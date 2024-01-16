@@ -14,7 +14,7 @@ const Logo = () => {
             <div>
                 <Avatar>
                     <AvatarImage src="https://avatars.githubusercontent.com/u/56760866?s=400&u=85f1f7114a7c9f4afc1c63e3d06d35a7e204ce1a&v=4" />
-                    <AvatarFallback>BA  </AvatarFallback>
+                    <AvatarFallback>BA</AvatarFallback>
                 </Avatar>
             </div>
         </div>

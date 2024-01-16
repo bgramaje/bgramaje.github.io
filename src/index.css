@@ -74,3 +74,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .rainbow-ring {
+    @apply relative;
+    @apply overflow-hidden;
+    @apply text-white;
+    @apply p-4;
+    @apply cursor-pointer;
+    @apply transition-all duration-300 ease-in-out;
+    @apply ring ring-transparent ring-offset-2 ring-offset-transparent;
+
+    background: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red);
+    background-size: 1400% 1400%;
+    animation: rainbow 8s infinite;
+    border: 2px solid transparent;
+    border-image: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red);
+    border-image-slice: 1;
+    @apply rounded-md;
+
+    &:hover {
+      @apply ring-transparent;
+      @apply text-gray-800; /* Change to the desired text color on hover */
+    }
+  }
+}

@@ -10,6 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <AnimatedCursor
       innerSize={0}
       outerSize={130}
+      // color="244, 151, 247"
       color="3, 223, 252"
       outerAlpha={102}
       innerScale={0}
@@ -17,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       showSystemCursor
       outerStyle={{
         mixBlendMode: 'exclusion',
-        filter: 'blur(7rem)'
+        filter: 'blur(6rem)'
       }}
     />
   </React.StrictMode>,

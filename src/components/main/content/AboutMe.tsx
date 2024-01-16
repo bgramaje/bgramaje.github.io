@@ -1,45 +1,65 @@
+import Logo from '@/components/header/Logo';
 import { TypeAnimation } from 'react-type-animation';
+import Sidebar from '../Sidebar';
+import { Button } from '@/components/ui/button';
+import { Icon } from '@iconify/react';
 
 const AboutMe = () => {
     return (
-        <div className="grow flex justify-end gap-12 text-justify items-center">
-            <img src="IMG_0165.jpg" className="w-[270px] h-auto rounded-full filter grayscale hover:filter-none transition-all duration-300 ease-in-out" />
-            <div className="flex flex-col max-w-[400px]">
-                <p className="font-semibold text-xl">
-                    👋 Hello, I am&nbsp;
-                    <span>
-                        <TypeAnimation
-                            sequence={[
-                                'Borja', // Types 'One'
-                                2000, // Waits 1s
-                                'Boria (eng. ver.)', // Deletes 'One' and types 'Two'
-                                2000, // Waits 2s
-                                "'boraal'", // Types 'Three' without deleting 'Two',
-                                2000,
-                                "'bgramaje'", // Types 'Three' without deleting 'Two',
-                                2000,
-                            ]}
-                            wrapper="span"
-                            cursor={true}
-                            repeat={Infinity}
-                            style={{ display: 'inline-block' }}
-                        />
-                    </span>
-                </p>
-                <p className="text-sm font-medium mt-2">
-                    A Software Engineer, Full Stack Developer, tech lover and F1 enthusiastic. 
-                </p>
-                <p className="text-sm mt-2 font-light ">
-                    Graduated in Computer Science from Universitat Politécnica de València <i>(UPV)</i> and <i>LAB</i> University of Applied Sciences.
-                    Recently, also graduated from UPV in Master's Degree in Software Systems Engineering and Technology.
-                </p>
-                <p className="text-sm mt-2 font-light">
-                    Currently working as a full-stack developer,
-                    undertaking innovative projects within the European framework such as 'H2020' or Horizon Europe.
-                </p>
+        <div className="flex justify-between items-center w-full gap-24">
+            <div className="flex flex-col gap-6">
+                <Logo />
+                <Sidebar />
             </div>
+            <div className="flex w-full gap-12 text-justify items-center">
+                <img src="IMG_0165.jpg" className="w-[270px] h-auto rounded-full filter grayscale hover:filter-none transition-all duration-300 ease-in-out" />
+                <div className="flex flex-col max-w-[400px]">
+                    <p className="font-semibold text-xl">
+                        👋 Hello, I am&nbsp;
+                        <span>
+                            <TypeAnimation
+                                sequence={[
+                                    'Borja',
+                                    2000,
+                                    'Boria (eng. ver.)',
+                                    2000,
+                                    "'boraal'",
+                                    2000,
+                                    "'bgramaje'",
+                                    2000,
+                                ]}
+                                wrapper="span"
+                                cursor={true}
+                                repeat={Infinity}
+                                style={{ display: 'inline-block' }}
+                            />
+                        </span>
+                    </p>
+                    <p className="text-sm font-medium mt-2">
+                        A Software Engineer, Full Stack Developer, tech lover and F1 enthusiastic.
+                    </p>
+                    <p className="text-sm mt-2 font-light ">
+                        Graduated in Computer Science from Universitat Politécnica de València <i>(UPV)</i> and <i>LAB</i> University of Applied Sciences.
+                        Recently, also graduated from UPV in Master's Degree in Software Systems Engineering and Technology.
+                    </p>
+                    <p className="text-sm mt-2 font-light">
+                        Currently working as a full-stack developer,
+                        undertaking innovative projects within the European framework such as 'H2020' or Horizon Europe.
+                    </p>
+                    <Button className="mt-8 max-w-[38%] transition-all duration-2500 ease-in-out animate-pulse text-xs" variant="outline">
+                        <Icon
+                            icon="line-md:download-loop"
+                            fontSize="1rem"
+                            className="mr-1 hover:cursor-pointer transition-all duration-300 ease-in-out hover:text-primary-foreground"
+                        />
+                        Download CV
+                    </Button>
+               
+                </div>
 
+            </div>
         </div>
+
     )
 }
 
