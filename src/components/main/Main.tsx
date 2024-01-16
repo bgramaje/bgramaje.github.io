@@ -1,4 +1,3 @@
-import React from 'react'
 import Sidebar from './Sidebar'
 import AboutMe from './content/AboutMe'
 import Logo from '../header/Logo'
