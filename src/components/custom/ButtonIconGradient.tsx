@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-const ButtonAnimatedGradient = ({
+const ButtonIconGradient = ({
     text,
     onClick
 }: {
@@ -49,7 +49,7 @@ const ButtonAnimatedGradient = ({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onClick={onClick}
-                className='relative inline-flex h-9 mt-6 items-center justify-center overflow-hidden rounded-md border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 px-6 font-medium text-slate-300 shadow-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'
+                className='relative inline-flex h-9 mt-6 items-center justify-center overflow-hidden rounded-full border border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 px-3 font-medium text-slate-300 shadow-2xl transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50  animate-bounce duration-30000 ease-in-out'
             >
                 <div
                     className='pointer-events-none absolute -inset-px opacity-0 transition duration-300'
@@ -64,4 +64,4 @@ const ButtonAnimatedGradient = ({
     );
 };
 
-export default ButtonAnimatedGradient;
+export default ButtonIconGradient;

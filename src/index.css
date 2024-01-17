@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
  
+* {
+  min-width: 0;
+  font: inherit;
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, svg {
+  display: flex;
+  height: auto;
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

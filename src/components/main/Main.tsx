@@ -1,12 +1,12 @@
-import Sidebar from './Sidebar'
 import AboutMe from './content/AboutMe'
-import Logo from '../header/Logo'
+import Experience from './content/Experience'
 
 const Main = () => {
     return (
-        <div className='w-full h-full flex gap-12 flex-col'>
+        <>
             <AboutMe />
-        </div>
+            <Experience />
+        </>
     )
 }
 

@@ -2,15 +2,15 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import './App.css'
 
-import Main from "./components/main/Main"
+import AboutMe from "./components/main/content/AboutMe"
+import Experience from "./components/main/content/Experience"
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="w-full h-screen flex items-center justify-center">
-        <div className="flex flex-col gap-6 font-sans justify-start text-left">
-          <Main />
-        </div>
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <AboutMe />
+        <Experience />
       </div>
     </ThemeProvider>
   )

@@ -1,21 +1,19 @@
 import Logo from '@/components/header/Logo';
 import { TypeAnimation } from 'react-type-animation';
 import Sidebar from '../Sidebar';
-import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react';
 import ButtonAnimatedGradient from '@/components/custom/ButtonAnimatedGradient';
+import ButtonIconGradient from '@/components/custom/ButtonIconGradient';
 
 
 const AboutMe = () => {
-    const url = window.location.href;
-
     return (
-        <div className="flex justify-between items-center w-full gap-24">
+        <div className="flex justify-center items-center w-full h-screen gap-24">
             <div className="flex flex-col gap-6">
                 <Logo />
                 <Sidebar />
             </div>
-            <div className="flex w-full gap-12 text-justify items-center">
+            <div className="flex gap-12 text-justify items-center">
                 <img src="IMG_0165.jpg" className="w-[270px] h-auto rounded-full filter grayscale hover:filter-none transition-all duration-300 ease-in-out" />
                 <div className="flex flex-col max-w-[400px]">
                     <p className="font-semibold text-xl">
@@ -50,7 +48,7 @@ const AboutMe = () => {
                         Currently working as a full-stack developer,
                         undertaking innovative projects within the European framework such as 'H2020' or Horizon Europe.
                     </p>
-                    <a href={`${window.location.href}CV_BORJA.pdf`} target='_blank'>
+                    <a href={`${window.location.href}CV_BORJA.pdf`} target='_blank' className='max-w-[40%] text-xs '>
                         <ButtonAnimatedGradient
                             text={
                                 <>
@@ -62,9 +60,25 @@ const AboutMe = () => {
                                     Download CV
                                 </>
                             }
-                            onClick={() => console.log('caca')}
+                            onClick={() => { return }}
                         />
                     </a>
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 max-w-[100px]">
+                        <ButtonIconGradient
+                            text={
+                                <>
+                                    <Icon
+                                        icon="line-md:download-loop"
+                                        fontSize="1rem"
+                                        className="mr-0 hover:cursor-pointer transition-all duration-300 ease-in-out hover:text-primary-foreground"
+                                    />
+                                </>
+                            }
+                            onClick={() => {
+                                window.scrollTo({ behavior: 'smooth', top: 1000 })
+                            }}
+                        />
+                    </div>
                 </div>
 
             </div>
