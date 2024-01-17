@@ -3,8 +3,12 @@ import { TypeAnimation } from 'react-type-animation';
 import Sidebar from '../Sidebar';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react';
+import ButtonAnimatedGradient from '@/components/custom/ButtonAnimatedGradient';
+
 
 const AboutMe = () => {
+    const url = window.location.href;
+
     return (
         <div className="flex justify-between items-center w-full gap-24">
             <div className="flex flex-col gap-6">
@@ -46,15 +50,21 @@ const AboutMe = () => {
                         Currently working as a full-stack developer,
                         undertaking innovative projects within the European framework such as 'H2020' or Horizon Europe.
                     </p>
-                    <Button className="mt-8 max-w-[38%] transition-all duration-2500 ease-in-out animate-pulse text-xs" variant="outline">
-                        <Icon
-                            icon="line-md:download-loop"
-                            fontSize="1rem"
-                            className="mr-1 hover:cursor-pointer transition-all duration-300 ease-in-out hover:text-primary-foreground"
+                    <a href={`${window.location.href}CV_BORJA.pdf`} target='_blank'>
+                        <ButtonAnimatedGradient
+                            text={
+                                <>
+                                    <Icon
+                                        icon="line-md:download-loop"
+                                        fontSize="1rem"
+                                        className="mr-1 hover:cursor-pointer transition-all duration-300 ease-in-out hover:text-primary-foreground"
+                                    />
+                                    Download CV
+                                </>
+                            }
+                            onClick={() => console.log('caca')}
                         />
-                        Download CV
-                    </Button>
-               
+                    </a>
                 </div>
 
             </div>
