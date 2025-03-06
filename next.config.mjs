@@ -4,7 +4,7 @@ import createMDX from '@next/mdx'
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  basePath: '/nextjs-github-pages',
+  basePath: '/bgramaje.github.io',
   images: {
     unoptimized: true,
   },
