@@ -3,8 +3,8 @@ import createMDX from '@next/mdx'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
-  basePath: '/bgramaje.github.io',
+  // output: 'export',
+  // basePath: '/bgramaje.github.io',
   images: {
     unoptimized: true,
   },
