@@ -5,7 +5,7 @@ const nextConfig = {
   distDir: 'out',
   reactStrictMode: true,
   output: 'export',
-  basePath: '/bgramaje.github.io',
+  // basePath: '/bgramaje.github.io',
   images: {
     unoptimized: true,
   },
