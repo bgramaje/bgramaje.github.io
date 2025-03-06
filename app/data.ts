@@ -6,13 +6,14 @@ type Project = {
   id: string
 }
 
-type WorkExperience = {
+export type WorkExperienceT = {
   company: string
   title: string
   start: string
   end: string
   link: string
   id: string
+  description: string
 }
 
 type BlogPost = {
@@ -20,6 +21,15 @@ type BlogPost = {
   description: string
   link: string
   uid: string
+}
+
+export type PublicationPostT = {
+  title: string
+  description: string
+  link: string
+  uid: string
+  publisher: string
+  tags?: string[]
 }
 
 type SocialLink = {
@@ -47,30 +57,36 @@ export const PROJECTS: Project[] = [
   },
 ]
 
-export const WORK_EXPERIENCE: WorkExperience[] = [
+export const WORK_EXPERIENCE: WorkExperienceT[] = [
   {
-    company: 'Reglazed Studio',
-    title: 'CEO',
-    start: '2024',
-    end: 'Present',
-    link: 'https://ibelick.com',
-    id: 'work1',
-  },
-  {
-    company: 'Freelance',
-    title: 'Design Engineer',
+    company: 'ETRA I+D',
+    title: 'Software Engineer',
     start: '2022',
-    end: '2024',
-    link: 'https://ibelick.com',
-    id: 'work2',
+    end: 'Present',
+    link: 'https://www.grupoetra.com/',
+    id: 'work1',
+    description:
+      'Experienced in European tech partnerships, contributing to projects like TwinAIR, ECOLOOP, and UNCHAIN. Expertise in web application development (Meteor.js, FIWARE), API development. (Express.js, Flask). Proficient in containerization (Docker, Kubernetes), CI/CD pipelines (GitLab), and technologies such as RabbitMQ, OCPP, MongoDB, InfluxDB, and NATS.',
   },
   {
-    company: 'Freelance',
-    title: 'Front-end Developer',
-    start: '2017',
-    end: 'Present',
-    link: 'https://ibelick.com',
+    company: 'DEVOLTEC',
+    title: 'Software Engineer',
+    start: '2021',
+    end: '2022',
+    link: 'https://devoltec.com/',
+    id: 'work2',
+    description:
+      'Developed comprehensive ERP and production control systems using Angular, Express, and various databases, while creating REST APIs and custom interfaces. Implemented Docker-based production environments and managed version control and CI/CD pipelines through GitLab.',
+  },
+  {
+    company: 'Panda Creatiu',
+    title: 'Frontend Engineer',
+    start: '2020',
+    end: '2020',
+    link: 'https://goodmorningpanda.com/',
     id: 'work3',
+    description:
+      'Designed and developed custom web interfaces using WordPress, HTML, CSS, JavaScript, and jQuery, while creating UI/UX designs with Adobe XD and Figma.',
   },
 ]
 
@@ -97,22 +113,39 @@ export const BLOG_POSTS: BlogPost[] = [
   },
 ]
 
+export const PUBLICATIONS: PublicationPostT[] = [
+  {
+    title: 'Data Management Platform for Indoor Air Quality Management',
+    description:
+      'This research presents the solution for building a Data Management platform with FIWARE framework and other open-source components to monitor and manage indoor air quality.',
+    link: 'https://ieeexplore.ieee.org/document/10710780',
+    publisher: 'IEEE',
+    uid: 'blog-1',
+    tags: ['FIWARE', 'IAQ', 'API', 'MQTT'],
+  },
+  {
+    title: "Exploring GPT's Capabilities in Chess-Puzzles",
+    description:
+      'Language Models have not acquired their popularity based only on their text-generation capabilities, but also for the ability of learning they do have.',
+    link: 'https://riunet.upv.es/handle/10251/197801',
+    publisher: 'UPV',
+    uid: 'blog-2',
+    tags: ['AI', 'LLM', 'GPT', 'OpenAI'],
+  },
+]
+
 export const SOCIAL_LINKS: SocialLink[] = [
   {
     label: 'Github',
     link: 'https://github.com/ibelick',
   },
   {
-    label: 'Twitter',
-    link: 'https://twitter.com/ibelick',
-  },
-  {
     label: 'LinkedIn',
     link: 'https://www.linkedin.com/in/ibelick',
   },
   {
-    label: 'Instagram',
-    link: 'https://www.instagram.com/ibelick',
+    label: 'CV',
+    link: '/CV_BORJA.pdf',
   },
 ]
 

@@ -4,6 +4,7 @@ import './globals.css'
 import { Header } from './header'
 import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
+import { ScrollProgress } from '@/components/ui/scroll-progress'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -12,7 +13,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Nim - Personal website template',
+  title: 'boraal | Borja Albert Gramaje',
   description:
     'Nim is a free and open-source personal website template built with Next.js 15, React 19 and Motion-Primitives.',
 }
@@ -37,6 +38,12 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}
       >
+        <ScrollProgress
+          className="fixed top-0 z-20 h-0.5 bg-gray-300 dark:bg-zinc-600"
+          springOptions={{
+            bounce: 0,
+          }}
+        />
         <ThemeProvider
           enableSystem={true}
           attribute="class"
