@@ -1,17 +1,17 @@
 'use client'
 import { motion } from 'motion/react'
 import { AnimatedBackground } from '@/components/ui/animated-background'
-import { WORK_EXPERIENCE, PUBLICATIONS } from './data'
+import { PUBLICATIONS } from './data'
 import { FadeInComponent } from '@/components/custom/FadeInComponent'
-import { WorkExperienceItem } from '@/components/custom/WorkExperienceItem'
 
 import { Education } from '@/components/custom/Education'
 import { Technologies } from '@/components/custom/Technologies'
 import { HoverButton } from '@/components/ui/hover-button'
-import { Accordion } from '@/components/ui/accordion'
 import { Publication } from '@/components/custom/Publication'
 import { cn } from '@/lib/utils'
 import { DotPattern } from '@/components/magicui/dot-pattern'
+import { WorkItems } from '@/components/custom/WorkItems'
+import { WORK_EXPERIENCE } from '@/data/work-experience'
 
 const VARIANTS_CONTAINER = {
   hidden: { opacity: 0 },
@@ -64,18 +64,8 @@ export default function Personal() {
         </div>
       </FadeInComponent>
 
-      <FadeInComponent>
-        <h3 className="mb-5 text-lg font-medium">Work Experience</h3>
-        <Accordion
-          type="single"
-          collapsible
-          className="flex flex-1 flex-col space-y-2"
-        >
-          {WORK_EXPERIENCE.map((job) => (
-            <WorkExperienceItem key={job.id} job={job} />
-          ))}
-        </Accordion>
-      </FadeInComponent>
+      <h3 className="mb-5 text-lg font-medium">Work Experience</h3>
+      <WorkItems workExperience={WORK_EXPERIENCE} />
 
       <FadeInComponent>
         <h3 className="mb-5 text-lg font-medium">Education</h3>
@@ -111,7 +101,7 @@ export default function Personal() {
           width={14}
           height={14}
           className={cn(
-            'opacity-40 [mask-image:radial-gradient(200px_circle_at_center,white,transparent)]',
+            '[mask-image:radial-gradient(200px_circle_at_center,white,transparent)] opacity-40',
           )}
         />
         <div className="flex w-full justify-between gap-0 rounded-xl border-1 p-4 px-4">

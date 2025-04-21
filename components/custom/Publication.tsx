@@ -15,10 +15,9 @@ export const Publication = ({ post }: PublicationProps) => {
       target="_blank"
       data-id={post.uid}
     >
-      <div className="flex flex-col space-y-1.5 py-3">
+      <div className="flex flex-col space-y-1.5 px-2 py-3">
         <div className="flex items-center gap-2">
           <h4 className="font-normal dark:text-zinc-100">{post.title}</h4>
-
           <p className="dark:bg-blue w-fit rounded-md bg-green-300 px-1.5 text-sm font-medium text-black dark:text-black">
             {post.publisher}
           </p>

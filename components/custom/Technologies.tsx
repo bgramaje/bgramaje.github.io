@@ -24,6 +24,8 @@ const slugs = [
   'postman',
   'mqtt',
   'kubernetes',
+  'arduino',
+  'platformio',
 ]
 
 export const Technologies = () => {
