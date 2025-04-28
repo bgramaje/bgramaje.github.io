@@ -1,7 +1,6 @@
 'use client'
 import { motion } from 'motion/react'
 import { AnimatedBackground } from '@/components/ui/animated-background'
-import { PUBLICATIONS } from './data'
 import { FadeInComponent } from '@/components/custom/FadeInComponent'
 
 import { Education } from '@/components/custom/Education'
@@ -12,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { DotPattern } from '@/components/magicui/dot-pattern'
 import { WorkItems } from '@/components/custom/WorkItems'
 import { WORK_EXPERIENCE } from '@/data/work-experience'
+import { PUBLICATIONS } from '@/data/publications'
 
 const VARIANTS_CONTAINER = {
   hidden: { opacity: 0 },
@@ -26,14 +26,14 @@ const VARIANTS_CONTAINER = {
 export default function Personal() {
   return (
     <motion.main
-      className="space-y-8"
+      className="space-y-6"
       variants={VARIANTS_CONTAINER}
       initial="hidden"
       animate="visible"
     >
       <FadeInComponent>
         <div className="flex flex-1 flex-col gap-1.5">
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-justify text-zinc-600 dark:text-zinc-400">
             Currently working as a full-stack software engineer, undertaking
             innovative projects within the European framework &quot;H2020&quot;
             (Horizon Europe).
