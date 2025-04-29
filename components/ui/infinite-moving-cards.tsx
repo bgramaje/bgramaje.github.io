@@ -4,6 +4,7 @@
 import { cn } from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 import { MagneticSocialLink } from '../custom/MagneticSocialLink'
+import Image from 'next/image'
 
 export const InfiniteMovingCards = ({
   items,
@@ -51,7 +52,7 @@ export const InfiniteMovingCards = ({
 
 
 
-  
+
   const getDirection = () => {
     if (containerRef.current) {
       if (direction === 'left') {
@@ -109,9 +110,12 @@ export const InfiniteMovingCards = ({
             <div className="relative z-20 mt-4 flex flex-row items-center">
               <span className="flex flex-col gap-1">
                 <div className="flex items-center gap-2 bg-transparent">
-                  <img
+                  <Image
+                    width={14}
+                    height={20}
                     className="h-auto max-h-14 w-20 bg-transparent mix-blend-multiply"
                     src={item.title}
+                    alt={item.title}
                   />
                   {item.href && <MagneticSocialLink link={item.href} />}
                 </div>
