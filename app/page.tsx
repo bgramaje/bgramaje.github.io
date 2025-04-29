@@ -101,7 +101,7 @@ export default function Personal() {
           width={14}
           height={14}
           className={cn(
-            '[mask-image:radial-gradient(200px_circle_at_center,white,transparent)] opacity-40',
+            'opacity-40 [mask-image:radial-gradient(200px_circle_at_center,white,transparent)]',
           )}
         />
         <div className="flex w-full justify-between gap-0 rounded-xl border-1 p-4 px-4">
