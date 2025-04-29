@@ -1,0 +1,5 @@
+components/ui/**/*
+components/motion-primitives/**/*
+components/magicui/**/*
+components/expandable-card-demo-standard.tsx
+./components/expandable-card-demo-standard.tsx
