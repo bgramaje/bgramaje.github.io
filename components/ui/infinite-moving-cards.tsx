@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { cn } from '@/lib/utils'
@@ -24,10 +25,13 @@ export const InfiniteMovingCards = ({
   const containerRef = React.useRef<HTMLDivElement>(null)
   const scrollerRef = React.useRef<HTMLUListElement>(null)
 
+
+  const [start, setStart] = useState(false)
+
   useEffect(() => {
     addAnimation()
   }, [])
-  const [start, setStart] = useState(false)
+
   function addAnimation() {
     if (containerRef.current && scrollerRef.current) {
       const scrollerContent = Array.from(scrollerRef.current.children)
@@ -44,6 +48,10 @@ export const InfiniteMovingCards = ({
       setStart(true)
     }
   }
+
+
+
+  
   const getDirection = () => {
     if (containerRef.current) {
       if (direction === 'left') {
