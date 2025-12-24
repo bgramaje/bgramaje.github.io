@@ -115,6 +115,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <div className="my-2 mt-10">
         <Callout {...props} />
       </div>
-    )
+    ),
+    ...components,
   };
 }
