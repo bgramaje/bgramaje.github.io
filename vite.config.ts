@@ -11,6 +11,11 @@ import mdxMermaid from "mdx-mermaid";
 import rehypeHighlight from "rehype-highlight";
 
 export default defineConfig({
+  base: "/", // Para repositorios de usuario (bgramaje.github.io), usar "/"
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+  },
   plugins: [
     react(),
     {
