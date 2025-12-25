@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "@/components/Terminal";
@@ -31,9 +31,27 @@ export function HomePage() {
 
   const scrollToBottom = useCallback(() => {
     if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+          }
+        });
+      });
     }
   }, []);
+
+  // Scroll to bottom when history changes (for async content like blog posts)
+  useEffect(() => {
+    if (history.length > 0) {
+      // Wait a bit longer for async content to render
+      const timeoutId = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [history, scrollToBottom]);
 
   const handleCommand = useCallback(
     (input: string) => {
@@ -71,13 +89,8 @@ export function HomePage() {
         setCommandHistory((prev) => [...prev, trimmedInput.toLowerCase()]);
       }
       setHistoryIndex(-1);
-
-      // Scroll to bottom only after executing a command
-      setTimeout(() => {
-        scrollToBottom();
-      }, 0);
     },
-    [scrollToBottom, navigate]
+    [navigate]
   );
 
   const handleKeyDown = useCallback(
@@ -126,7 +139,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="h-screen bg-terminal-bg flex items-center justify-center p-4 md:p-4 relative dot-pattern-rotated overflow-hidden">
+    <div className="h-[100dvh] bg-terminal-bg flex items-center justify-center p-4 md:p-4 relative dot-pattern-rotated overflow-hidden">
       {/* Snowfall effect - only visible during December 1 - January 7 */}
       <Snowfall />
       

@@ -145,7 +145,7 @@ export function TerminalModal({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-4xl h-[85vh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative"
+          className="w-full max-w-4xl h-[85dvh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Title Bar */}

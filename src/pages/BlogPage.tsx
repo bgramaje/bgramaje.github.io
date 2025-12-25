@@ -163,7 +163,7 @@ export function BlogPage() {
   }, []);
 
   return (
-    <div className="h-screen bg-terminal-bg flex items-center justify-center p-4 md:p-4 relative dot-pattern-rotated overflow-hidden">
+    <div className="h-[100dvh] bg-terminal-bg flex items-center justify-center p-4 md:p-4 relative dot-pattern-rotated overflow-hidden">
       {/* Snowfall effect - only visible during December 1 - January 7 */}
       <Snowfall />
       

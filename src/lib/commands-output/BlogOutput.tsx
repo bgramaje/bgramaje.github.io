@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAllBlogPosts, type BlogMetadata } from "@/lib/blogLoader";
 
 interface BlogOutputProps {
@@ -8,6 +8,7 @@ interface BlogOutputProps {
 export function BlogOutput({ onPostClick }: BlogOutputProps) {
   const [posts, setPosts] = useState<Array<BlogMetadata & { id: string }>>([]);
   const [loading, setLoading] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     getAllBlogPosts()
@@ -21,6 +22,14 @@ export function BlogOutput({ onPostClick }: BlogOutputProps) {
       });
   }, []);
 
+  // Notify parent when content is loaded and rendered
+  useEffect(() => {
+    if (!loading && posts.length > 0 && containerRef.current) {
+      // Trigger a resize event to help with scroll calculations
+      window.dispatchEvent(new Event('resize'));
+    }
+  }, [loading, posts]);
+
   if (loading) {
     return (
       <div className="space-y-2">
@@ -31,7 +40,7 @@ export function BlogOutput({ onPostClick }: BlogOutputProps) {
   }
 
   return (
-    <div className="space-y-2">
+    <div ref={containerRef} className="space-y-2">
       <p className="text-terminal-accent font-semibold mb-3">Blog Posts:</p>
       {posts.map((post) => (
         <div
@@ -41,7 +50,7 @@ export function BlogOutput({ onPostClick }: BlogOutputProps) {
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-4">
-              <h3 className="text-terminal-success font-medium">{post.title}</h3>
+              <h3 className="text-terminal-success font-medium font-mono">{post.title}</h3>
               <span className="text-terminal-muted text-xs shrink-0">{post.date}</span>
             </div>
             <div className="flex items-center justify-between gap-4">

@@ -1,6 +1,6 @@
 ---
-title: "CrowPanel (Unchain): nodo IoT LoRaWAN para plazas públicas con gestión remota dinámica"
-description: "Dispositivo low-power (ESP32-S3 + SX1262 + ultrasonidos + e-ink) integrado con ChirpStack para monitorizar ocupación y habilitar usos dinámicos de plazas públicas."
+title: "CrowPanel (UNCHAIN): LoRaWAN IoT Node for Public Parking Spaces with Dynamic Remote Management"
+description: "Low-power device (ESP32-S3 + SX1262 + ultrasonic sensors + e-ink) integrated with ChirpStack to monitor occupancy and enable dynamic use cases for public parking spaces."
 date: "2025-12-24"
 tags:
   - IoT
@@ -13,154 +13,159 @@ tags:
 
 import { Alert } from "@/components/ui/alert";
 
-# PARCAR-IoT: nodo IoT LoRaWAN para plazas públicas con gestión remota dinámica
+# PARCAR-IoT: LoRaWAN IoT Node for Public Parking Spaces with Dynamic Remote Management
 
-#### Dentro del proyecto europeo **UNCHAIN**, desarrollé un nodo IoT de bajo consumo orientado a monitorizar plazas públicas de parking y habilitar un modelo de “uso dinámico” gestionado remotamente (horarios, reglas y configuración sin intervención física). El foco no era solo detectar ocupación, sino convertir cada plaza en un recurso operable: medir, comunicar, recibir configuración desde servidor y funcionar de forma estable en campo durante largos periodos con batería.
+#### As part of the European **[UNCHAIN](https://unchainproject.eu/])** project, I developed a low-power IoT node designed to monitor public parking spaces and enable a remotely managed "dynamic use" model—allowing schedules, rules, and configuration updates without physical intervention.
+##### The focus wasn't merely detecting occupancy, but transforming each parking space into an operable resource: measuring, communicating, receiving server-side configuration, and operating reliably in the field for extended periods on battery power.
 
-<Alert title={null} variant="default" className="!mt-4">
-Este post está escrito como pieza de portfolio: explica la solución a alto nivel, las decisiones técnicas clave y cómo se integra con ChirpStack, sin entrar en detalles sensibles ni en código propietario.
-</Alert>
+> This post is written as a portfolio piece: it explains the solution at a high level, key technical decisions, and how it integrates with ChirpStack, without delving into sensitive details or proprietary code.
 
-## Qué se quería conseguir.
+## Objectives
 
-El objetivo del sistema era dotar a las plazas públicas de un ciclo operativo digital: saber si están libres/ocupadas y poder cambiar el uso permitido según franjas horarias o necesidades puntuales (rotación, carga/descarga, reservas temporales, etc.).
-Para que esto funcione de verdad en calle, se necesitaban dos capacidades: 
-* **sensado fiable** (sin falsos positivos)
-* **gestión remota** (actualizar horarios y calibración sin reflashear firmware).
+The system's goal was to provide public parking spaces with a digital operational cycle: knowing whether they're free or occupied, and being able to change permitted usage according to time slots or specific needs (rotation, loading/unloading, temporary reservations, etc.).
 
-## La solución (visión sistema)
+For this to work reliably in real-world conditions, two core capabilities were essential:
+* **Reliable sensing** (without false positives)
+* **Remote management** (updating schedules and calibration without reflashing firmware)
 
-La solución se construyó como un sistema completo con tres piezas:
+## System Architecture
 
-- **Nodo en campo** (CrowPanel): sensado + UI local + gestión energética. [memory:1]
-- **Red LoRaWAN**: gateway(s) y servidor LoRaWAN con ChirpStack para recepción de uplinks y entrega de downlinks. [memory:11]
-- **Aplicación / plataforma**: interpreta eventos, aplica lógica de calendario/uso y encola respuestas/comandos al nodo. [memory:5]
+The solution was built as a complete system with multiple interconnected components:
 
-## Arquitectura (diagrama)
+- **IoT Node**: sensing + local UI + power management
+- **LoRaWAN Gateway**: receives uplinks and transmits downlinks via LoRa RF
+- **ChirpStack**: LoRaWAN network server managing device registration, uplink processing, and downlink queuing
+- **MQTT Broker**: message broker for event distribution between ChirpStack and application services
+- **MongoDB Database**: persistent storage for device data, schedules, configurations, and telemetry
+- **MeteorJS Application**: web-based platform for writing and managing data in MongoDB, providing user interface for configuration and monitoring
+- **Docker Microservice (chstack-mqtt-bridge)**: dedicated service responsible for managing requests and responses between the server and the IoT node, handling protocol translation and command queuing
+
+## Architecture Diagram
 
 ```mermaid
-flowchart LR
-subgraph Field["Campo"]
-Node["CrowPanel Node\nESP32-S3 + Ultrasound + E-ink + SX1262"]
-GW["LoRaWAN Gateway\n(Packet Forwarder)"]
-Node -->|"LoRa RF (Uplink/Downlink)"| GW
-end
+sequenceDiagram
+participant Node as IoT Node<br/>(ESP32-S3 + SX1262)
+participant GW as LoRaWAN Gateway<br/>(Packet Forwarder)
+participant CS as ChirpStack<br/>(LoRaWAN Network Server)
+participant MQTT as MQTT Broker
+participant MS as Microservice<br/>(Request/Response Manager)
+participant DB as MongoDB Database
+participant Meteor as MeteorJS Application<br/>(Web UI + Data Management)
 
-subgraph Net["Backend"]
-CS["ChirpStack\n(Network + Application)"]
-APP["Mi aplicación\n(calendario + reglas + comandos)"]
-end
+Note over Node,GW: Uplink Flow
+Node->>GW: LoRa RF Uplink
+GW->>CS: IP backhaul (forward uplink)
+CS->>MQTT: Publish events
+MQTT->>MS: Subscribe events
+MS->>DB: Read/Write data
+Meteor->>DB: Read/Write data
 
-GW -->|"IP backhaul"| CS
-CS --> APP
-APP -->|"Encola downlinks"| CS
-CS -->|"Downlink (RX1/RX2)"| GW
+Note over MS,CS: Downlink Flow
+MS->>CS: Queue downlinks
+CS->>GW: Downlink (RX1/RX2)
+GW->>Node: LoRa RF Downlink
 ```
 
+## The CrowPanel Node
 
-## El nodo CrowPanel (campo)
+The device combines:
 
-El dispositivo combina:
+- **ESP32‑S3** as the main MCU and lifecycle orchestrator (boot → measure → communicate → sleep)
+- **SX1262 radio** for LoRaWAN communication
+- **Ultrasonic sensor** to infer distance and determine occupancy based on configurable thresholds
+- **E‑ink display** for local status and diagnostics (particularly useful during deployment and maintenance)
 
-- **ESP32‑S3** como MCU principal y orquestador del ciclo de vida (boot → medir → comunicar → dormir). [memory:12]
-- **Radio SX1262** para LoRaWAN. [memory:3]
-- **Sensor ultrasónico** para inferir distancia y decidir ocupación a partir de thresholds. [memory:6]
-- **Pantalla e‑ink** para estado local y diagnóstico (muy útil en despliegue y mantenimiento). [memory:1]
+A significant part of the hardware integration work involved resolving pin mapping and bus conflicts (SPI) when multiple peripherals coexist (e‑ink/SD/radio), ensuring the design remains stable and reproducible.
 
-En términos de integración hardware, una parte importante del trabajo fue resolver el mapeo de pines y conflictos de buses (SPI) cuando conviven periféricos (e‑ink/SD/radio) y el diseño debe mantenerse estable y reproducible. [memory:4]
+## Firmware Architecture (Layered Design)
 
-## Arquitectura de firmware (por capas)
+The firmware was organized in layers with a clear objective: **minimize awake time** and make behavior predictable.
 
-El firmware se organizó en capas con un objetivo: **minimizar tiempo despierto** y hacer el comportamiento predecible. [memory:12]
+- **Power/Boot/RTC**: state restoration and determining the "goal" of the current cycle
+- **Sensor**: robust measurement when context requires it
+- **Schedule**: active usage schedules/rules and associated configurations received remotely
+- **LoRaWAN**: transmissions, downlink waiting, and retry control
+- **UI**: e‑ink updates only when relevant state changes
 
-- **Power/Boot/RTC**: restauración de estado y decisión del “objetivo” del ciclo actual. [memory:12]
-- **Sensor**: medición robusta cuando el contexto lo requiere. [memory:6]
-- **Schedule**: horarios/uso “activos” y reglas asociadas recibidas remotamente. [memory:5]
-- **LoRaWAN**: envíos, espera de downlinks y control de reintentos. [memory:5]
-- **UI**: actualización de e‑ink solo cuando cambia el estado relevante. [memory:18]
+## Lifecycle (Step by Step)
 
-## Ciclo de vida (paso a paso)
+At a high level, the node operates as follows:
 
-A grandes rasgos, el nodo funciona así:
+1. **Boot**: restore persisted state (schedule, thresholds, pending messages, counters)
+2. **Decision**: determine whether to synchronize (RSYNC), retry a pending transmission, or execute a "normal" cycle
+3. **Measurement**: perform ultrasonic measurement if current usage requires it or if state confirmation is needed for a transmission
+4. **Uplink**: send RSYNC / STATUS / PING as appropriate
+5. **Downlink**: process RESYNC_RESPONSE / ACK / REBOOT when received
+6. **UI**: refresh e‑ink only if there's a real change (different hash)
+7. **Deep sleep**: sleep for the calculated duration
 
-1. **Boot**: se restaura el estado persistido (schedule, thresholds, mensajes pendientes, contadores). [memory:12]
-2. **Decisión**: se determina si toca sincronizar (RSYNC), reintentar un envío pendiente o ejecutar un ciclo “normal”. [memory:5]
-3. **Medición**: se realiza medición ultrasónica si el uso actual lo requiere o si hay que confirmar estado para un envío. [memory:5][memory:6]
-4. **Uplink**: se envía RSYNC / STATUS / PING según el caso. [memory:5]
-5. **Downlink**: se procesa RESYNC_RESPONSE / ACK / REBOOT cuando llega. [memory:5]
-6. **UI**: se refresca la e‑ink solo si hay cambio real (hash distinto). [memory:18]
-7. **Deep sleep**: se duerme el tiempo calculado. [memory:12]
+## LoRaWAN Messaging Protocol
 
-## Mensajería LoRaWAN (concepto)
+The protocol was designed with small, purpose-driven messages, separated by FPorts to simplify backend processing and debugging:
 
-El protocolo se diseñó con mensajes pequeños y con intención clara, separados por FPorts para simplificar backend y depuración:
+- **`RSYNC (uplink)`**: node requests synchronization; includes context so the server can calculate and return schedule/thresholds
+- **`RSYNC_RESPONSE (downlink)`**: server returns timestamp/configuration, thresholds, and schedule entries; node persists and applies them
+- **`STATUS (uplink)`**: reports distance/occupancy and metadata about active usage
+- **`ACK/REBOOT (downlink)`**: confirmation and remote control for safe operation
 
-- **RSYNC (uplink)**: el nodo pide sincronización; incluye contexto para que el servidor calcule y devuelva schedule/thresholds. [memory:5]
-- **RESYNC_RESPONSE (downlink)**: el servidor devuelve timestamp/configuración, thresholds y entradas de schedule, y el nodo lo persiste y aplica. [memory:5]
-- **STATUS (uplink)**: reporta distancia/ocupación y metadatos del uso activo. [memory:5]
-- **ACK/REBOOT (downlink)**: confirmación y control remoto para operación segura. [memory:5]
-
-### Secuencia típica (RSYNC → RESYNC_RESPONSE → STATUS)
+### Typical Sequence (RSYNC → RESYNC_RESPONSE → STATUS)
 
 ```mermaid
 sequenceDiagram
 participant D as CrowPanel Node
 participant G as Gateway
 participant C as ChirpStack
-participant A as App (calendario/reglas)
+participant A as App (calendar/rules)
 
 D->>G: Uplink RSYNC
 G->>C: Forward uplink
-C->>A: Evento (RSYNC)
+C->>A: Event (RSYNC)
 A-->>C: Enqueue RESYNC_RESPONSE
-C-->>G: Downlink en RX1/RX2
+C-->>G: Downlink in RX1/RX2
 G-->>D: RESYNC_RESPONSE
-D->>G: Uplink STATUS (ocupación + distancia)
+D->>G: Uplink STATUS (occupancy + distance)
 G->>C: Forward uplink
-C->>A: Evento (STATUS)
-````
+C->>A: Event (STATUS)
+```
 
 
-## Detección de ocupación (ultrasonidos)
+## Occupancy Detection (Ultrasonic)
 
-La ocupación se infiere a partir de la distancia, pero evitando decisiones con ruido:
+Occupancy is inferred from distance measurements, but with noise-resistant decision-making:
 
-- Se toman varias lecturas y se estabiliza el valor (mediana / filtrado de outliers). [memory:6]
-- Se comparan las lecturas contra thresholds **configurables remotamente**, lo que permite calibrar por emplazamiento (altura, inclinación, rebotes) sin reflashear. [memory:5]
-- La medición no se ejecuta siempre: se activa solo si el schedule/uso lo requiere o si hay mensajes pendientes que dependen del estado. [memory:5]
+- Multiple readings are taken and the value is stabilized (median / outlier filtering)
+- Readings are compared against **remotely configurable thresholds**, enabling site-specific calibration (height, tilt, reflections) without reflashing
+- Measurement isn't always executed: it's activated only when the schedule/usage requires it or when pending messages depend on the state
 
-## Bajo consumo y persistencia
+## Low Power and Persistence
 
-El diseño de energía está basado en “transacciones”: despertar, hacer lo mínimo y volver a dormir. [memory:12]  
-Para hacerlo viable, se persiste estado crítico en RTC (configuración, schedule, mensajes pendientes, hashes), de forma que los reboots por deep sleep no rompen la continuidad lógica. [memory:12]
+The power design is based on "transactions": wake up, do the minimum necessary, and go back to sleep.  
+To make this viable, critical state is persisted in RTC memory (configuration, schedule, pending messages, hashes), so deep sleep reboots don't break logical continuity.
 
-## Robustez: reintentos y mensajes pendientes
+## Robustness: Retries and Pending Messages
 
-En entornos reales hay pérdidas de uplink/downlink, por lo que la lógica de retries es esencial:
+In real-world environments, uplink/downlink losses occur, making retry logic essential:
 
-- Mensajes importantes se marcan como `pending_message` con contador de reintentos, persistido en RTC para sobrevivir resets. [memory:5]
-- La aplicación limpia el pending cuando se recibe confirmación esperada, o reintenta en un boot posterior si no llegó. [memory:5]
-- Los hashes de estado ayudan a evitar spam: si nada cambió, no se fuerza STATUS ni refresco de e‑ink. [memory:18]
+- Important messages are marked as `pending_message` with a retry counter, persisted in RTC to survive resets
+- The application clears the pending flag when the expected confirmation is received, or retries on a subsequent boot if it didn't arrive
+- State hashes help prevent spam: if nothing changed, STATUS transmission and e‑ink refresh aren't forced
 
-## Operación y pruebas (PlatformIO)
+## Development and Testing (PlatformIO)
 
-Para desarrollo y bancada, el flujo de trabajo típico fue:
+For development and bench testing, the typical workflow was:
 
-```bash
+```shell
 platformio run --target upload
 platformio device monitor --baud 115200
 ```
 
+This allows validation of the lifecycle in logs (join/tx/rx/sleep), as well as debugging sensor calibration and retry behavior.
 
-Esto permite validar en logs el ciclo de vida (join/tx/rx/sleep), además de depurar calibración de sensor y comportamiento de reintentos. [memory:12]
+## Results and Impact
 
-## Resultado (por qué es relevante)
+This work transforms a public parking space into a manageable asset: the backend defines usage schedules and the node applies rules and reports occupancy with minimal energy cost and true remote operation.  
+As a portfolio piece, the main value lies in the end‑to‑end integration: hardware + low-power firmware + LoRaWAN + ChirpStack operation + calendar/management logic.
 
-Este trabajo convierte una plaza pública en un activo gestionable: el backend define usos/horarios y el nodo aplica reglas y reporta ocupación con un coste energético mínimo y operación remota real. [memory:5][memory:11]  
-Como pieza de portfolio, el valor principal está en la integración end‑to‑end: hardware + firmware low-power + LoRaWAN + operación con ChirpStack + lógica de calendario/gestión. [memory:1][memory:11]
-
----
-
-<Alert title="Siguiente mejora (si se ampliara)" type="note">
-En una evolución natural entrarían: telemetría avanzada (RSSI/SNR/consumo), mejoras de calibración, y automatización de despliegue/configuración en ChirpStack para operar flotas con menos fricción.
+<Alert title="Future Improvements" type="note">
+Natural next steps would include: advanced telemetry (RSSI/SNR/power consumption), calibration improvements, and deployment/configuration automation in ChirpStack to operate fleets with less friction.
 </Alert>

@@ -19,7 +19,7 @@ export function Snowfall() {
       style={{
         position: "fixed",
         width: "100vw",
-        height: "100vh",
+        height: "100dvh",
         pointerEvents: "none",
         zIndex: 0,
       }}

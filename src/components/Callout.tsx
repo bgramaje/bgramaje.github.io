@@ -32,11 +32,11 @@ export function Callout({ title, type = "info", className, children }: CalloutPr
   const variant = variantMap[validType] || "info";
 
   return (
-    <Alert variant={variant} className={cn("my-2 p-2 px-3 pb-1 flex items-center", className)}>
+    <Alert variant={variant} className={cn("my-2 p-2 px-3 pb-1 flex items-center font-sans", className)}>
         <Icon size={18} />
         <div className="flex flex-col gap-1 ml-2">
-            {title && <AlertTitle className="mb-0">{title}</AlertTitle>}
-            <AlertDescription className="!mb-0 !pb-0">{children}</AlertDescription>
+            {title && <AlertTitle className="mb-0 font-sans">{title}</AlertTitle>}
+            <AlertDescription className="!mb-0 !pb-0 font-sans">{children}</AlertDescription>
         </div>
     </Alert>
   );
