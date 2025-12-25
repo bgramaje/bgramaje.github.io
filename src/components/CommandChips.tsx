@@ -11,9 +11,9 @@ export function CommandChips({ onCommandClick, allowedCommands }: CommandChipsPr
     : Object.keys(commands).sort();
 
   return (
-    <div className="p-3">
-      <p className="text-terminal-muted text-xs mb-2">Available commands:</p>
-      <div className="flex gap-2 overflow-x-auto pb-1">
+    <div className="p-2 md:p-3">
+      <p className="text-terminal-muted hidden md:block text-xs mb-2">Available commands:</p>
+      <div className="flex gap-2 overflow-x-auto pb-0 md:pb-1">
         {commandList.filter((cmd) => cmd !== "clear").map((cmd) => (
           <button
             key={cmd}
