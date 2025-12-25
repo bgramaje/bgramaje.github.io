@@ -43,14 +43,29 @@ The solution was built as a complete system with multiple interconnected compone
 ## Architecture Diagram
 
 ```mermaid
+%%{init: {
+"theme": "base",
+"themeVariables": {
+    "actorBkg":"#6b8bd1",
+    "actorBorder":"#4a6fa5",
+    "actorTextColor":"#ffffff",
+    "actorLineColor":"#d4d4e4",
+    "signalColor":"#d4d4e4",
+    "signalTextColor":"#ffffff",
+    "textColor":"#d4d4e4",
+    "noteBkgColor":"#6a7fa5",
+    "noteTextColor":"#d4d4e4",
+    "noteBorderColor":"#ffffff"
+}
+}}%%
 sequenceDiagram
-participant Node as IoT Node<br/>(ESP32-S3 + SX1262)
-participant GW as LoRaWAN Gateway<br/>(Packet Forwarder)
+participant Node as IoT Node<br/>(ESP32-S3)
+participant GW as LoRaWAN<br/>Gateway
 participant CS as ChirpStack<br/>(LoRaWAN Network Server)
 participant MQTT as MQTT Broker
-participant MS as Microservice<br/>(Request/Response Manager)
-participant DB as MongoDB Database
-participant Meteor as MeteorJS Application<br/>(Web UI + Data Management)
+participant MS as Microservice<br/>(chstack-mqtt-bridge)
+participant DB as MongoDB<br/>Database
+participant Meteor as MeteorJS<br/>(Web UI)
 
 Note over Node,GW: Uplink Flow
 Node->>GW: LoRa RF Uplink
