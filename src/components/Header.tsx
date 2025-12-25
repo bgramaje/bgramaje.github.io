@@ -42,9 +42,9 @@ export function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="mb-0 border-2 border-terminal-border bg-terminal-surface p-3"
+      className="mb-0 border-2 border-terminal-border bg-terminal-surface p-3 py-1 md:py-3"
     >
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-0.5 md:gap-5">
         {/* Avatar - Stacked Cards */}
         <div className="flex items-center shrink-0 relative" style={{ width: "80px", height: "80px" }}>
           <div 

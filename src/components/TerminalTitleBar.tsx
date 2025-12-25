@@ -7,7 +7,7 @@ interface TerminalTitleBarProps {
 
 export function TerminalTitleBar({ title = "bgramaje@portfolio", onClose }: TerminalTitleBarProps) {
   return (
-    <div className="flex items-center gap-2 px-2 py-2 bg-terminal-bg border-b-2 border-terminal-border shrink-0">
+    <div className="flex items-center gap-2 px-2 py-1 bg-terminal-bg border-b-2 border-terminal-border shrink-0">
       <div className="flex gap-2">
         <div className="w-3 h-3 bg-terminal-error" />
         <div className="w-3 h-3 bg-terminal-warning" />
