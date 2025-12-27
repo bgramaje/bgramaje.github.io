@@ -43,7 +43,7 @@ export function BlogPost({ id }: BlogPostProps) {
   }
 
   return (
-    <div className="space-y-4 pr-0 md:pr-2 font-sans">
+    <div className="space-y-2 pr-0 md:pr-2 pl-0 md:pl-2 font-sans">
       <div className="prose prose-invert prose-sm max-w-none">
         <MDXProvider components={components}>
           <MDXContent />

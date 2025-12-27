@@ -20,7 +20,7 @@ import { Alert } from "@/components/ui/alert";
 
 > This post is written as a portfolio piece: it explains the solution at a high level, key technical decisions, and how it integrates with ChirpStack, without delving into sensitive details or proprietary code.
 
-## Objectives
+## 1. Objectives
 
 The system's goal was to provide public parking spaces with a digital operational cycle: knowing whether they're free or occupied, and being able to change permitted usage according to time slots or specific needs (rotation, loading/unloading, temporary reservations, etc.).
 
@@ -28,7 +28,7 @@ For this to work reliably in real-world conditions, two core capabilities were e
 * **Reliable sensing** (without false positives)
 * **Remote management** (updating schedules and calibration without reflashing firmware)
 
-## System Architecture
+## 2. System Architecture
 
 The solution was built as a complete system with multiple interconnected components:
 
@@ -40,7 +40,7 @@ The solution was built as a complete system with multiple interconnected compone
 - **MeteorJS Application**: web-based platform for writing and managing data in MongoDB, providing user interface for configuration and monitoring
 - **Docker Microservice (chstack-mqtt-bridge)**: dedicated service responsible for managing requests and responses between the server and the IoT node, handling protocol translation and command queuing
 
-## Architecture Diagram
+## 3. Architecture Diagram
 
 ```mermaid
 %%{init: {
@@ -81,20 +81,23 @@ CS->>GW: Downlink (RX1/RX2)
 GW->>Node: LoRa RF Downlink
 ```
 
-## The CrowPanel Node
+
+## 4. IoT Node
 
 The device combines:
 
 - **ESP32‑S3** as the main MCU and lifecycle orchestrator (boot → measure → communicate → sleep)
-- **SX1262 radio** for LoRaWAN communication
-- **Ultrasonic sensor** to infer distance and determine occupancy based on configurable thresholds
-- **E‑ink display** for local status and diagnostics (particularly useful during deployment and maintenance)
+- **SX-1262** LoRa module for LoRaWAN communication
+- **JSN-SR04T** ultrasonic sensor to infer distance and determine occupancy based on configurable thresholds
+- **E‑ink display** showcasing the current occupancy status and usage schedule
 
-A significant part of the hardware integration work involved resolving pin mapping and bus conflicts (SPI) when multiple peripherals coexist (e‑ink/SD/radio), ensuring the design remains stable and reproducible.
+A significant part of the hardware integration work involved resolving pin mapping and bus conflicts (SPI) when multiple peripherals coexist (e‑ink/SD-slot/radio), ensuring the design remains stable and reproducible.
+> For this, the given device acquired was an `ESP32-S3 DevKitC-1` with a custom PCB including the e‑ink display, and an SD-slot for the microSD card. Since the SD-slot was not needed for this project, a modification in the 
+library of `arduino-lmic` was made to target the `SPI3` class rather than the default `SPI` class.
 
-## Firmware Architecture (Layered Design)
+## 5. Firmware Architecture (Layered Design)
 
-The firmware was organized in layers with a clear objective: **minimize awake time** and make behavior predictable.
+The firmware was organized in layers with a clear objective: **minimize awake time**, make behavior predictable and **power efficient**.
 
 - **Power/Boot/RTC**: state restoration and determining the "goal" of the current cycle
 - **Sensor**: robust measurement when context requires it
@@ -102,7 +105,7 @@ The firmware was organized in layers with a clear objective: **minimize awake ti
 - **LoRaWAN**: transmissions, downlink waiting, and retry control
 - **UI**: e‑ink updates only when relevant state changes
 
-## Lifecycle (Step by Step)
+## 6. Lifecycle (Step by Step)
 
 At a high level, the node operates as follows:
 
@@ -114,7 +117,7 @@ At a high level, the node operates as follows:
 6. **UI**: refresh e‑ink only if there's a real change (different hash)
 7. **Deep sleep**: sleep for the calculated duration
 
-## LoRaWAN Messaging Protocol
+## 7. LoRaWAN Messaging Protocol
 
 The protocol was designed with small, purpose-driven messages, separated by FPorts to simplify backend processing and debugging:
 
@@ -123,14 +126,29 @@ The protocol was designed with small, purpose-driven messages, separated by FPor
 - **`STATUS (uplink)`**: reports distance/occupancy and metadata about active usage
 - **`ACK/REBOOT (downlink)`**: confirmation and remote control for safe operation
 
-### Typical Sequence (RSYNC → RESYNC_RESPONSE → STATUS)
+### 7.1. Typical Sequence (RSYNC → RESYNC_RESPONSE → STATUS)
 
 ```mermaid
+%%{init: {
+"theme": "base",
+"themeVariables": {
+    "actorBkg":"#6b8bd1",
+    "actorBorder":"#4a6fa5",
+    "actorTextColor":"#ffffff",
+    "actorLineColor":"#d4d4e4",
+    "signalColor":"#d4d4e4",
+    "signalTextColor":"#ffffff",
+    "textColor":"#d4d4e4",
+    "noteBkgColor":"#6a7fa5",
+    "noteTextColor":"#d4d4e4",
+    "noteBorderColor":"#ffffff"
+}
+}}%%
 sequenceDiagram
-participant D as CrowPanel Node
+participant D as Node
 participant G as Gateway
 participant C as ChirpStack
-participant A as App (calendar/rules)
+participant A as App <br> (calendar/rules)
 
 D->>G: Uplink RSYNC
 G->>C: Forward uplink
@@ -143,8 +161,23 @@ G->>C: Forward uplink
 C->>A: Event (STATUS)
 ```
 
+## 8. Application (MeteorJS)
 
-## Occupancy Detection (Ultrasonic)
+### 8.1. What is MeteorJS?
+
+MeteorJS is a full-stack JavaScript framework that provides real-time data synchronization between the client and server. It uses MongoDB as its default database and features a reactive data layer that automatically updates the UI when data changes. This makes it particularly well-suited for applications requiring live monitoring and configuration management, where users need to see device status and telemetry updates in real-time without manual page refreshes.
+
+### 8.2. Core Functionalities
+
+The MeteorJS application serves as the central management and monitoring platform for the parking space IoT nodes. Its core functionalities include:
+
+- **Device Management**: Registration and configuration of IoT nodes, including device metadata, location information, and LoRaWAN credentials.
+- **Schedule and Rule Configuration**: Creation and management of usage schedules that define when parking spaces are available, reserved, or have special rules (e.g., loading zones, time-restricted access).
+- **Remote Configuration Management**: Dynamic calibration and threshold updates for occupancy detection sensors. Administrators can adjust distance thresholds.
+- **Real-time Monitoring Dashboard**: Live visualization of device status, occupancy states, and telemetry data.
+- **Downlink Command Queuing**: Interface for administrators to trigger remote actions such as reboots, or configuration updates.
+
+## 9. Occupancy Detection
 
 Occupancy is inferred from distance measurements, but with noise-resistant decision-making:
 
@@ -152,12 +185,11 @@ Occupancy is inferred from distance measurements, but with noise-resistant decis
 - Readings are compared against **remotely configurable thresholds**, enabling site-specific calibration (height, tilt, reflections) without reflashing
 - Measurement isn't always executed: it's activated only when the schedule/usage requires it or when pending messages depend on the state
 
-## Low Power and Persistence
+## 10. Low Power and Persistence
 
-The power design is based on "transactions": wake up, do the minimum necessary, and go back to sleep.  
-To make this viable, critical state is persisted in RTC memory (configuration, schedule, pending messages, hashes), so deep sleep reboots don't break logical continuity.
+The power design is based on "transactions": wake up, do the minimum necessary, and go back to sleep. To make this viable, critical state is persisted in RTC memory (configuration, schedule, pending messages, hashes), so deep sleep reboots don't break logical continuity.
 
-## Robustness: Retries and Pending Messages
+## 11. Robustness: Retries and Pending Messages
 
 In real-world environments, uplink/downlink losses occur, making retry logic essential:
 
@@ -165,22 +197,10 @@ In real-world environments, uplink/downlink losses occur, making retry logic ess
 - The application clears the pending flag when the expected confirmation is received, or retries on a subsequent boot if it didn't arrive
 - State hashes help prevent spam: if nothing changed, STATUS transmission and e‑ink refresh aren't forced
 
-## Development and Testing (PlatformIO)
-
-For development and bench testing, the typical workflow was:
-
-```shell
-platformio run --target upload
-platformio device monitor --baud 115200
-```
-
-This allows validation of the lifecycle in logs (join/tx/rx/sleep), as well as debugging sensor calibration and retry behavior.
-
-## Results and Impact
+## 12. Results and Impact
 
 This work transforms a public parking space into a manageable asset: the backend defines usage schedules and the node applies rules and reports occupancy with minimal energy cost and true remote operation.  
+
 As a portfolio piece, the main value lies in the end‑to‑end integration: hardware + low-power firmware + LoRaWAN + ChirpStack operation + calendar/management logic.
 
-<Alert title="Future Improvements" type="note">
-Natural next steps would include: advanced telemetry (RSSI/SNR/power consumption), calibration improvements, and deployment/configuration automation in ChirpStack to operate fleets with less friction.
-</Alert>
+> Natural next steps would include: calibration improvements, and deployment/configuration automation in ChirpStack to operate fleets with less friction.

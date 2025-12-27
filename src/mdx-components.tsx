@@ -2,23 +2,11 @@ import type { MDXComponents } from "mdx/types";
 import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import type { MermaidProps } from "mdx-mermaid/lib/Mermaid";
 import { Callout } from "@/components/Callout";
-import { MermaidConfig } from "mermaid";
 
 function isInlineCode(className?: string) {
   // En MDX, los inline code normalmente no traen language-xxx
   return !className || !/language-\w+/.test(className);
 }
-
-const mermaidConfig = {
-  theme: "base",
-  themeVariables: {
-    actorBkg: "#e8f0ff",
-    actorBorder: "#2b5cff",
-    actorTextColor: "#0b1b3a",
-    actorLineColor: "#2b5cff",
-  },
-} as MermaidConfig;
-
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -87,7 +75,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </pre>
       </div>
     ),
-
     // Inline code: estilo; Code block: no tocar (rehype-highlight manda)
     code: ({ className, children, ...props }) => {
       if (isInlineCode(className)) {
@@ -124,7 +111,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     // Mermaid aislado: no pasa por pre/code
     mermaid: (props: MermaidProps) => (
       <div className="my-3 md:my-4 overflow-x-auto">
-        <Mermaid chart={props.chart} config={{ mermaid: mermaidConfig }} />
+        <Mermaid chart={props.chart} />
       </div>
     ),
     // Callout component for MDX
