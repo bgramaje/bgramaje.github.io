@@ -61,7 +61,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <pre
           {...props}
           className={[
-            "!m-0 p-2 md:p-4 text-[10px] md:text-xs leading-relaxed border-2 rounded-[0.35rem]",
+            "!m-0 p-2 md:p-4 text-[10px] md:text-xs leading-relaxed border-2 rounded-lg",
             // opcional: si quieres fijar fondo aquí y no en hljs theme
             // "bg-terminal-bg",
           ].join(" ")}
@@ -80,7 +80,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       if (isInlineCode(className)) {
         return (
           <code
-            className="px-1 py-0.5 bg-terminal-bg border border-terminal-border text-terminal-accent text-[10px] md:text-xs rounded font-mono"
+            className="px-1 py-0.5 bg-terminal-bg border border-terminal-border text-terminal-accent text-[10px] md:text-xs rounded-lg font-mono"
             {...props}
           >
             {children}
@@ -96,7 +96,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     blockquote: ({ children, ...props }) => (
       <blockquote
-        className="border-l-4 border-terminal-accent pl-2 md:pl-3 italic text-terminal-muted text-xs md:text-sm mb-2 my-2 md:my-3 font-sans"
+        className="border-l-4 border-terminal-accent pl-2 md:pl-3 italic text-terminal-muted text-xs md:text-sm mb-2 my-2 md:my-3 font-sans rounded-r-lg"
         {...props}
       >
         {children}
@@ -107,7 +107,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </a>
     ),
-    img: (props) => <img className="my-3 md:my-4 rounded-lg max-w-full" {...props} />,
+    img: (props) => <img className="my-3 md:my-4 rounded-xl max-w-full" {...props} />,
     // Mermaid aislado: no pasa por pre/code
     mermaid: (props: MermaidProps) => (
       <div className="my-3 md:my-4 overflow-x-auto">

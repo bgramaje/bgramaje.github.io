@@ -76,7 +76,7 @@ export function JobDetail({ job }: JobDetailProps) {
           {job.technologies.map((tech) => (
             <span
               key={tech}
-              className="px-3 py-1.5 text-xs font-medium bg-terminal-border/30 border border-terminal-border/50 text-terminal-text rounded hover:bg-terminal-border/50 hover:border-terminal-border transition-colors"
+              className="px-3 py-1.5 text-xs font-medium bg-terminal-border/30 border border-terminal-border/50 text-terminal-text rounded-lg hover:bg-terminal-border/50 hover:border-terminal-border transition-colors"
             >
               {tech}
             </span>

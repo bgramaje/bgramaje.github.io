@@ -42,19 +42,19 @@ export function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="mb-0 border-2 border-terminal-border bg-terminal-surface p-3 py-1 md:py-3"
+      className="mb-0 border-2 border-terminal-border bg-terminal-surface p-2.5 py-1.5 md:py-2 rounded-lg"
     >
       <div className="flex flex-row items-center gap-0.5 md:gap-5">
         {/* Avatar - Stacked Cards */}
-        <div className="flex items-center shrink-0 relative" style={{ width: "80px", height: "80px" }}>
+        <div className="flex items-center shrink-0 relative" style={{ width: "56px", height: "56px" }}>
           <div 
-            className="relative w-16 h-16 md:w-20 md:h-20 cursor-pointer"
+            className="relative w-12 h-12 md:w-14 md:h-14 cursor-pointer"
             onClick={() => setIsFlipped(!isFlipped)}
             style={{ perspective: "1000px" }}
           >
             {/* Bottom card - rotated */}
             <motion.div
-              className="absolute inset-0 border-2 border-white rounded-lg"
+              className="absolute inset-0 border-2 border-white rounded-xl"
               style={{
                 rotate: isFlipped ? "-8deg" : "8deg",
                 zIndex: 0,
@@ -67,7 +67,7 @@ export function Header() {
               <img
                 src={bottomImage.src}
                 alt={bottomImage.alt}
-                className="w-full h-full object-cover rounded-lg blur-[2px]"
+                className="w-full h-full object-cover rounded-xl blur-[2px]"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = "none";
@@ -77,7 +77,7 @@ export function Header() {
 
             {/* Top card - smaller */}
             <motion.div
-              className="absolute inset-0 border-2 border-white rounded-lg"
+              className="absolute inset-0 border-2 border-white rounded-xl"
               style={{
                 zIndex: 1,
                 scale: 0.9,
@@ -91,7 +91,7 @@ export function Header() {
               <img
                 src={topImage.src}
                 alt={topImage.alt}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-xl"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = "none";
@@ -105,12 +105,15 @@ export function Header() {
         <div className="flex-1 flex flex-col items-start text-center md:text-left">
           {/* Name and Social Links - Same div on desktop with justify-between */}
           <div className="w-full hidden md:flex justify-between items-center">
-            <h1 className="text-base md:text-lg font-semibold text-terminal-text">
-              {personalInfo.name}
-            </h1>
+            <div className="flex flex-col">
+              <h1 className="text-sm md:text-base font-semibold text-terminal-text leading-tight">
+                {personalInfo.name}
+              </h1>
+              <p className="text-terminal-muted text-xs leading-tight">{personalInfo.title}</p>
+            </div>
 
             {/* Social Links - Inline with name on desktop */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {socialLinks.map((link) => {
                 const Icon = link.icon;
                 return (
@@ -122,7 +125,7 @@ export function Header() {
                     className="text-terminal-muted hover:text-terminal-accent transition-colors"
                     aria-label={link.name}
                   >
-                    <Icon size={18} />
+                    <Icon size={16} />
                   </a>
                 );
               })}
@@ -130,15 +133,15 @@ export function Header() {
           </div>
 
           {/* Name - Mobile only */}
-          <h1 className="text-base md:text-lg font-semibold text-terminal-text md:hidden">
-            {personalInfo.name}
-          </h1>
-
-          {/* Title - Visible on all screens */}
-          <p className="text-terminal-muted text-sm">{personalInfo.title}</p>
+          <div className="md:hidden">
+            <h1 className="text-sm font-semibold text-terminal-text leading-tight">
+              {personalInfo.name}
+            </h1>
+            <p className="text-terminal-muted text-xs leading-tight">{personalInfo.title}</p>
+          </div>
 
           {/* Social Links - Mobile only */}
-          <div className="flex md:hidden items-center gap-3 mt-1">
+          <div className="flex md:hidden items-center gap-2 mt-0.5">
             {socialLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -150,16 +153,11 @@ export function Header() {
                   className="text-terminal-muted hover:text-terminal-accent transition-colors"
                   aria-label={link.name}
                 >
-                  <Icon size={18} />
+                  <Icon size={16} />
                 </a>
               );
             })}
           </div>
-
-          {/* Bio - Hidden on mobile */}
-          <p className="hidden md:block text-terminal-muted text-xs leading-relaxed mt-1">
-            &gt; {personalInfo.bio}
-          </p>
         </div>
       </div>
     </motion.div>

@@ -25,16 +25,16 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
             startOnLoad: false,
             theme: "dark",
             themeVariables: {
-              primaryColor: "#5b9bd1",
-              primaryTextColor: "#d4d4e4",
-              primaryBorderColor: "#4a6fa5",
-              lineColor: "#4a6fa5",
-              secondaryColor: "#151a25",
-              tertiaryColor: "#0a0f1a",
-              background: "#151a25",
-              mainBkg: "#151a25",
-              secondBkg: "#0a0f1a",
-              textColor: "#d4d4e4",
+              primaryColor: "#cccccc",
+              primaryTextColor: "#ffffff",
+              primaryBorderColor: "#666666",
+              lineColor: "#666666",
+              secondaryColor: "#1a1a1a",
+              tertiaryColor: "#000000",
+              background: "#1a1a1a",
+              mainBkg: "#1a1a1a",
+              secondBkg: "#000000",
+              textColor: "#ffffff",
             },
           });
           mermaidInitialized = true;
@@ -60,7 +60,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 
   if (error) {
     return (
-      <div className="my-4 p-4 border-2 border-terminal-border rounded bg-terminal-bg">
+      <div className="my-4 p-4 border-2 border-terminal-border rounded-lg bg-terminal-bg">
         <p className="text-terminal-error text-sm">{error}</p>
         <pre className="text-terminal-muted text-xs mt-2 overflow-x-auto whitespace-pre-wrap">{chart}</pre>
       </div>

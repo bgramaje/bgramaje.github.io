@@ -139,13 +139,16 @@ export function TerminalModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/80">
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/80"
+        onClick={onClose}
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-4xl h-[95dvh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative"
+          className="w-full max-w-4xl h-[95dvh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative rounded-lg overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Title Bar */}

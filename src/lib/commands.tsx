@@ -101,8 +101,6 @@ export function processCommand(
         return null;
       }
       return <div className="text-terminal-muted text-sm">Already on home page</div>;
-    case "whoami":
-      return <WhoamiOutput />;
     case "clear":
       return null;
     case "":

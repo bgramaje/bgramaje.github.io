@@ -21,7 +21,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-terminal-border;
+    @apply bg-terminal-border rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -50,7 +50,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background-image: radial-gradient(circle, rgba(91, 155, 209, 0.15) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
     background-size: 20px 20px;
     background-position: 0 0;
     transform: rotate(45deg);

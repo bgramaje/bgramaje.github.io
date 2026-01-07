@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "@/components/Terminal";
 import { TerminalOutput } from "@/components/TerminalOutput";
-import { Header } from "@/components/Header";
 import { CommandChips } from "@/components/CommandChips";
 import { TerminalModal } from "@/components/TerminalModal";
 import { TerminalTitleBar } from "@/components/TerminalTitleBar";
 import { Snowfall } from "@/components/Snowfall";
+import { ContactOutput } from "@/lib/commands-output/ContactOutput";
 import { commands as availableCommands } from "@/data/portfolio";
 import { processCommand } from "@/lib/commands";
 
@@ -19,7 +19,13 @@ export interface HistoryItem {
 
 export function HomePage() {
   const navigate = useNavigate();
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([
+    {
+      id: Date.now(),
+      command: "contact",
+      output: <ContactOutput />,
+    },
+  ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -150,13 +156,8 @@ export function HomePage() {
         className="w-full max-w-5xl h-full flex flex-col items-center justify-center gap-2 md:gap-3 relative z-10"
         onClick={focusInput}
       >
-        {/* Header */}
-        <div className="w-full shrink-0 h-auto max-h-32">
-          <Header />
-        </div>
-
         {/* Terminal Window */}
-        <div className="w-full flex-grow bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col">
+        <div className="w-full flex-grow bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col rounded-lg">
           {/* Title Bar */}
           <TerminalTitleBar />
 

@@ -271,6 +271,5 @@ export const commands = {
   studies: "Show academic studies",
   home: "Navigate to home page",
   clear: "Clear the terminal",
-  whoami: "Display user information",
 };
 

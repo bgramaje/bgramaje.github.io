@@ -12,7 +12,7 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
         <div
           key={job.id ?? index}
           onClick={() => onJobClick?.(job.id ?? index)}
-          className="p-3 border-2 border-terminal-border bg-terminal-bg hover:bg-terminal-border/30 hover:border-terminal-accent cursor-pointer transition-colors"
+          className="p-3 border-2 border-terminal-border bg-terminal-bg hover:bg-terminal-border/30 hover:border-terminal-accent cursor-pointer transition-colors rounded-lg"
         >
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-4">

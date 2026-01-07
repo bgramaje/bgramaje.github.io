@@ -175,7 +175,7 @@ export function BlogPage() {
         onClick={focusInput}
       >
         {/* Terminal Window */}
-        <div className="w-full flex-grow bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col">
+        <div className="w-full flex-grow bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col rounded-lg">
           {/* Title Bar */}
           <TerminalTitleBar />
 

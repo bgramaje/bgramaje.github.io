@@ -46,7 +46,7 @@ export function BlogOutput({ onPostClick }: BlogOutputProps) {
         <div
           key={post.id}
           onClick={() => onPostClick(post.id)}
-          className="p-3 border-2 border-terminal-border bg-terminal-bg hover:bg-terminal-border/30 hover:border-terminal-accent cursor-pointer transition-colors"
+          className="p-3 border-2 border-terminal-border bg-terminal-bg hover:bg-terminal-border/30 hover:border-terminal-accent cursor-pointer transition-colors rounded-lg"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-4">

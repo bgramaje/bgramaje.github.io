@@ -30,7 +30,7 @@ export const TerminalOutput = forwardRef<HTMLDivElement, TerminalOutputProps>(
         <span className="text-terminal-text inline sm:hidden text-xs">{command}</span>
 
         {/* Output */}
-        <div className="pl-2 border-l-2 border-terminal-border ml-0.5">
+        <div>
           {output}
         </div>
       </motion.div>

@@ -18,7 +18,7 @@ export function CommandChips({ onCommandClick, allowedCommands }: CommandChipsPr
           <button
             key={cmd}
             onClick={() => onCommandClick(cmd)}
-            className="px-3 py-1.5 text-xs border-2 border-terminal-border bg-terminal-bg text-terminal-text hover:bg-terminal-border hover:text-terminal-accent transition-colors cursor-pointer shrink-0"
+            className="px-3 py-1.5 text-xs border-2 border-terminal-border bg-terminal-bg text-terminal-text hover:bg-terminal-border hover:text-terminal-accent transition-colors cursor-pointer shrink-0 rounded-lg"
             type="button"
           >
             {cmd}

@@ -28,7 +28,7 @@ export function PublicationsOutput() {
             {pub.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-0.5 text-xs bg-terminal-border/50 text-terminal-accent rounded"
+                className="px-2 py-0.5 text-xs bg-terminal-border/50 text-terminal-accent rounded-lg"
               >
                 {tag}
               </span>
