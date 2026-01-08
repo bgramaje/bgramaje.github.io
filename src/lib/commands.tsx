@@ -7,7 +7,6 @@ import { PublicationsOutput } from "./commands-output/PublicationsOutput";
 import { SkillsOutput } from "./commands-output/SkillsOutput";
 import { StudiesOutput } from "./commands-output/StudiesOutput";
 import { ContactOutput } from "./commands-output/ContactOutput";
-import { WhoamiOutput } from "./commands-output/WhoamiOutput";
 import { ErrorOutput } from "./commands-output/ErrorOutput";
 import { BlogOutput } from "./commands-output/BlogOutput";
 
