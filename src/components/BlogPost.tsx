@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { useMDXComponents } from "@/mdx-components";
-import { loadBlogContent, type BlogMDXModule } from "@/lib/blogLoader";
+import { loadBlogContent } from "@/lib/blogLoader";
 
 interface BlogPostProps {
   id: string;
@@ -9,44 +9,61 @@ interface BlogPostProps {
 
 export function BlogPost({ id }: BlogPostProps) {
   const [MDXContent, setMDXContent] = useState<React.ComponentType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const components = useMDXComponents({});
 
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
     loadBlogContent(id)
-      .then((module: BlogMDXModule) => {
-        setMDXContent(() => module.default);
-        setLoading(false);
+      .then((module) => {
+        if (!cancelled) setMDXContent(() => module.default);
       })
-      .catch((error) => {
-        console.error("Error loading blog content:", error);
-        setLoading(false);
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : String(err));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
+
+  const wrapperClass = "space-y-2 pr-0 md:pr-2 pl-0 md:pl-2 font-sans pb-20";
+  const proseClass = "prose prose-invert prose-sm max-w-none relative";
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <div className="text-terminal-muted text-sm">Loading...</div>
+      <div className={wrapperClass}>
+        <div className="flex items-center gap-2 py-6 text-terminal-muted text-sm">
+          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-terminal-border border-t-terminal-accent" />
+          Loading…
+        </div>
       </div>
     );
   }
 
-  if (!MDXContent) {
+  if (error || !MDXContent) {
     return (
-      <div className="space-y-1">
+      <div className={wrapperClass}>
         <p className="text-terminal-error">
-          Failed to load blog post: <span className="text-terminal-text">{id}</span>
+          {error ?? "Failed to load post"}: <span className="text-terminal-text">{id}</span>
         </p>
       </div>
     );
   }
 
+  const Content = MDXContent;
   return (
-    <div className="space-y-2 pr-0 md:pr-2 pl-0 md:pl-2 font-sans">
-      <div className="prose prose-invert prose-sm max-w-none">
+    <div className={wrapperClass}>
+      <div className={proseClass}>
         <MDXProvider components={components}>
-          <MDXContent />
+          <Content />
         </MDXProvider>
       </div>
     </div>

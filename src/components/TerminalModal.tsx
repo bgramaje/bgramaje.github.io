@@ -23,9 +23,21 @@ export function TerminalModal({
   const [history, setHistory] = useState<Array<{ id: number; command: string; output: React.ReactNode }>>([]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(true);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const scrollToBottom = useCallback(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (history.length > 0) {
+      const t = setTimeout(scrollToBottom, 80);
+      return () => clearTimeout(t);
+    }
+  }, [history, scrollToBottom]);
 
   useEffect(() => {
     if (isOpen) {
@@ -35,25 +47,18 @@ export function TerminalModal({
 
   useEffect(() => {
     if (isOpen) {
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-        if (initialContent) {
-          setHistory([
-            {
-              id: Date.now(),
-              command: placeholder || "",
-              output: initialContent,
-            },
-          ]);
-        } else {
-          setHistory([]);
-        }
-      }, 1000);
-
-      return () => clearTimeout(timer);
+      if (initialContent) {
+        setHistory([
+          {
+            id: Date.now(),
+            command: placeholder || "",
+            output: initialContent,
+          },
+        ]);
+      } else {
+        setHistory([]);
+      }
     } else {
-      setIsLoading(true);
       setHistory([]);
     }
   }, [isOpen, initialContent, placeholder]);
@@ -159,41 +164,24 @@ export function TerminalModal({
             {/* Terminal Content */}
             <div
               ref={terminalRef}
-              className={`flex-1 overflow-y-auto pt-2 pb-4 px-2 md:pt-3 md:pb-6 md:px-4 scroll-smooth text-sm ${
-                isLoading ? "flex items-center justify-center" : ""
-              }`}
+              className="flex-1 overflow-y-auto pt-2 pb-4 px-2 md:pt-3 md:pb-6 md:px-4 scroll-smooth text-sm"
             >
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center">
-                  <div className="relative w-10 h-10">
-                    <div className="absolute inset-0 border-2 border-terminal-border border-t-terminal-accent rounded-full animate-spin"></div>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {/* Command History */}
-                  <AnimatePresence mode="popLayout">
-                    {history.map((item) => (
-                      <TerminalOutput key={item.id} command={item.command} output={item.output} />
-                    ))}
-                  </AnimatePresence>
+              <AnimatePresence mode="popLayout">
+                {history.map((item) => (
+                  <TerminalOutput key={item.id} command={item.command} output={item.output} />
+                ))}
+              </AnimatePresence>
 
-                  {/* Input Line */}
-                  <Terminal
-                    onSubmit={handleCommand}
-                    onKeyDown={handleKeyDown}
-                    inputRef={inputRef}
-                  />
-                </>
-              )}
+              <Terminal
+                onSubmit={handleCommand}
+                onKeyDown={handleKeyDown}
+                inputRef={inputRef}
+              />
             </div>
 
-            {/* Command Chips - Only close */}
-            {!isLoading && (
-              <div className="border-t-2 border-terminal-border bg-terminal-surface shrink-0">
-                <CommandChips onCommandClick={handleCommand} allowedCommands={["close"]} />
-              </div>
-            )}
+            <div className="border-t-2 border-terminal-border bg-terminal-surface shrink-0">
+              <CommandChips onCommandClick={handleCommand} allowedCommands={["close"]} />
+            </div>
           </div>
         </motion.div>
       </div>

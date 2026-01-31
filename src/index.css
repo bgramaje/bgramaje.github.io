@@ -7,21 +7,36 @@
     @apply border-terminal-border;
   }
 
+  html {
+    overflow: hidden;
+    height: 100dvh;
+  }
+
   body {
     @apply bg-terminal-bg text-terminal-text font-mono antialiased;
+    overflow: hidden;
+    height: 100dvh;
+    margin: 0;
+  }
+
+  #root {
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-terminal-bg;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-terminal-border rounded-full;
+    @apply bg-terminal-border/80 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -33,29 +48,27 @@
   }
 }
 
+/* MDX table: alternating row background for body rows */
+.mdx-table-wrapper tbody tr:nth-child(odd) {
+  background-color: rgb(30 30 46 / 0.35);
+}
+.mdx-table-wrapper tbody tr:nth-child(even) {
+  background-color: rgb(30 30 46 / 0.12);
+}
+
 @layer utilities {
   .text-gradient {
     @apply bg-gradient-to-r from-terminal-text via-terminal-muted to-terminal-text bg-clip-text text-transparent;
   }
+}
 
-  .dot-pattern-rotated {
-    position: relative;
-    overflow: hidden;
+/* Light Rays: soft pulse for animated rays */
+@keyframes light-ray-pulse {
+  0%, 100% {
+    opacity: 0.4;
   }
-
-  .dot-pattern-rotated::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-position: 0 0;
-    transform: rotate(45deg);
-    transform-origin: center;
-    pointer-events: none;
+  50% {
+    opacity: 0.65;
   }
 }
 

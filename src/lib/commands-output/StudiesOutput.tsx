@@ -3,8 +3,6 @@ import { studies } from "@/data/portfolio";
 export function StudiesOutput() {
   return (
     <div className="space-y-3">
-      <p className="text-terminal-accent font-semibold">Academic Studies:</p>
-      <div className="space-y-3">
         {studies.map((study, idx) => (
           <div key={idx} className="flex items-start gap-3">
             <span className="text-terminal-success shrink-0 mt-0.5">
@@ -16,11 +14,13 @@ export function StudiesOutput() {
               </p>
               <p className="text-terminal-muted text-xs mt-0.5">
                 {study.institution}
+                {study.ongoing && (
+                  <span className="text-terminal-success ml-1">(ongoing)</span>
+                )}
               </p>
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 }

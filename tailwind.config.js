@@ -9,18 +9,18 @@ export default {
     extend: {
       colors: {
         terminal: {
-          bg: "#000000",
-          surface: "#1a1a1a",
-          border: "#666666",
-          text: "#ffffff",
-          muted: "#888888",
-          accent: "#cccccc",
-          success: "#ffffff",
-          warning: "#aaaaaa",
-          error: "#888888",
-          purple: "#999999",
-          cyan: "#bbbbbb",
-          pink: "#aaaaaa",
+          bg: "#0a0a0a",
+          surface: "#141414",
+          border: "#2d2d2d",
+          text: "#e5e5e5",
+          muted: "#737373",
+          accent: "#a3a3a3",
+          success: "#22c55e",
+          warning: "#eab308",
+          error: "#ef4444",
+          purple: "#a78bfa",
+          cyan: "#22d3ee",
+          pink: "#f472b6",
         },
       },
       fontFamily: {
@@ -32,8 +32,13 @@ export default {
         "fade-in": "fadeIn 0.3s ease-out",
         "slide-up": "slideUp 0.4s ease-out",
         glow: "glow 2s ease-in-out infinite alternate",
+        "light-ray-pulse": "lightRayPulse 14s ease-in-out infinite",
       },
       keyframes: {
+        lightRayPulse: {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.65" },
+        },
         blink: {
           "0%, 100%": { opacity: 1 },
           "50%": { opacity: 0 },

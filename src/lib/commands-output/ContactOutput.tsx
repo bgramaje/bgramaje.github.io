@@ -3,7 +3,7 @@ import { personalInfo, socialLinks } from "@/data/portfolio";
 export function ContactOutput() {
   return (
     <div className="space-y-2">
-      <p className="text-terminal-accent font-semibold">Contact & Social:</p>
+      <p className="text-terminal-accent font-semibold">Contact:</p>
       <div className="flex items-center gap-3">
         <img
           src="/images/pic3.png"
@@ -19,21 +19,21 @@ export function ContactOutput() {
           </a>
         </div>
       </div>
-      <div className="flex flex-wrap gap-4 pt-0">
+      <div className="flex flex-wrap gap-2 pt-0">
         {socialLinks.map((link) => (
           <a
             key={link.name}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-1.5 bg-terminal-border/50 rounded-lg hover:bg-terminal-border transition-colors text-terminal-success"
+            className="flex items-center gap-2 px-2 py-1 text-xs bg-terminal-border/50 rounded-lg hover:bg-terminal-border transition-colors text-terminal-success"
           >
             <span>{link.name}</span>
             <span className="text-terminal-muted">↗</span>
           </a>
         ))}
       </div>
-      <p className="text-terminal-muted text-sm pt-2">
+      <p className="text-terminal-muted text-sm pt-0">
         Type <span className="text-terminal-text">help</span> to see available commands
       </p>
     </div>

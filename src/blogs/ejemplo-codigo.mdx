@@ -1,0 +1,44 @@
+---
+title: "Ejemplo: Highlighter y Code Block"
+description: "Post de ejemplo con Magic UI Highlighter y Joly UI Code Block para ver cómo se integran en MDX."
+date: "2025-01-15"
+tags:
+  - ejemplo
+  - MDX
+  - componentes
+---
+
+# Ejemplo: Highlighter y Code Block
+
+Este post muestra el uso de <Highlighter action="highlight" color="#86efac">Highlighter</Highlighter> (Magic UI) y del <Highlighter action="underline" color="#fbbf24">Code Block</Highlighter> (Joly UI) dentro de MDX.
+
+## Texto con Highlighter
+
+Puedes resaltar términos clave con distintos estilos:
+
+- <Highlighter action="highlight" color="#a78bfa">highlight</Highlighter> — marca como rotulador
+- <Highlighter action="underline" color="#f472b6">underline</Highlighter> — subrayado
+- <Highlighter action="box" color="#93c5fd">box</Highlighter> — recuadro alrededor del texto
+
+## Bloque de código con CodeBlock
+
+A continuación, un ejemplo con el componente **CodeBlock** (variante terminal, tema oneDark):
+
+<CodeBlock
+  code={`function greet(name: string): string {
+  return \`Hello, \${name}!\`;
+}
+
+const message = greet("MDX");
+console.log(message); // Hello, MDX!`}
+  language="typescript"
+  variant="terminal"
+  theme="oneDark"
+  animation="fadeIn"
+  showLineNumbers={true}
+  copyable={true}
+  showLanguage={true}
+  title="greet.ts"
+/>
+
+Así puedes combinar **Highlighter** para enfatizar texto y **CodeBlock** para mostrar código con syntax highlighting, copiar y opciones de tema y variante.

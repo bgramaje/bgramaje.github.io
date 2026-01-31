@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, type RefObject } from "react";
+import { useState, useEffect, type RefObject } from "react";
+import { TerminalPrompt } from "./TerminalPrompt";
 
 interface TerminalProps {
   onSubmit: (command: string) => void;
@@ -13,7 +14,6 @@ interface TerminalProps {
 
 export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: TerminalProps) {
   const [value, setValue] = useState("");
-  const spanRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -26,14 +26,8 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2 group text-sm">
-      <span className="text-terminal-success shrink-0">❯</span>
-      <span className="text-terminal-text shrink-0">bgramaje</span>
-      <span className="text-terminal-muted shrink-0">@</span>
-      <span className="text-terminal-cyan shrink-0">portfolio</span>
-      <span className="text-terminal-muted shrink-0 mx-1">~</span>
-      <span className="text-terminal-muted shrink-0">$</span>
-      
+    <form onSubmit={handleSubmit} className="flex items-center gap-2 text-sm">
+      <TerminalPrompt />
       <div className="relative flex-1 min-w-0">
         <input
           ref={inputRef}
@@ -41,18 +35,17 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => onKeyDown(e, value, setValue)}
-          className="w-full bg-transparent text-terminal-text outline-none caret-transparent"
+          className="w-full bg-transparent text-terminal-text outline-none caret-transparent focus:ring-0"
+          placeholder={placeholder ?? ""}
           spellCheck={false}
           autoComplete="off"
           autoCapitalize="off"
           autoCorrect="off"
+          aria-label="Terminal command"
         />
-        <span
-          ref={spanRef}
-          className="absolute left-0 top-0 pointer-events-none text-terminal-text whitespace-pre"
-        >
-          {value || (placeholder ? <span className="text-terminal-muted">{placeholder}</span> : "")}
-          <span className="inline-block w-2.5 h-5 bg-terminal-accent animate-blink ml-px align-middle -mb-0.5" />
+        <span className="absolute left-0 top-0 pointer-events-none text-terminal-text whitespace-pre">
+          {value || (placeholder ? <span className="text-terminal-muted">{placeholder}</span> : null)}
+          <span className="inline-block w-2.5 h-5 bg-terminal-accent animate-blink ml-px align-middle -mb-0.5" aria-hidden />
         </span>
       </div>
     </form>

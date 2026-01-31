@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "@/components/Terminal";
 import { TerminalOutput } from "@/components/TerminalOutput";
-import { CommandChips } from "@/components/CommandChips";
+import { CommandToolbar } from "@/components/CommandToolbar";
 import { TerminalModal } from "@/components/TerminalModal";
+import { JobModal } from "@/components/JobModal";
 import { TerminalTitleBar } from "@/components/TerminalTitleBar";
 import { Snowfall } from "@/components/Snowfall";
 import { ContactOutput } from "@/lib/commands-output/ContactOutput";
@@ -17,45 +18,39 @@ export interface HistoryItem {
   output: React.ReactNode;
 }
 
+const initialHistory: HistoryItem[] = [
+  {
+    id: Date.now(),
+    command: "contact",
+    output: <ContactOutput />,
+  },
+];
+
 export function HomePage() {
   const navigate = useNavigate();
-  const [history, setHistory] = useState<HistoryItem[]>([
-    {
-      id: Date.now(),
-      command: "contact",
-      output: <ContactOutput />,
-    },
-  ]);
+  const [history, setHistory] = useState<HistoryItem[]>(initialHistory);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
   const [modalTitle, setModalTitle] = useState("Terminal");
   const [modalPlaceholder, setModalPlaceholder] = useState<string | undefined>(undefined);
+  const [jobModalOpen, setJobModalOpen] = useState(false);
+  const [jobModalJobId, setJobModalJobId] = useState("");
+  const [jobModalTitle, setJobModalTitle] = useState("");
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = useCallback(() => {
     if (terminalRef.current) {
-      // Use requestAnimationFrame to ensure DOM is updated
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (terminalRef.current) {
-            terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-          }
-        });
-      });
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, []);
 
-  // Scroll to bottom when history changes (for async content like blog posts)
   useEffect(() => {
     if (history.length > 0) {
-      // Wait a bit longer for async content to render
-      const timeoutId = setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-      return () => clearTimeout(timeoutId);
+      const t = setTimeout(scrollToBottom, 80);
+      return () => clearTimeout(t);
     }
   }, [history, scrollToBottom]);
 
@@ -77,6 +72,11 @@ export function HomePage() {
           setModalPlaceholder(placeholder);
           setModalOpen(true);
         },
+        onOpenJobModal: (jobId: string, title: string) => {
+          setJobModalJobId(jobId);
+          setJobModalTitle(title);
+          setJobModalOpen(true);
+        },
         onNavigate: (path: string) => {
           navigate(path);
         },
@@ -84,11 +84,7 @@ export function HomePage() {
 
       setHistory((prev) => [
         ...prev,
-        {
-          id: Date.now(),
-          command: input,
-          output,
-        },
+        { id: Date.now(), command: input, output },
       ]);
 
       if (trimmedInput) {
@@ -133,64 +129,59 @@ export function HomePage() {
   );
 
   const focusInput = useCallback((e: React.MouseEvent) => {
-    // Only focus if clicking on the container itself, not on content inside
     if (e.target === e.currentTarget) {
       inputRef.current?.focus();
     }
   }, []);
 
   const handleTerminalContentClick = useCallback((e: React.MouseEvent) => {
-    // Prevent scroll when clicking on terminal content
     e.stopPropagation();
   }, []);
 
   return (
-    <div className="h-[100dvh] bg-terminal-bg flex items-center justify-center p-2 md:p-4 relative dot-pattern-rotated overflow-hidden">
-      {/* Snowfall effect - only visible during December 1 - January 7 */}
+    <div className="flex-1 flex flex-col min-h-0 bg-terminal-bg p-1 md:p-1.5 relative overflow-hidden">
       <Snowfall />
-      
+
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="w-full max-w-5xl h-full flex flex-col items-center justify-center gap-2 md:gap-3 relative z-10"
+        transition={{ duration: 0.15, ease: "easeOut" }}
+        className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-1 md:gap-1.5 relative z-10 min-h-0"
         onClick={focusInput}
       >
-        {/* Terminal Window */}
-        <div className="w-full flex-grow bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col rounded-lg">
-          {/* Title Bar */}
+        <div className="flex-1 min-h-0 bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col rounded-lg">
           <TerminalTitleBar />
 
-          {/* Terminal Content */}
           <div
             ref={terminalRef}
-            className="flex-1 overflow-y-auto pt-2 pb-32 px-2 md:px-2 scroll-smooth text-sm"
+            className="flex-1 overflow-y-auto pt-1.5 pb-4 pr-12 px-1.5 md:px-1.5 scroll-smooth text-sm relative"
             onClick={handleTerminalContentClick}
           >
-            {/* Command History */}
+            <div className="sticky top-1 z-10 h-0 overflow-visible flex justify-end">
+              <div className="absolute right-1 top-0 w-11 flex flex-col items-center">
+                <CommandToolbar onCommandClick={handleCommand} />
+              </div>
+            </div>
             <AnimatePresence mode="popLayout">
               {history.map((item) => (
                 <TerminalOutput key={item.id} command={item.command} output={item.output} />
               ))}
             </AnimatePresence>
 
-            {/* Input Line */}
+            {history.length === 1 && (
+              <p className="text-terminal-muted text-xs mb-2 mt-0.5 px-0.5" aria-hidden>
+                Try: <span className="text-terminal-cyan">help</span>, <span className="text-terminal-cyan">jobs</span>, <span className="text-terminal-cyan">contact</span>, <span className="text-terminal-cyan">home</span>
+              </p>
+            )}
+
             <Terminal
               onSubmit={handleCommand}
               onKeyDown={handleKeyDown}
               inputRef={inputRef}
             />
           </div>
+        </div>
 
-          {/* Command Chips - Fixed at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 border-t-2 border-terminal-border bg-terminal-surface">
-            <CommandChips 
-              onCommandClick={handleCommand} 
-              allowedCommands={Object.keys(availableCommands).filter((cmd) => !["clear", "close", "exit", "home"].includes(cmd))} />
-            </div>
-          </div>
-
-        {/* Terminal Modal */}
         <TerminalModal
           isOpen={modalOpen}
           onClose={() => {
@@ -202,8 +193,18 @@ export function HomePage() {
           title={modalTitle}
           placeholder={modalPlaceholder}
         />
+
+        <JobModal
+          isOpen={jobModalOpen}
+          onClose={() => {
+            setJobModalOpen(false);
+            setJobModalJobId("");
+            setJobModalTitle("");
+          }}
+          jobId={jobModalJobId}
+          title={jobModalTitle}
+        />
       </motion.div>
     </div>
   );
 }
-

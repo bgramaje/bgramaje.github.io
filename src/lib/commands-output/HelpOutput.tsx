@@ -5,7 +5,6 @@ export function HelpOutput() {
   
   return (
     <div className="space-y-2">
-      <p className="text-terminal-accent font-semibold mb-3">Available Commands:</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {sortedCommands.map(([cmd, desc]) => (
           <div key={cmd} className="flex gap-3">

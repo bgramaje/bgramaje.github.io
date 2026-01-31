@@ -8,7 +8,6 @@ interface JobDetailProps {
 export function JobDetail({ job }: JobDetailProps) {
   return (
     <div className="space-y-3">
-      {/* Header Section */}
       <div className="pb-3 border-b-2 border-terminal-border">
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center justify-between w-full">

@@ -2,41 +2,26 @@ import { publications } from "@/data/portfolio";
 
 export function PublicationsOutput() {
   return (
-    <div className="space-y-2">
-      <p className="text-terminal-accent font-semibold mb-2">Scientific Publications:</p>
-      {publications.map((pub) => (
-        <div key={pub.uid} className="space-y-1 pb-4 border-b border-terminal-border/30 last:border-0">
-          <div className="flex items-start justify-between gap-4">
-            <h3 className="text-terminal-success font-medium flex-1">{pub.title}</h3>
-            {pub.link && (
-              <a
-                href={pub.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-terminal-accent text-sm hover:underline shrink-0"
-              >
-                [View ↗]
-              </a>
-            )}
+    <div className="space-y-3 mx-2">
+        {publications.map((pub) => (
+          <div
+            key={pub.uid}
+            role={pub.link ? "link" : undefined}
+            onClick={() => pub.link && window.open(pub.link, "_blank", "noopener,noreferrer")}
+            className="flex items-start gap-3 cursor-pointer rounded-lg px-2 py-1.5 -mx-2 -my-1.5 hover:bg-terminal-border/25 transition-colors"
+          >
+            <span className="text-terminal-success shrink-0 mt-0.5">▸</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-terminal-text text-sm font-medium min-w-0 truncate">{pub.title}</p>
+              <p className="text-terminal-muted text-xs mt-0.5">
+                {pub.publisher} · {pub.role} · {pub.tags.join(", ")}
+              </p>
+              <p className="text-terminal-text/70 text-xs mt-0.5 min-w-0 truncate" title={pub.description}>
+                {pub.description}
+              </p>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <span className="text-terminal-muted">{pub.publisher}</span>
-            <span className="text-terminal-cyan">{pub.role}</span>
-          </div>
-          <p className="text-terminal-text/80 text-sm leading-relaxed">{pub.description}</p>
-          <div className="flex flex-wrap gap-2">
-            {pub.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 text-xs bg-terminal-border/50 text-terminal-accent rounded-lg"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
-

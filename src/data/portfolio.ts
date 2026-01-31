@@ -1,5 +1,7 @@
 export interface Job {
   id?: number;
+  /** Slug used to load the job MDX file (e.g. etra-id, devoltec-sl) */
+  mdxSlug: string;
   company: string;
   role: string;
   period: string;
@@ -45,6 +47,8 @@ export interface Study {
   degree: string;
   institution: string;
   type: "degree" | "master";
+  /** When true, shown as currently in progress */
+  ongoing?: boolean;
 }
 
 export const personalInfo = {
@@ -61,6 +65,7 @@ to complex problems and contributing to open-source projects.`,
 export const jobs: Job[] = [
   {
     id: 0,
+    mdxSlug: "etra-id",
     company: "ETRA I+D",
     role: "Software Engineer",
     period: "2022 - Present",
@@ -91,6 +96,7 @@ export const jobs: Job[] = [
   },
   {
     id: 1,
+    mdxSlug: "devoltec-sl",
     company: "DEVOLTEC SL",
     role: "Software Engineer",
     period: "2021 - 2022",
@@ -118,6 +124,7 @@ export const jobs: Job[] = [
   },
   {
     id: 2,
+    mdxSlug: "good-morning-panda",
     company: "Good Morning Panda",
     role: "Frontend Engineer",
     period: "2020 - 2020",
@@ -259,15 +266,20 @@ export const studies: Study[] = [
     institution: "Univresitat Politècnica de València",
     type: "master",
   },
+  {
+    degree: "Master's Degree in Computational Engineering & Industrial Mathematics",
+    institution: "Universitat Politècnica de València (UPV)",
+    type: "master",
+    ongoing: true,
+  },
 ];
 
 export const commands = {
   help: "Show available commands",
-  jobs: "List work experience",
-  publications: "Show scientific publications",
+  jobs: "List jobs",
+  publications: "Show publications",
   skills: "Show technical skills",
   contact: "Display contact information",
-  blog: "List blog posts",
   studies: "Show academic studies",
   home: "Navigate to home page",
   clear: "Clear the terminal",
