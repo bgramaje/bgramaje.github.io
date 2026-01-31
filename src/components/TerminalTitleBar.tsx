@@ -9,7 +9,7 @@ export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBar
   const trafficLightsWidth = "w-14"; // 3.5rem, mismo ancho que los tres círculos + gap
 
   return (
-    <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-terminal-bg border-b-2 border-terminal-border shrink-0">
+    <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-transparent border-b border-terminal-border/60 shrink-0">
       <div className={`${trafficLightsWidth} shrink-0 flex gap-2`}>
         <div className="w-3 h-3 bg-[#ff5f57] rounded-full" />
         <div className="w-3 h-3 bg-[#ffbd2e] rounded-full" />
@@ -22,7 +22,7 @@ export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBar
         {onClose ? (
           <button
             onClick={onClose}
-            className="w-6 h-6 flex items-center justify-center text-terminal-muted hover:text-terminal-text transition-colors rounded-md hover:bg-terminal-border/30"
+            className="w-6 h-6 flex items-center justify-center text-terminal-muted hover:text-terminal-text transition-colors rounded-md hover:bg-terminal-border/10"
             aria-label="Close"
           >
             <X size={16} />

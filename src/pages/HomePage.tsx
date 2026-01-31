@@ -139,7 +139,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-terminal-bg p-1 md:p-1.5 relative overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-0 bg-neutral-950 p-1 md:p-1.5 relative overflow-hidden">
       <Snowfall />
 
       <motion.div
@@ -149,7 +149,7 @@ export function HomePage() {
         className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-1 md:gap-1.5 relative z-10 min-h-0"
         onClick={focusInput}
       >
-        <div className="flex-1 min-h-0 bg-terminal-surface border-2 border-terminal-border shadow-lg overflow-hidden relative flex flex-col rounded-lg">
+        <div className="flex-1 min-h-0 bg-transparent border border-terminal-border/60 overflow-hidden relative flex flex-col rounded-lg">
           <TerminalTitleBar />
 
           <div
