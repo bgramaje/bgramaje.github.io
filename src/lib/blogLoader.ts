@@ -12,15 +12,15 @@ export interface BlogMDXModule {
   frontmatter?: BlogMetadata;
 }
 
-const blogModules = import.meta.glob<BlogMDXModule>("../blogs/*.mdx", { eager: false });
+const blogModules = import.meta.glob<BlogMDXModule>("../mdx/blogs/*.mdx", { eager: false });
 
-/** Extract slug from glob path: "../blogs/filename.mdx" -> "filename" */
+/** Extract slug from glob path: "../mdx/blogs/filename.mdx" -> "filename" */
 function slugFromPath(path: string): string {
-  const match = path.match(/blogs\/([^/]+)\.mdx$/);
+  const match = path.match(/mdx\/blogs\/([^/]+)\.mdx$/);
   return match ? match[1] : "";
 }
 
-/** All blog IDs from src/blogs/*.mdx (no modules loaded). */
+/** All blog IDs from src/mdx/blogs/*.mdx (no modules loaded). */
 export function getAllBlogIds(): string[] {
   return Object.keys(blogModules)
     .map(slugFromPath)
@@ -34,7 +34,7 @@ export async function loadBlogContent(id: string): Promise<BlogMDXModule> {
   const cached = contentCache.get(id);
   if (cached) return cached;
 
-  const path = `../blogs/${id}.mdx`;
+  const path = `../mdx/blogs/${id}.mdx`;
   const loader = blogModules[path];
   if (!loader) {
     const err = new Error(`Blog not found: ${id}`);

@@ -2,18 +2,18 @@ import type React from "react";
 
 export interface JobMDXModule {
   default: React.ComponentType;
-  frontmatter?: { title?: string; company?: string; role?: string };
+  frontmatter?: { title?: string; company?: string; role?: string; period?: string };
 }
 
-const jobModules = import.meta.glob<JobMDXModule>("../jobs/*.mdx", { eager: false });
+const jobModules = import.meta.glob<JobMDXModule>("../mdx/jobs/*.mdx", { eager: false });
 
-/** Extract id from glob path: "../jobs/0.mdx" -> "0" */
+/** Extract id from glob path: "../mdx/jobs/0.mdx" -> "0" */
 function idFromPath(path: string): string {
-  const match = path.match(/jobs\/([^/]+)\.mdx$/);
+  const match = path.match(/mdx\/jobs\/([^/]+)\.mdx$/);
   return match ? match[1] : "";
 }
 
-/** All job IDs from src/jobs/*.mdx */
+/** All job IDs from src/mdx/jobs/*.mdx */
 export function getAllJobIds(): string[] {
   return Object.keys(jobModules)
     .map(idFromPath)
@@ -27,7 +27,7 @@ export async function loadJobContent(id: string): Promise<JobMDXModule> {
   const cached = contentCache.get(id);
   if (cached) return cached;
 
-  const path = `../jobs/${id}.mdx`;
+  const path = `../mdx/jobs/${id}.mdx`;
   const loader = jobModules[path];
   if (!loader) {
     const err = new Error(`Job not found: ${id}`);

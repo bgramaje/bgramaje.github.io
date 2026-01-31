@@ -26,7 +26,7 @@ export function JobModal({ isOpen, onClose, jobId, title }: JobModalProps) {
   return (
     <AnimatePresence>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/80"
+        className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       >
         <motion.div
@@ -34,7 +34,7 @@ export function JobModal({ isOpen, onClose, jobId, title }: JobModalProps) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-4xl h-fit max-h-[95dvh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative rounded-lg overflow-hidden"
+          className="w-full max-w-4xl h-fit max-h-[95dvh] bg-transparent border border-terminal-border/60 flex flex-col relative rounded-lg overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           <TerminalTitleBar title={title} onClose={onClose} />
