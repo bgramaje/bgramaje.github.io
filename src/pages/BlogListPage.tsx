@@ -54,7 +54,7 @@ export function BlogListPage() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="text-terminal-success font-bold font-mono text-[28px] md:text-[32px] leading-tight mb-2 mt-0 uppercase tracking-tight"
+        className="text-white font-bold font-mono text-[28px] md:text-[32px] leading-tight mb-2 mt-0 uppercase tracking-tight"
       >
         Blog
       </motion.h1>

@@ -13,7 +13,7 @@ function isInlineCode(className?: string) {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className="text-terminal-success font-bold font-mono text-[42px] leading-tight mb-3 mt-2 md:mt-3" {...props}>
+      <h1 className="text-white font-bold font-mono text-[42px] leading-tight mb-3 mt-2 md:mt-3" {...props}>
         {children}
       </h1>
     ),

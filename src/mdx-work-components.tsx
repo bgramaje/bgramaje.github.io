@@ -19,7 +19,7 @@ export function useMDXWorkComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
       <h1
-        className="text-terminal-success font-bold font-mono text-lg md:text-xl leading-tight mb-2 mt-0 md:mt-1"
+        className="text-white font-bold font-mono text-lg md:text-xl leading-tight mb-2 mt-0 md:mt-1"
         {...props}
       >
         {children}

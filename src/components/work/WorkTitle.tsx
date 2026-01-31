@@ -11,7 +11,7 @@ export function WorkTitle({ children, className }: WorkTitleProps) {
   return (
     <h1
       className={cn(
-        "text-terminal-success font-bold font-mono text-lg md:text-xl leading-tight mb-0.5 mt-0 tracking-tight",
+        "text-white font-bold font-mono text-lg md:text-xl leading-tight mb-0.5 mt-0 tracking-tight",
         className
       )}
     >
