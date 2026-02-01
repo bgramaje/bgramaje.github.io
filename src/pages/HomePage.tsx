@@ -1,16 +1,16 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal } from "@/components/Terminal";
-import { TerminalOutput } from "@/components/TerminalOutput";
-import { CommandToolbar } from "@/components/CommandToolbar";
-import { TerminalModal } from "@/components/TerminalModal";
+import { Terminal } from "@/components/terminal/Terminal";
+import { TerminalOutput } from "@/components/terminal/TerminalOutput";
+import { CommandToolbar } from "@/components/terminal/CommandToolbar";
+import { TerminalModal } from "@/components/terminal/TerminalModal";
 import { JobModal } from "@/components/JobModal";
-import { TerminalTitleBar } from "@/components/TerminalTitleBar";
+import { TerminalTitleBar } from "@/components/terminal/TerminalTitleBar";
 import { Snowfall } from "@/components/Snowfall";
-import { ContactOutput } from "@/lib/commands-output/ContactOutput";
+import { ContactOutput } from "@/components/commands/commands-output/ContactOutput";
 import { commands as availableCommands } from "@/data/portfolio";
-import { processCommand } from "@/lib/commands";
+import { processCommand } from "@/components/commands/commands";
 
 export interface HistoryItem {
   id: number;
@@ -146,19 +146,19 @@ export function HomePage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.15, ease: "easeOut" }}
-        className="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-1 md:gap-1.5 relative z-10 min-h-0"
+        className="w-full min-w-0 max-w-4xl mx-auto flex-1 flex flex-col gap-1 md:gap-1.5 relative z-10 min-h-0"
         onClick={focusInput}
       >
-        <div className="flex-1 min-h-0 bg-transparent border border-terminal-border/60 overflow-hidden relative flex flex-col rounded-lg">
+        <div className="flex-1 min-h-0 min-w-0 w-full bg-transparent border border-terminal-border/60 overflow-hidden relative flex flex-col rounded-lg">
           <TerminalTitleBar />
 
           <div
             ref={terminalRef}
-            className="flex-1 overflow-y-auto pt-1.5 pb-4 pr-12 px-1.5 md:px-1.5 scroll-smooth text-sm relative"
+            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 px-1.5 scroll-smooth text-sm relative"
             onClick={handleTerminalContentClick}
           >
-            <div className="sticky top-1 z-10 h-0 overflow-visible flex justify-end">
-              <div className="absolute right-1 top-0 w-11 flex flex-col items-center">
+            <div className="sticky top-0.5 z-10 h-0 overflow-visible flex justify-end">
+              <div className="absolute right-0.5 top-0 w-11 flex flex-col items-center">
                 <CommandToolbar onCommandClick={handleCommand} />
               </div>
             </div>

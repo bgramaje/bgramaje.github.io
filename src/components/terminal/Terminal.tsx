@@ -51,4 +51,3 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
     </form>
   );
 }
-

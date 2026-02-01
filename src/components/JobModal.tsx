@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalTitleBar } from "./TerminalTitleBar";
+import { TerminalTitleBar } from "./terminal/TerminalTitleBar";
 import { JobPost } from "./JobPost";
 
 interface JobModalProps {

@@ -1,11 +1,11 @@
 import { JobPost } from "@/components/JobPost";
-import { HelpOutput } from "./commands-output/HelpOutput";
-import { JobsOutput } from "./commands-output/JobsOutput";
-import { PublicationsOutput } from "./commands-output/PublicationsOutput";
-import { SkillsOutput } from "./commands-output/SkillsOutput";
-import { StudiesOutput } from "./commands-output/StudiesOutput";
-import { ContactOutput } from "./commands-output/ContactOutput";
-import { ErrorOutput } from "./commands-output/ErrorOutput";
+import { HelpOutput } from "@/components/commands/commands-output/HelpOutput";
+import { JobsOutput } from "@/components/commands/commands-output/JobsOutput";
+import { PublicationsOutput } from "@/components/commands/commands-output/PublicationsOutput";
+import { SkillsOutput } from "@/components/commands/commands-output/SkillsOutput";
+import { StudiesOutput } from "@/components/commands/commands-output/StudiesOutput";
+import { ContactOutput } from "@/components/commands/commands-output/ContactOutput";
+import { ErrorOutput } from "@/components/commands/commands-output/ErrorOutput";
 import { getAllJobIds } from "@/lib/jobLoader";
 
 interface ProcessCommandOptions {
@@ -73,5 +73,3 @@ export function processCommand(
       return <ErrorOutput command={input} />;
   }
 }
-
-

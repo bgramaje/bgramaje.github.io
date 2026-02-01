@@ -27,4 +27,3 @@ export function CommandChips({ onCommandClick, allowedCommands }: CommandChipsPr
     </div>
   );
 }
-

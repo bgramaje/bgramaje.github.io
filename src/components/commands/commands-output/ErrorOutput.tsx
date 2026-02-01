@@ -14,4 +14,3 @@ export function ErrorOutput({ command }: ErrorOutputProps) {
     </div>
   );
 }
-

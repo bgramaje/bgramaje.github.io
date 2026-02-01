@@ -29,4 +29,3 @@ function TerminalOutputInner({ command, output }: TerminalOutputProps, ref: Reac
 
 export const TerminalOutput = memo(forwardRef<HTMLDivElement, TerminalOutputProps>(TerminalOutputInner));
 TerminalOutput.displayName = "TerminalOutput";
-

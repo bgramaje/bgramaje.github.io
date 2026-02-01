@@ -24,4 +24,3 @@ export function StudiesOutput() {
     </div>
   );
 }
-

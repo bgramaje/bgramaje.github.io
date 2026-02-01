@@ -32,4 +32,3 @@ export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBar
     </div>
   );
 }
-

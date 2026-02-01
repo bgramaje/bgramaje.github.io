@@ -33,8 +33,13 @@ export default {
         "slide-up": "slideUp 0.4s ease-out",
         glow: "glow 2s ease-in-out infinite alternate",
         "light-ray-pulse": "lightRayPulse 14s ease-in-out infinite",
+        rainbow: "rainbow var(--speed, 2s) infinite linear",
       },
       keyframes: {
+        rainbow: {
+          "0%": { backgroundPosition: "0%" },
+          "100%": { backgroundPosition: "200%" },
+        },
         lightRayPulse: {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "0.65" },

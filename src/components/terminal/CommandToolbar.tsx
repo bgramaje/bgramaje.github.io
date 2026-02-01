@@ -31,7 +31,7 @@ export function CommandToolbar({ onCommandClick, className }: CommandToolbarProp
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-0.5 p-1",
+        "flex flex-col items-center gap-0.5 p-0",
         className
       )}
     >
