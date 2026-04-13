@@ -189,6 +189,7 @@ export const commands = {
   skills: "Show technical skills",
   contact: "Display contact information",
   studies: "Show academic studies",
+  blog: "Navigate to blog",
   home: "Navigate to home page",
   clear: "Clear the terminal",
 };

@@ -154,7 +154,7 @@ export function HomePage() {
 
           <div
             ref={terminalRef}
-            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 px-1.5 scroll-smooth text-sm relative"
+            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 pl-1.5 pr-12 md:pr-14 scroll-smooth text-sm relative"
             onClick={handleTerminalContentClick}
           >
             <div className="sticky top-0.5 z-10 h-0 overflow-visible flex justify-end">
@@ -169,8 +169,9 @@ export function HomePage() {
             </AnimatePresence>
 
             {history.length === 1 && (
-              <p className="text-terminal-muted text-xs mb-2 mt-0.5 px-0.5" aria-hidden>
-                Try: <span className="text-terminal-cyan">help</span>, <span className="text-terminal-cyan">jobs</span>, <span className="text-terminal-cyan">contact</span>, <span className="text-terminal-cyan">home</span>
+              <p className="text-terminal-muted text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed" aria-hidden>
+                Prueba: <span className="text-terminal-cyan">help</span>, <span className="text-terminal-cyan">jobs</span>, <span className="text-terminal-cyan">blog</span>, <span className="text-terminal-cyan">contact</span>.{" "}
+                <span className="text-terminal-muted/80">↑↓ historial · Tab autocompleta</span>
               </p>
             )}
 

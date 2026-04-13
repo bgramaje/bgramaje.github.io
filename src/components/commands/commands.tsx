@@ -59,6 +59,14 @@ export function processCommand(
     case "contact":
     case "social":
       return <ContactOutput />;
+    case "blog":
+    case "posts":
+    case "articles":
+      if (options?.onNavigate) {
+        options.onNavigate("/blog");
+        return null;
+      }
+      return <div className="text-terminal-muted text-sm">Open /blog from the app shell to read posts.</div>;
     case "home":
       if (options?.onNavigate) {
         options.onNavigate("/");
