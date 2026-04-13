@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { requestTerminalInputFocus } from "@/lib/terminal-focus";
 
 const iconMap = {
   github: Github,
@@ -61,6 +62,11 @@ export function MorphicNavbar() {
               key={path}
               to={path}
               end={path === "/"}
+              onClick={() => {
+                if (path === "/") {
+                  requestTerminalInputFocus();
+                }
+              }}
               className={({ isActive }) =>
                 clsx(
                   "flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-200",

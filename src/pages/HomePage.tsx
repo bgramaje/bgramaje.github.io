@@ -11,6 +11,7 @@ import { Snowfall } from "@/components/Snowfall";
 import { ContactOutput } from "@/components/commands/commands-output/ContactOutput";
 import { commands as availableCommands } from "@/data/portfolio";
 import { processCommand } from "@/components/commands/commands";
+import { FOCUS_TERMINAL_INPUT_EVENT, requestTerminalInputFocus } from "@/lib/terminal-focus";
 
 export interface HistoryItem {
   id: number;
@@ -54,6 +55,14 @@ export function HomePage() {
     }
   }, [history, scrollToBottom]);
 
+  useEffect(() => {
+    const focusInput = () => {
+      inputRef.current?.focus();
+    };
+    window.addEventListener(FOCUS_TERMINAL_INPUT_EVENT, focusInput);
+    return () => window.removeEventListener(FOCUS_TERMINAL_INPUT_EVENT, focusInput);
+  }, []);
+
   const handleCommand = useCallback(
     (input: string) => {
       const trimmedInput = input.trim();
@@ -93,6 +102,14 @@ export function HomePage() {
       setHistoryIndex(-1);
     },
     [navigate]
+  );
+
+  const handleToolbarCommand = useCallback(
+    (command: string) => {
+      handleCommand(command);
+      requestTerminalInputFocus();
+    },
+    [handleCommand]
   );
 
   const handleKeyDown = useCallback(
@@ -154,32 +171,34 @@ export function HomePage() {
 
           <div
             ref={terminalRef}
-            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 pl-1.5 pr-12 md:pr-14 scroll-smooth text-sm relative"
+            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 px-1.5 scroll-smooth text-sm relative"
             onClick={handleTerminalContentClick}
           >
-            <div className="sticky top-0.5 z-10 h-0 overflow-visible flex justify-end">
-              <div className="absolute right-0.5 top-0 w-11 flex flex-col items-center">
-                <CommandToolbar onCommandClick={handleCommand} />
+            <div className="sticky top-0.5 z-10 h-0 overflow-visible flex justify-end pointer-events-none">
+              <div className="absolute right-1.5 top-0 w-11 flex flex-col items-center pointer-events-auto">
+                <CommandToolbar onCommandClick={handleToolbarCommand} />
               </div>
             </div>
-            <AnimatePresence mode="popLayout">
-              {history.map((item) => (
-                <TerminalOutput key={item.id} command={item.command} output={item.output} />
-              ))}
-            </AnimatePresence>
+            <div className="pr-11 md:pr-12 min-w-0">
+              <AnimatePresence mode="popLayout">
+                {history.map((item) => (
+                  <TerminalOutput key={item.id} command={item.command} output={item.output} />
+                ))}
+              </AnimatePresence>
 
-            {history.length === 1 && (
-              <p className="text-terminal-muted text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed" aria-hidden>
-                Prueba: <span className="text-terminal-cyan">help</span>, <span className="text-terminal-cyan">jobs</span>, <span className="text-terminal-cyan">blog</span>, <span className="text-terminal-cyan">contact</span>.{" "}
-                <span className="text-terminal-muted/80">↑↓ historial · Tab autocompleta</span>
-              </p>
-            )}
+              {history.length === 1 && (
+                <p className="text-terminal-muted text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed" aria-hidden>
+                  Prueba: <span className="text-terminal-cyan">help</span>, <span className="text-terminal-cyan">jobs</span>, <span className="text-terminal-cyan">blog</span>, <span className="text-terminal-cyan">contact</span>.{" "}
+                  <span className="text-terminal-muted/80">↑↓ historial · Tab autocompleta</span>
+                </p>
+              )}
 
-            <Terminal
-              onSubmit={handleCommand}
-              onKeyDown={handleKeyDown}
-              inputRef={inputRef}
-            />
+              <Terminal
+                onSubmit={handleCommand}
+                onKeyDown={handleKeyDown}
+                inputRef={inputRef}
+              />
+            </div>
           </div>
         </div>
 
