@@ -11,7 +11,7 @@ export function Layout() {
   return (
     <ScrollContainerContext.Provider value={mainRef}>
       <div className="h-[100dvh] flex flex-col overflow-hidden bg-neutral-950">
-        <header className="shrink-0 pt-0.5 pb-0">
+        <header className="shrink-0 pb-0">
           <MorphicNavbar />
         </header>
         <main
