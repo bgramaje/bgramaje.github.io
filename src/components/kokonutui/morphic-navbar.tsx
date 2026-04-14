@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { NavLink } from "react-router-dom";
 import { Github, Linkedin, Mail, Bitcoin } from "lucide-react";
 import { socialLinks } from "@/data/portfolio";
@@ -10,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SegmentedNavGroup, segmentedNavItemClassName } from "@/components/ui/segmented-nav";
 import { requestTerminalInputFocus } from "@/lib/terminal-focus";
 
 const iconMap = {
@@ -56,7 +56,7 @@ export function MorphicNavbar() {
 
       {/* Navbar (me | blog) */}
       <nav className="flex shrink-0 items-center justify-center">
-        <div className="flex overflow-hidden rounded-lg border border-white/10 bg-white/5 shadow-md backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
+        <SegmentedNavGroup>
           {Object.entries(navItems).map(([path, { name }]) => (
             <NavLink
               key={path}
@@ -67,19 +67,12 @@ export function MorphicNavbar() {
                   requestTerminalInputFocus();
                 }
               }}
-              className={({ isActive }) =>
-                clsx(
-                  "flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-200",
-                  isActive
-                    ? "bg-white/20 text-white dark:bg-white/20 dark:text-white"
-                    : "text-neutral-400 hover:bg-white/5 hover:text-white dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white"
-                )
-              }
+              className={({ isActive }) => segmentedNavItemClassName(isActive)}
             >
               {name}
             </NavLink>
           ))}
-        </div>
+        </SegmentedNavGroup>
       </nav>
 
       {/* Redes sociales */}
