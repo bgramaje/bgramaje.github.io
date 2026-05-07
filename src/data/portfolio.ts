@@ -152,6 +152,11 @@ export const socialLinks: SocialLink[] = [
     icon: "linkedin",
   },
   {
+    name: "Google Scholar",
+    url: "https://scholar.google.com/citations?user=07QdnWUAAAAJ&hl=en",
+    icon: "scholar",
+  },
+  {
     name: "Email",
     url: "mailto:bgramaje@gmail.com",
     icon: "mail",

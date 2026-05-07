@@ -1,0 +1,187 @@
+# yaml-language-server: $schema=https://yamlresume.dev/schema.json
+# English CV — keep in sync with borja-gramaje.yml (structure/dates).
+---
+content:
+  basics:
+    name: Borja Albert Gramaje
+    headline: Software Engineer
+    email: boralbgra@gmail.com
+    phone: "+34 665 335 439"
+    summary: |
+      Versatile software engineer with a broad cross-domain background spanning full-stack web, IoT, embedded systems, data engineering, cloud-native infrastructure, and AI-driven tooling. I thrive in fast-changing environments, adapt quickly to new stacks and problem domains, and consistently deliver end-to-end solutions from hardware to frontend. My track record across EU Horizon 2020 R&D projects, multiple IEEE publications, and hands-on work at every layer of the stack reflects both strong technical depth and the problem-solving mindset to tackle whatever comes next.
+  location:
+    city: Valencia
+    region: Valencian Community
+    country: Spain
+  profiles:
+    - network: GitHub
+      url: https://github.com/bgramaje
+      username: bgramaje
+    - network: LinkedIn
+      url: https://linkedin.com/in/bgramaje
+      username: bgramaje
+  education:
+    - institution: Universitat Politècnica de València (UPV)
+      degree: Master
+      area: Computational Engineering & Industrial Mathematics
+      startDate: Sep 1, 2023
+      endDate:
+      summary: |
+        Master's in progress focused on advanced computational methods, mathematical modeling, and industrial applications.
+    - institution: Universitat Politècnica de València (UPV)
+      degree: Master
+      area: Software Systems Engineering and Technology
+      startDate: Sep 1, 2019
+      endDate: Jul 1, 2021
+      summary: |
+        Specialized in advanced software architecture, systems engineering, and emerging technology frameworks.
+    - institution: LAB University of Applied Sciences
+      degree: Bachelor
+      area: Information & Communication Technology
+      startDate: Sep 1, 2017
+      endDate: Jun 1, 2018
+      summary: |
+        Completed an international bachelor's exchange in ICT, gaining cross-cultural technical collaboration and hands-on systems experience.
+    - institution: Universitat Politècnica de València (UPV)
+      degree: Bachelor
+      area: Computer Engineering
+      startDate: Sep 1, 2014
+      endDate: Jul 1, 2019
+      summary: |
+        Foundation in computer engineering principles, software development, algorithm design, and systems architecture.
+  work:
+    - name: ETRA I+D
+      url: https://www.grupoetra.com/
+      startDate: Jan 1, 2022
+      endDate:
+      position: Software Engineer
+      summary: |
+        Lead software engineer for EU Horizon 2020 R&D projects TWINAIR, ECOLOOP, UNCHAIN, and EBRT2030, with a leading and guiding role in TWINAIR and ECOLOOP, driving technical strategy and end-to-end delivery of innovative data platforms and enterprise applications.
+        - Built a deployment- and protocol-agnostic IoT monitoring platform (HTTP, MQTT, AMQP) with customizable dashboards and integrated MCP servers with local LLMs for natural-language-to-chart interaction; deployed for agrovoltaic fields and workplace air quality monitoring.
+        - Worked with industrial protocols (SDI-12, I2C, Modbus) to integrate environmental sensors, solar inverters, and field equipment into data pipelines.
+        - Engineered a city-wide SAE bus fleet management app; used IndexedDB and Web Workers to offload heavy computation off the main thread.
+        - Extended the FIWARE platform for IAQ monitoring using Orion, QuantumLeap, CrateDB, and Keyrock for contextualization, historical storage, and identity management.
+        - Built an ESP-32 device with ultrasonic sensing and LoRaWAN for public parking detection, with a remote backoffice and a client license-plate app.
+        - Authored LLM skill libraries for key services, pioneering AI-driven workflows and boosting team-wide coding efficiency.
+        - Leveraged DuckDB-WASM for edge-side analytical transforms and workflows, offloading processing from the backend.
+      keywords:
+        - FIWARE
+        - IoT
+        - Kubernetes
+        - Microservices
+        - MeteorJS
+        - LoRaWAN
+        - ESP-32
+        - Campbell
+        - Modbus
+        - MCP
+        - LLM
+    - name: DEVOLTEC SL
+      url: https://devoltec.com/
+      startDate: Jan 1, 2021
+      endDate: Dec 31, 2022
+      position: Software Engineer
+      summary: |
+        Developed tailored enterprise software aligned with strategic business requirements, delivering full-stack applications and robust CI/CD pipelines with Angular, Express.js, NestJS, and Docker.
+        - Delivered a comprehensive ERP platform for manufacturing SMEs in the Ontinyent region, centralizing operations and resource planning.
+        - Implemented real-time production monitoring systems for manufacturing floors, increasing operational visibility and efficiency.
+        - Engineered an AI-driven email classification system across multiple backup providers, automating large-scale mail management.
+      keywords:
+        - Angular
+        - NestJS
+        - Docker
+        - PostgreSQL
+    - name: Good Morning Panda
+      url: https://goodmorningpanda.com/
+      startDate: Jan 1, 2020
+      endDate: Dec 31, 2020
+      position: Frontend Engineer
+      summary: |
+        Designed and developed responsive web interfaces and user experiences for multiple client projects, producing modern and accessible frontends using WordPress, HTML5, CSS3, and JavaScript while creating UI/UX prototypes and design systems with Adobe XD and Figma.
+      keywords:
+        - WordPress
+        - Figma
+  languages:
+    - language: Spanish
+      fluency: Native or Bilingual Proficiency
+      keywords: []
+    - language: English
+      fluency: B2 Upper-Intermediate
+      keywords: []
+  skills:
+    - name: Full-stack development
+      level: Expert
+      keywords:
+        - JavaScript
+        - TypeScript
+        - Python
+        - Node.js
+        - React
+        - Angular
+        - MeteorJS
+        - NestJS
+        - Express
+    - name: Data, IoT & platforms
+      level: Advanced
+      keywords:
+        - FIWARE
+        - NGSI-LD
+        - MongoDB
+        - PostgreSQL
+        - InfluxDB
+        - MQTT
+        - RabbitMQ
+        - NATS
+        - Arduino
+        - LoRaWAN
+    - name: DevOps
+      level: Advanced
+      keywords:
+        - Docker
+        - Kubernetes
+        - GitLab
+        - CI/CD
+    - name: Design
+      level: Intermediate
+      keywords:
+        - Figma
+        - Adobe XD
+        - After Effects
+  publications:
+    - publisher: IEEE
+      url: https://ieeexplore.ieee.org/document/11205684
+      name: "Ensuring Data Quality in FIWARE-Based Air Quality Monitoring Systems: A Step-by-Step Approach"
+      releaseDate: "2024"
+      summary: |
+        Co-authored a structured methodology for ensuring data quality in FIWARE-based air quality monitoring systems, addressing sensor validation and contextual reliability.
+    - publisher: IEEE
+      url: https://ieeexplore.ieee.org/document/10710780
+      name: "Data Management Platform for Indoor Air Quality Management"
+      releaseDate: "2024"
+      summary: |
+        Co-authored the design of a FIWARE-powered open-source data management platform for indoor air quality, enabling scalable environmental oversight.
+    - publisher: UPV
+      url: https://riunet.upv.es/handle/10251/197801
+      name: "Exploring GPT's Capabilities in Chess-Puzzles"
+      releaseDate: "2023"
+      summary: |
+        Authored an independent study analyzing the reasoning capabilities of GPT large language models on complex chess puzzles.
+locale:
+  language: en
+layouts:
+  - engine: latex
+    page:
+      margins:
+        top: 2.5cm
+        left: 1.5cm
+        right: 1.5cm
+        bottom: 2.5cm
+      showPageNumbers: true
+    template: jake
+    typography:
+      fontSize: 11pt
+  - engine: markdown
+  - engine: html
+    template: calm
+    typography:
+      fontSize: 16px

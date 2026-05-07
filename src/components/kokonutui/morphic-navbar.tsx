@@ -1,9 +1,10 @@
 "use client";
 
 import { NavLink } from "react-router-dom";
-import { Github, Linkedin, Mail, Bitcoin } from "lucide-react";
+import { Bitcoin, Github, GraduationCap, Linkedin, Mail } from "lucide-react";
 import { socialLinks } from "@/data/portfolio";
 import { BitcoinTicker } from "@/components/BitcoinTicker";
+import { CvPdfDownloadButton } from "@/components/CvPdfDownloadButton";
 import {
   Popover,
   PopoverContent,
@@ -15,6 +16,7 @@ import { requestTerminalInputFocus } from "@/lib/terminal-focus";
 const iconMap = {
   github: Github,
   linkedin: Linkedin,
+  scholar: GraduationCap,
   mail: Mail,
 } as const;
 
@@ -75,8 +77,9 @@ export function MorphicNavbar() {
         </SegmentedNavGroup>
       </nav>
 
-      {/* Redes sociales */}
-      <div className="flex flex-1 min-w-0 items-center justify-end gap-1">
+      {/* CV + redes */}
+      <div className="flex flex-1 min-w-0 items-center justify-end gap-1 sm:gap-1.5">
+        <CvPdfDownloadButton />
         {socialLinks.map((link) => {
           const Icon = iconMap[link.icon as keyof typeof iconMap];
           if (!Icon) return null;
