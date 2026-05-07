@@ -20,39 +20,42 @@ content:
     - network: LinkedIn
       url: https://linkedin.com/in/bgramaje
       username: bgramaje
+    - network: Web
+      url: https://bgramaje.github.io
+      username: bgramaje.github.io
   education:
     - institution: Universitat Politècnica de València (UPV)
       degree: Master
       area: Computational Engineering & Industrial Mathematics
-      startDate: Sep 1, 2023
+      startDate: Sep 2025
       endDate:
       summary: |
         Master's in progress focused on advanced computational methods, mathematical modeling, and industrial applications.
     - institution: Universitat Politècnica de València (UPV)
       degree: Master
       area: Software Systems Engineering and Technology
-      startDate: Sep 1, 2019
-      endDate: Jul 1, 2021
+      startDate: Sep 2021
+      endDate: Sep 2023
       summary: |
         Specialized in advanced software architecture, systems engineering, and emerging technology frameworks.
     - institution: LAB University of Applied Sciences
       degree: Bachelor
       area: Information & Communication Technology
-      startDate: Sep 1, 2017
-      endDate: Jun 1, 2018
+      startDate: Sep 2016
+      endDate: Jun 2020
       summary: |
         Completed an international bachelor's exchange in ICT, gaining cross-cultural technical collaboration and hands-on systems experience.
     - institution: Universitat Politècnica de València (UPV)
       degree: Bachelor
       area: Computer Engineering
-      startDate: Sep 1, 2014
-      endDate: Jul 1, 2019
+      startDate: Sep 2016
+      endDate: Jul 2021
       summary: |
         Foundation in computer engineering principles, software development, algorithm design, and systems architecture.
   work:
     - name: ETRA I+D
       url: https://www.grupoetra.com/
-      startDate: Jan 1, 2022
+      startDate: Oct 2022
       endDate:
       position: Software Engineer
       summary: |
@@ -78,8 +81,8 @@ content:
         - LLM
     - name: DEVOLTEC SL
       url: https://devoltec.com/
-      startDate: Jan 1, 2021
-      endDate: Dec 31, 2022
+      startDate: Oct 2021
+      endDate: Oct 2022
       position: Software Engineer
       summary: |
         Developed tailored enterprise software aligned with strategic business requirements, delivering full-stack applications and robust CI/CD pipelines with Angular, Express.js, NestJS, and Docker.
@@ -91,10 +94,10 @@ content:
         - NestJS
         - Docker
         - PostgreSQL
-    - name: Good Morning Panda
+    - name: Panda Creatiu
       url: https://goodmorningpanda.com/
-      startDate: Jan 1, 2020
-      endDate: Dec 31, 2020
+      startDate: Jul 2020
+      endDate: Oct 2020
       position: Frontend Engineer
       summary: |
         Designed and developed responsive web interfaces and user experiences for multiple client projects, producing modern and accessible frontends using WordPress, HTML5, CSS3, and JavaScript while creating UI/UX prototypes and design systems with Adobe XD and Figma.

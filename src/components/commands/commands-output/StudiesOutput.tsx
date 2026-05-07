@@ -14,6 +14,12 @@ export function StudiesOutput() {
               </p>
               <p className="text-terminal-muted text-xs mt-0.5">
                 {study.institution}
+                {(study.startDate || study.endDate || study.ongoing) && (
+                  <span className="ml-2 text-terminal-muted opacity-70">
+                    {study.startDate}
+                    {study.ongoing ? " - present" : study.endDate ? ` - ${study.endDate}` : ""}
+                  </span>
+                )}
                 {study.ongoing && (
                   <span className="text-terminal-success ml-1">(ongoing)</span>
                 )}
