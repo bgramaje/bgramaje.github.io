@@ -28,3 +28,6 @@ dist-ssr
 .env.local
 .env.production.local
 .env.development.local
+
+# pnpm is not used; CI is npm-based (see .github/workflows/deploy.yml)
+pnpm-lock.yaml
