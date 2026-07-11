@@ -4,6 +4,7 @@ import { MDXProvider } from "@mdx-js/react";
 import { useMDXComponents } from "@/mdx-components";
 import { PublishedBlock } from "@/components/mdx/PublishedBlock";
 import { SegmentedNavGroup, segmentedNavItemClassName } from "@/components/ui/segmented-nav";
+import { useDocumentHead } from "@/lib/useDocumentHead";
 import {
   getBlogLocales,
   getDefaultBlogLocale,
@@ -65,6 +66,11 @@ export function BlogPost({ id }: BlogPostProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const components = useMDXComponents({});
+
+  useDocumentHead({
+    title: meta ? `${meta.title} | bgramaje` : "bgramaje | Borja",
+    description: meta?.description,
+  });
 
   useEffect(() => {
     let cancelled = false;
