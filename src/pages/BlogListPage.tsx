@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { getAllBlogPosts } from "@/lib/blogLoader";
+import { getAllBlogPosts, getDefaultBlogLocale } from "@/lib/blogLoader";
 import type { BlogMetadata } from "@/lib/blogLoader";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
+import { useDocumentHead } from "@/lib/useDocumentHead";
 
 type BlogListItem = BlogMetadata & { id: string };
 
@@ -12,10 +13,10 @@ function parsePostDate(value: string): number {
   return Number.isNaN(t) ? 0 : t;
 }
 
-function formatListDate(value: string): string {
+function formatListDate(value: string, locale = "es-ES"): string {
   const t = Date.parse(value);
   if (Number.isNaN(t)) return value;
-  return new Intl.DateTimeFormat("es-ES", {
+  return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -39,6 +40,8 @@ export function BlogListPage() {
       [...posts].sort((a, b) => parsePostDate(b.date) - parsePostDate(a.date)),
     [posts]
   );
+
+  useDocumentHead({ title: "Blog | bgramaje", description: "Blog posts by Borja Gramaje" });
 
   if (loading) {
     return (
@@ -75,6 +78,7 @@ export function BlogListPage() {
       <ul className="space-y-2 md:space-y-3" role="list">
         {sortedPosts.map((post, i) => {
           const tags = post.tags?.filter(Boolean).slice(0, 4) ?? [];
+          const locale = getDefaultBlogLocale(post.id) ?? "es-ES";
           return (
             <motion.li
               key={post.id}
@@ -91,7 +95,7 @@ export function BlogListPage() {
                     dateTime={post.date}
                     className="font-mono text-[10px] md:text-xs text-terminal-muted tabular-nums"
                   >
-                    {formatListDate(post.date)}
+                    {formatListDate(post.date, locale)}
                   </time>
                 </div>
 
@@ -101,7 +105,7 @@ export function BlogListPage() {
                       {post.title}
                     </h2>
                     <span className="sm:hidden font-mono text-[10px] text-terminal-muted/90 tabular-nums">
-                      {formatListDate(post.date)}
+                      {formatListDate(post.date, locale)}
                     </span>
                   </div>
                   <p className="text-terminal-muted text-xs md:text-sm leading-relaxed font-sans line-clamp-2 mb-2">
