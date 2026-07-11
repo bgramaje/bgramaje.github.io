@@ -13,6 +13,11 @@ export interface BlogMDXModule {
 }
 
 const blogModules = import.meta.glob<BlogMDXModule>("../mdx/blogs/**/*.mdx", { eager: false });
+const blogRaw = import.meta.glob("../mdx/blogs/**/*.mdx", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
 
 type LoaderFn = () => Promise<BlogMDXModule>;
 
@@ -34,6 +39,35 @@ function parseBlogPath(path: string): ParsedPath | null {
     return { postId: root[1], locale: null };
   }
   return null;
+}
+
+function parseFrontmatter(raw: string): Partial<BlogMetadata> {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return {};
+  const lines = match[1].split(/\r?\n/);
+  const out: Record<string, string | string[]> = {};
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const parsedLine = line.match(/^(\w+):\s*(.*)$/);
+    if (!parsedLine) {
+      i++;
+      continue;
+    }
+    const [, key, value] = parsedLine;
+    if (value === "") {
+      const items: string[] = [];
+      while (i + 1 < lines.length && /^\s+-\s+/.test(lines[i + 1])) {
+        items.push(lines[i + 1].replace(/^\s+-\s+/, "").replace(/^"(.*)"$/, "$1"));
+        i++;
+      }
+      out[key] = items;
+    } else {
+      out[key] = value.replace(/^"(.*)"$/, "$1");
+    }
+    i++;
+  }
+  return out as Partial<BlogMetadata>;
 }
 
 const loadersByPost = new Map<string, Map<string, LoaderFn>>();
@@ -135,23 +169,37 @@ const defaultMetadata: BlogMetadata = {
   tags: [],
 };
 
+const metadataByPost = new Map<string, Map<string, BlogMetadata>>();
+
+for (const path of Object.keys(blogRaw)) {
+  const parsed = parseBlogPath(path);
+  if (!parsed) continue;
+  const frontmatter = parseFrontmatter(blogRaw[path]);
+  const metadata: BlogMetadata = {
+    title: frontmatter.title ?? defaultMetadata.title,
+    description: frontmatter.description ?? defaultMetadata.description,
+    date: frontmatter.date ?? defaultMetadata.date,
+    tags: frontmatter.tags ?? defaultMetadata.tags,
+  };
+  if (!metadataByPost.has(parsed.postId)) {
+    metadataByPost.set(parsed.postId, new Map());
+  }
+  const key = parsed.locale ?? ROOT_KEY;
+  metadataByPost.get(parsed.postId)!.set(key, metadata);
+}
+
 let allPostsCache: Promise<Array<BlogMetadata & { id: string }>> | null = null;
 
 /** All posts with metadata from frontmatter. Cached after first call. */
 export function getAllBlogPosts(): Promise<Array<BlogMetadata & { id: string }>> {
   if (allPostsCache) return allPostsCache;
-
-  const blogIds = getAllBlogIds();
-  allPostsCache = Promise.all(
-    blogIds.map(async (id) => {
-      try {
-        const defaultLocale = getDefaultBlogLocale(id);
-        const module = await loadBlogContent(id, defaultLocale);
-        const frontmatter = module.frontmatter ?? defaultMetadata;
-        return { ...frontmatter, id };
-      } catch {
-        return { ...defaultMetadata, id, title: "Error loading post", description: "Failed to load metadata" };
-      }
+  allPostsCache = Promise.resolve(
+    getAllBlogIds().map((id) => {
+      const localesMetadata = metadataByPost.get(id);
+      const defaultLocale = getDefaultBlogLocale(id);
+      const key = defaultLocale ?? ROOT_KEY;
+      const metadata = localesMetadata?.get(key) ?? localesMetadata?.values().next().value ?? defaultMetadata;
+      return { ...metadata, id };
     })
   );
   return allPostsCache;
