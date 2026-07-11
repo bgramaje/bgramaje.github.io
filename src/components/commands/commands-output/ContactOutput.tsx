@@ -1,4 +1,6 @@
+import { CvPdfDownloadButton } from "@/components/CvPdfDownloadButton";
 import { personalInfo, socialLinks } from "@/data/portfolio";
+import { PROFILE_PHOTO_PATH } from "@/lib/cv/profilePhoto";
 
 export function ContactOutput() {
   return (
@@ -6,17 +8,20 @@ export function ContactOutput() {
       <p className="text-terminal-accent font-semibold">Contact:</p>
       <div className="flex items-center gap-3">
         <img
-          src="/images/pic3.png"
+          src={PROFILE_PHOTO_PATH}
           alt="Profile"
           className="w-14 h-14 rounded-xl border-2 border-terminal-border bg-terminal-bg object-cover"
           loading="lazy"
         />
-        <div className="space-y-0.5">
-          <p className="text-terminal-text font-medium">{personalInfo.name}</p>
-          <p className="text-terminal-muted text-xs">{personalInfo.title}</p>
-          <a href={`mailto:${personalInfo.email}`} className="text-terminal-cyan text-xs hover:underline">
-            {personalInfo.email}
-          </a>
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <div className="min-w-0 space-y-0.5">
+            <p className="text-terminal-text font-medium">{personalInfo.name}</p>
+            <p className="text-terminal-muted text-xs">{personalInfo.title}</p>
+            <a href={`mailto:${personalInfo.email}`} className="text-terminal-cyan text-xs hover:underline">
+              {personalInfo.email}
+            </a>
+          </div>
+          <CvPdfDownloadButton />
         </div>
       </div>
       <div className="flex flex-wrap gap-2 pt-0">

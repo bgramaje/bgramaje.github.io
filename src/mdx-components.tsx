@@ -2,6 +2,7 @@ import type { MDXComponents } from "mdx/types";
 import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import type { MermaidProps } from "mdx-mermaid/lib/Mermaid";
 import { Callout } from "@/components/Callout";
+import { PublishedBlock } from "@/components/mdx/PublishedBlock";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Highlighter } from "@/components/ui/highlighter";
 
@@ -163,6 +164,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Highlighter,
     // Joly UI CodeBlock — use in MDX: <CodeBlock code={...} language="tsx" variant="terminal" />
     CodeBlock,
+    // Fecha de publicación alineada a la derecha: <PublishedBlock date="2026-04-14" />
+    PublishedBlock,
     ...components,
   };
 }

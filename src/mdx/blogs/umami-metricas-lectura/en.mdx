@@ -1,0 +1,119 @@
+---
+title: "How I track what gets read (and what doesn’t) with Umami"
+description: "My workflow for measuring which content works on the site and spotting posts people drop early, using Umami."
+date: "2026-04-14"
+tags:
+  - Analytics
+  - Umami
+  - Content
+  - Blog
+---
+
+# How I track what gets read (and what doesn’t) with Umami
+
+Publishing content is fine, but improving it needs data. I use <Highlighter action="highlight" color="#16a34a">Umami</Highlighter> to see which posts people actually read and which ones they bail on halfway through.
+
+## Why I use Umami
+
+I picked Umami because it’s <Highlighter action="underline" color="#d97706">simple, fast, and privacy-focused</Highlighter>. I don’t need a heavy stack to answer a few specific questions:
+
+- Which pages pull the most reading.
+- Which posts lose interest.
+- Which routes barely get traffic.
+- Which editorial changes actually move the needle.
+
+Official site: [Umami](https://umami.is/).
+
+## The metrics I check every week
+
+To avoid drowning in numbers, I stick to a small set:
+
+1. <Highlighter action="box" color="#2563eb">Pageviews per post</Highlighter>: shows which topics resonate.
+2. <Highlighter action="box" color="#dc2626">Unique visitors</Highlighter>: stops me mistaking repeats for real reach.
+3. <Highlighter action="box" color="#7c3aed">Time on page</Highlighter>: if it’s low, the title and opening may not match the piece.
+4. <Highlighter action="box" color="#0891b2">Bounce rate</Highlighter>: when it spikes, I revisit the hook, structure, and clarity.
+
+That’s enough to decide whether a post needs:
+
+- A stronger intro.
+- Structural tweaks (clearer subheadings).
+- A technical refresh.
+- Internal links from stronger articles.
+
+## How I spot content people stop reading
+
+My rule of thumb: if a page gets traffic but pairs <Highlighter action="highlight" color="#be185d">low time on page + high bounce</Highlighter>, it’s a rewrite candidate.
+
+Usually the issue is one of these:
+
+- The title promises something the opening doesn’t deliver quickly.
+- Long walls of text with no visual breaks.
+- Not enough concrete examples.
+- The reader can’t tell what to do next.
+
+When I see that, I rework the top of the article and measure again for a week or two.
+
+## My continuous improvement loop
+
+I run a tight cycle:
+
+1. Publish or update a post.
+2. Watch Umami for several days.
+3. Note what works and what doesn’t.
+4. Ship small changes to copy, structure, and links.
+5. Measure again to confirm real improvement.
+
+That keeps me writing with less guesswork and more proof: <Highlighter action="underline" color="#ca8a04">fewer assumptions, more data-backed calls</Highlighter>.
+
+## Deploying with Docker (YAML)
+
+If you want to self-host, here’s a basic `docker-compose.yml` example to run Umami with Postgres:
+
+```yaml
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@db:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: replace-with-a-long-secret
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: umami-db
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  umami-db-data:
+```
+
+## Umami tracking script
+
+This is the snippet Umami usually gives you to drop into your site and start tracking visits, paths, and events:
+
+```js
+<script
+  async
+  defer
+  data-website-id="YOUR_WEBSITE_ID"
+  src="https://your-umami-domain.example/script.js"
+></script>
+```
+
+When this script loads, Umami records navigation and usage so you can see which content performs best.
+
+## Conclusion
+
+Umami is exactly what I want for a personal blog: clear performance visibility without unnecessary complexity. If you want to know what gets read most—or what people abandon—starting with these basics already puts you far ahead.

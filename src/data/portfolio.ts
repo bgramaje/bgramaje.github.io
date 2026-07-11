@@ -31,6 +31,8 @@ export interface Study {
   degree: string;
   institution: string;
   type: "degree" | "master";
+  startDate?: string;
+  endDate?: string;
   /** When true, shown as currently in progress */
   ongoing?: boolean;
 }
@@ -152,6 +154,11 @@ export const socialLinks: SocialLink[] = [
     icon: "linkedin",
   },
   {
+    name: "Google Scholar",
+    url: "https://scholar.google.com/citations?user=07QdnWUAAAAJ&hl=en",
+    icon: "scholar",
+  },
+  {
     name: "Email",
     url: "mailto:bgramaje@gmail.com",
     icon: "mail",
@@ -163,21 +170,28 @@ export const studies: Study[] = [
     degree: "Degree in Computer Engineering",
     institution: "Universitat Politècnica de València",
     type: "degree",
+    startDate: "Sep 2016",
+    endDate: "Jul 2021",
   },
   {
     degree: "Degree in Information & Communication Technology",
     institution: "LAB University of Applied Sciences",
     type: "degree",
+    startDate: "Sep 2016",
+    endDate: "Jun 2020",
   },
   {
     degree: "Master's Degree in Software Systems Engineering and Technology",
     institution: "Univresitat Politècnica de València",
     type: "master",
+    startDate: "Sep 2021",
+    endDate: "Sep 2023",
   },
   {
     degree: "Master's Degree in Computational Engineering & Industrial Mathematics",
     institution: "Universitat Politècnica de València (UPV)",
     type: "master",
+    startDate: "Sep 2025",
     ongoing: true,
   },
 ];

@@ -1,6 +1,7 @@
 import type React from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "@/components/Callout";
+import { PublishedBlock } from "@/components/mdx/PublishedBlock";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Highlighter } from "@/components/ui/highlighter";
 import { WorkTitle } from "@/components/work/WorkTitle";
@@ -118,6 +119,7 @@ export function useMDXWorkComponents(components: MDXComponents): MDXComponents {
     ),
     Highlighter,
     CodeBlock,
+    PublishedBlock,
     WorkTitle,
     WorkTimerange,
     WorkCompany,

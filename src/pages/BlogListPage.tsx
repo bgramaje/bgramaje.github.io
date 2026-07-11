@@ -61,7 +61,7 @@ export function BlogListPage() {
     <div className="mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-4xl px-4 py-6 pb-12 bg-neutral-950 min-h-full">
       <ScrollProgress className="top-0 z-50" />
 
-      <header className="mb-8 border-b border-terminal-border/40 pb-6">
+      <header className="mb-5 border-b border-terminal-border/40 pb-4">
         <motion.h1
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -70,18 +70,6 @@ export function BlogListPage() {
         >
           Blog
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
-          className="text-terminal-muted text-xs md:text-sm font-sans max-w-prose"
-        >
-          Artículos y notas. {sortedPosts.length > 0 && (
-            <span className="text-terminal-muted/80">
-              {sortedPosts.length} {sortedPosts.length === 1 ? "entrada" : "entradas"}.
-            </span>
-          )}
-        </motion.p>
       </header>
 
       <ul className="space-y-2 md:space-y-3" role="list">
