@@ -16,16 +16,16 @@ Use the `@/` alias for `src/` imports. Use terminal tokens (`text-terminal-*`,
 
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
-| 001  | Make `npm run build` green again (install `@types/mdx`) | P1 | S | — | TODO |
-| 002  | Delete unused components and dead exports | P2 | S | 001 | TODO |
-| 003  | Remove unused direct dependencies | P3 | S | 002 | TODO |
-| 004  | Standardize on the `motion` package (drop `framer-motion`) | P2 | M | 001 | TODO |
-| 005  | Clear the lint baseline to zero errors | P2 | S-M | 002, 004 | TODO |
-| 006  | Add focus trap and focus restore to the modals | P3 | S-M | 001 | TODO |
-| 007  | Remove the artificial loading delay in BlogPage | P3 | S | — | TODO |
-| 008  | Fix stale path references in README.md | P3 | S | — | TODO |
-| 009  | Reduce npm audit advisories (dev/build-time only) | P3 | S | 003, 004 (preferred) | TODO |
-| 010  | Add a `projects` terminal command | P2 | S | 001 | TODO |
+| 001  | Make `npm run build` green again (install `@types/mdx`) | P1 | S | — | DONE |
+| 002  | Delete unused components and dead exports | P2 | S | 001 | DONE |
+| 003  | Remove unused direct dependencies | P3 | S | 002 | DONE |
+| 004  | Standardize on the `motion` package (drop `framer-motion`) | P2 | M | 001 | DONE |
+| 005  | Clear the lint baseline to zero errors | P2 | S-M | 002, 004 | DONE |
+| 006  | Add focus trap and focus restore to the modals | P3 | S-M | 001 | DONE |
+| 007  | Remove the artificial loading delay in BlogPage | P3 | S | — | DONE |
+| 008  | Fix stale path references in README.md | P3 | S | — | DONE |
+| 009  | Reduce npm audit advisories (dev/build-time only) | P3 | S | 003, 004 (preferred) | DONE (26→0: 1 crit, 9 high, 14 mod, 2 low → 0) |
+| 010  | Add a `projects` terminal command | P2 | S | 001 | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale — finding fixed independently or approach abandoned)
 

@@ -59,7 +59,7 @@ export const Ticker = memo(
             className,
           )}
           type="button"
-          {...(props as any)}
+          {...props}
         >
           {children}
         </button>
@@ -80,7 +80,7 @@ export const TickerIcon = memo(({ src, symbol, className, ...props }: TickerIcon
   }
   return (
     <Avatar className={cn("size-7 border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800", className)}>
-      <AvatarImage src={src} {...(props as any)} />
+      <AvatarImage src={src} {...props} />
       <AvatarFallback className="font-semibold text-zinc-500 text-sm dark:text-zinc-400">
         {symbol.slice(0, 2).toUpperCase()}
       </AvatarFallback>
@@ -94,7 +94,7 @@ export type TickerSymbolProps = HTMLAttributes<HTMLSpanElement> & {
 }
 
 export const TickerSymbol = memo(({ symbol, className, ...props }: TickerSymbolProps) => (
-  <span className={cn("font-medium", className)} {...(props as any)}>
+  <span className={cn("font-medium", className)} {...props}>
     {symbol.toUpperCase()}
   </span>
 ))
@@ -110,7 +110,7 @@ export const TickerPrice = memo(({ price, className, ...props }: TickerPriceProp
   const formattedPrice = useMemo(() => context.formatter.format(price), [price, context])
 
   return (
-    <span className={cn("text-zinc-500 dark:text-zinc-400", className)} {...(props as any)}>
+    <span className={cn("text-zinc-500 dark:text-zinc-400", className)} {...props}>
       {formattedPrice}
     </span>
   )
@@ -143,7 +143,7 @@ export const TickerPriceChange = memo(
             : "text-red-600 dark:text-red-500",
           className,
         )}
-        {...(props as any)}
+        {...props}
       >
         <svg
           aria-labelledby="ticker-change-icon-title"

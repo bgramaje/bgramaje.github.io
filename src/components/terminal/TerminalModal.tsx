@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Terminal } from "./Terminal";
 import { TerminalOutput } from "./TerminalOutput";
 import { CommandChips } from "./CommandChips";
 import { TerminalTitleBar } from "./TerminalTitleBar";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 interface TerminalModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export function TerminalModal({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, containerRef, inputRef);
 
   const scrollToBottom = useCallback(() => {
     if (terminalRef.current) {
@@ -38,12 +41,6 @@ export function TerminalModal({
       return () => clearTimeout(t);
     }
   }, [history, scrollToBottom]);
-
-  useEffect(() => {
-    if (isOpen) {
-      inputRef.current?.focus();
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -149,6 +146,8 @@ export function TerminalModal({
         onClick={onClose}
       >
         <motion.div
+          ref={containerRef}
+          tabIndex={-1}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}

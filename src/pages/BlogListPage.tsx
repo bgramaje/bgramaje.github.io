@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { getAllBlogPosts } from "@/lib/blogLoader";
 import type { BlogMetadata } from "@/lib/blogLoader";
 import { ScrollProgress } from "@/components/ui/scroll-progress";

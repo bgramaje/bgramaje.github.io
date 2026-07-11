@@ -1,6 +1,7 @@
 import { JobPost } from "@/components/JobPost";
 import { HelpOutput } from "@/components/commands/commands-output/HelpOutput";
 import { JobsOutput } from "@/components/commands/commands-output/JobsOutput";
+import { ProjectsOutput } from "@/components/commands/commands-output/ProjectsOutput";
 import { PublicationsOutput } from "@/components/commands/commands-output/PublicationsOutput";
 import { SkillsOutput } from "@/components/commands/commands-output/SkillsOutput";
 import { StudiesOutput } from "@/components/commands/commands-output/StudiesOutput";
@@ -47,6 +48,9 @@ export function processCommand(
           onJobClick={(slug) => options?.onOpenJobModal?.(slug, "Job")}
         />
       );
+    case "projects":
+    case "project":
+      return <ProjectsOutput />;
     case "publications":
     case "papers":
     case "research":

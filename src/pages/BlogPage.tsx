@@ -1,24 +1,13 @@
-import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { ArrowLeft, Github, Linkedin } from "lucide-react";
 import { BlogPost } from "@/components/BlogPost";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { socialLinks } from "@/data/portfolio";
 
-const LOAD_DELAY_MS = 250;
-
 export function BlogPage() {
   const { id } = useParams<{ id: string }>();
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    if (!id) return;
-    setReady(false);
-    const t = setTimeout(() => setReady(true), LOAD_DELAY_MS);
-    return () => clearTimeout(t);
-  }, [id]);
 
   if (!id) {
     return (
@@ -28,23 +17,6 @@ export function BlogPage() {
           <ArrowLeft className="h-4 w-4" />
           Volver al blog
         </Link>
-      </div>
-    );
-  }
-
-  if (!ready) {
-    return (
-      <div className="mx-auto w-full max-w-2xl md:max-w-3xl lg:max-w-4xl px-4 py-6 pb-12 bg-neutral-950 min-h-full">
-        <ScrollProgress className="top-0 z-50" />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.15 }}
-          className="flex items-center gap-2 text-sm text-neutral-500"
-        >
-          <span className="inline-block w-2 h-2 rounded-full bg-neutral-500 animate-pulse" />
-          Cargando…
-        </motion.div>
       </div>
     );
   }

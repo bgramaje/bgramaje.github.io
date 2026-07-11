@@ -185,6 +185,7 @@ export const studies: Study[] = [
 export const commands = {
   help: "Show available commands",
   jobs: "List jobs",
+  projects: "Show side projects",
   publications: "Show publications",
   skills: "Show technical skills",
   contact: "Display contact information",

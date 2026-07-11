@@ -49,11 +49,15 @@ npm run preview
 
 ## 📁 Estructura del proyecto
 
-- `src/pages/` - Páginas principales (HomePage, BlogPage)
-- `src/components/` - Componentes reutilizables
-- `src/blogs/` - Archivos MDX de los posts del blog
-- `src/data/` - Datos del portfolio (jobs, publications, etc.)
-- `src/lib/` - Utilidades y lógica de comandos
+- `src/pages/` - Páginas principales (HomePage, BlogListPage, BlogPage)
+- `src/components/` - Componentes reutilizables (terminal, comandos, UI)
+- `src/components/commands/` - Lógica de comandos del terminal (`commands.tsx`)
+- `src/mdx/blogs/` - Archivos MDX de los posts del blog
+- `src/mdx/jobs/` - Archivos MDX de las experiencias laborales
+- `src/data/` - Datos del portfolio (`portfolio.ts`: jobs, publications, skills, etc.)
+- `src/lib/` - Utilidades (loaders de MDX, `terminal-focus`, `utils`)
+
+> Para detalles completos de arquitectura y convenciones, ver `AGENTS.md`.
 
 ## 🛠️ Tecnologías
 

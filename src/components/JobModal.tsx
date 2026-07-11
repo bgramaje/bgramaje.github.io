@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { TerminalTitleBar } from "./terminal/TerminalTitleBar";
 import { JobPost } from "./JobPost";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 interface JobModalProps {
   isOpen: boolean;
@@ -11,6 +12,9 @@ interface JobModalProps {
 }
 
 export function JobModal({ isOpen, onClose, jobId, title }: JobModalProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, containerRef);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -30,6 +34,8 @@ export function JobModal({ isOpen, onClose, jobId, title }: JobModalProps) {
         onClick={onClose}
       >
         <motion.div
+          ref={containerRef}
+          tabIndex={-1}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
