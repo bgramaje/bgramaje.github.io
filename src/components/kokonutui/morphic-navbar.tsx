@@ -82,8 +82,8 @@ export function MorphicNavbar() {
       </nav>
 
       <div className="flex flex-1 min-w-0 items-center justify-end gap-1 sm:gap-1.5">
-        <ThemeToggle />
         <CvPdfDownloadButton />
+        <ThemeToggle />
       </div>
     </div>
   );
