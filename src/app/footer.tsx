@@ -3,7 +3,7 @@ import { socialLinks } from "@/content/data/portfolio";
 import { pageShellClass } from "@/lib/utils";
 
 const footerLinkClass =
-  "rounded-sm text-muted-foreground transition-colors hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex min-h-10 items-center rounded-sm px-1 text-muted-foreground transition-[color,transform] active:scale-[0.96] hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export function SiteFooter() {
   const [cvLoading, setCvLoading] = useState(false);

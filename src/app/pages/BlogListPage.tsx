@@ -4,6 +4,11 @@ import { getAllBlogPosts, getBlogPostPath, getDefaultBlogLocale } from "@/lib/bl
 import { pageShellClass } from "@/lib/utils";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 
+const enterVariants = {
+  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
+
 function parsePostDate(value: string): number {
   const t = Date.parse(value);
   return Number.isNaN(t) ? 0 : t;
@@ -33,19 +38,27 @@ export function BlogListPage() {
 
   return (
     <div className={`${pageShellClass} py-8 pb-16 min-h-full`}>
-      <header className="mb-8">
+      <motion.header
+        className="mb-8"
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+      >
         <motion.h1
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={enterVariants}
           transition={{ duration: 0.3 }}
           className="text-foreground font-bold font-mono text-3xl md:text-4xl leading-tight uppercase tracking-tight text-balance"
         >
           Blog
         </motion.h1>
-        <p className="text-muted-foreground text-sm font-sans mt-1.5 text-pretty">
+        <motion.p
+          variants={enterVariants}
+          transition={{ duration: 0.3 }}
+          className="text-muted-foreground text-sm font-sans mt-1.5 text-pretty"
+        >
           Pensamientos, proyectos y apuntes
-        </p>
-      </header>
+        </motion.p>
+      </motion.header>
 
       <ul className="space-y-4" role="list">
         {sortedPosts.map((post, i) => {
@@ -54,13 +67,13 @@ export function BlogListPage() {
           return (
             <motion.li
               key={post.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.05 + i * 0.04 }}
+              initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.3, delay: 0.2 + i * 0.1 }}
             >
               <Link
                 to={getBlogPostPath(post.id, getDefaultBlogLocale(post.id))}
-                className="group flex gap-4 rounded-xl border border-border/50 bg-card p-4 md:p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-border/80 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group flex gap-4 rounded-xl bg-card p-4 md:p-5 shadow-[var(--shadow-border)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-border-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="flex-1 min-w-0">
                   <time

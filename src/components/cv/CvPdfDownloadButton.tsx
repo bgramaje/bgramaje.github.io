@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FileDown, Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { cn } from "@/lib/utils";
+
+const iconTransition = { type: "spring" as const, duration: 0.3, bounce: 0 };
 
 export function CvPdfDownloadButton({ className }: { className?: string }) {
   const [loading, setLoading] = useState(false);
@@ -36,18 +39,38 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
           aria-label="Download CV PDF"
           title="Download CV"
         >
-          <span className="flex items-center justify-center">
-            {loading ? (
-              <Loader2
-                size={17}
-                className="shrink-0 animate-spin sm:h-[18px] sm:w-[18px]"
-              />
-            ) : (
-              <FileDown
-                size={17}
-                className="shrink-0 sm:h-[18px] sm:w-[18px]"
-              />
-            )}
+          <span className="relative flex size-[17px] items-center justify-center">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {loading ? (
+                <motion.span
+                  key="loading"
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+                  animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+                  transition={iconTransition}
+                >
+                  <Loader2
+                    size={17}
+                    className="shrink-0 animate-spin sm:h-[18px] sm:w-[18px]"
+                  />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="download"
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+                  animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+                  transition={iconTransition}
+                >
+                  <FileDown
+                    size={17}
+                    className="shrink-0 sm:h-[18px] sm:w-[18px]"
+                  />
+                </motion.span>
+              )}
+            </AnimatePresence>
           </span>
         </button>
       </RainbowButton>

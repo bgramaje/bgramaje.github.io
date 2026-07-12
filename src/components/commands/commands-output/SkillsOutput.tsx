@@ -12,7 +12,7 @@ export function SkillsOutput() {
               {skill.items.map((item) => (
                 <span
                   key={item}
-                  className="px-2 py-1 text-xs bg-border/50 text-success rounded-lg"
+                  className="px-1.5 py-0 text-xs text-success rounded-md"
                 >
                   {item}
                 </span>

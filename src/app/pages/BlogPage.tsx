@@ -69,23 +69,23 @@ export function BlogPage() {
     <div className={`${pageShellClass} relative py-6 pb-4 md:pb-12 bg-background min-h-full`}>
       <ScrollProgress className="top-0 z-50" />
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.25 }}
         className="mb-3 md:mb-6"
       >
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 rounded-sm text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="inline-flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted-foreground transition-[color,transform] active:scale-[0.96] hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
           Volver al blog
         </Link>
       </motion.div>
       <motion.article
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.05 }}
+        initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.3, delay: 0.1 }}
         className="pb-6 md:pb-20"
       >
         <BlogPost id={id} locale={locale} />

@@ -14,7 +14,7 @@ export function ContactOutput() {
             width={56}
             height={56}
             decoding="async"
-            className="w-14 h-14 rounded-xl bg-background object-cover outline outline-1 outline-[oklch(0_0_0/0.1)] dark:outline-[oklch(1_0_0/0.1)]"
+            className="w-14 h-14 rounded-xl bg-background object-cover"
           />
         </picture>
         <div className="min-w-0 space-y-0.5">
@@ -32,7 +32,7 @@ export function ContactOutput() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-2 py-1 text-xs bg-border/50 rounded-lg hover:bg-border transition-colors text-success focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="inline-flex items-center gap-1.5 px-1.5 py-0 text-xs rounded-md transition-[color,transform] active:scale-[0.96] text-success hover:text-success/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <span>{link.name}</span>
             <span className="text-muted-foreground" aria-hidden>↗</span>

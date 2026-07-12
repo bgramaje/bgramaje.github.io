@@ -109,7 +109,7 @@ export const TickerPrice = memo(({ price, className, ...props }: TickerPriceProp
   const formattedPrice = useMemo(() => context.formatter.format(price), [price, context])
 
   return (
-    <span className={cn("text-muted-foreground", className)} {...props}>
+    <span className={cn("text-muted-foreground tabular-nums", className)} {...props}>
       {formattedPrice}
     </span>
   )
@@ -136,7 +136,7 @@ export const TickerPriceChange = memo(
     return (
       <span
         className={cn(
-          "flex items-center gap-0.5",
+          "flex items-center gap-0.5 tabular-nums",
           isPositiveChange ? "text-success" : "text-destructive",
           className,
         )}

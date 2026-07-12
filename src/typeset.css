@@ -50,6 +50,7 @@
     &:where(p) {
       margin-block-start: var(--typeset-flow);
       margin-block-end: 0;
+      text-wrap: pretty;
     }
 
     /* Headings. */
@@ -58,6 +59,7 @@
       font-family: var(--typeset-font-heading);
       font-weight: 600;
       margin-block-end: 0;
+      text-wrap: balance;
     }
     &:where(h1) {
       font-size: 1.75em;
@@ -209,6 +211,7 @@
     &:where(li) {
       margin-block-start: 0.5em;
       padding-inline-start: 0.4em;
+      text-wrap: pretty;
     }
     &:where(li > p, li > ul, li > ol) {
       margin-block-start: 0.5em;
@@ -320,6 +323,7 @@
       margin-block-start: var(--typeset-flow);
       margin-block-end: 0;
       margin-inline: 0;
+      text-wrap: pretty;
     }
 
     /* Dividers. */
