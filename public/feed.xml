@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>bgramaje | Blog</title>
+    <link>https://bgramaje.github.io/blog</link>
+    <description>Blog posts by Borja Gramaje on software engineering, IoT, and data platforms.</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 14 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://bgramaje.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>How I track what gets read (and what doesn’t) with Umami</title>
+      <link>https://bgramaje.github.io/blog/umami-metricas-lectura/en</link>
+      <guid isPermaLink="true">https://bgramaje.github.io/blog/umami-metricas-lectura/en</guid>
+      <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
+      <description>My workflow for measuring which content works on the site and spotting posts people drop early, using Umami.</description>
+    </item>
+    <item>
+      <title>Cómo monitorizo qué se lee (y qué no) con Umami</title>
+      <link>https://bgramaje.github.io/blog/umami-metricas-lectura/es</link>
+      <guid isPermaLink="true">https://bgramaje.github.io/blog/umami-metricas-lectura/es</guid>
+      <pubDate>Tue, 14 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Mi flujo para medir qué contenidos funcionan en la web y detectar posts que se abandonan pronto usando Umami.</description>
+    </item>
+    <item>
+      <title>PARCAR-IoT: LoRaWAN node for public parking with remote management</title>
+      <link>https://bgramaje.github.io/blog/parcar-iot</link>
+      <guid isPermaLink="true">https://bgramaje.github.io/blog/parcar-iot</guid>
+      <pubDate>Wed, 24 Dec 2025 00:00:00 GMT</pubDate>
+      <description>Low-power device (ESP32-S3 + SX1262 + ultrasonic sensors + e-ink) integrated with ChirpStack to monitor occupancy and enable dynamic use cases for public parking spaces.</description>
+    </item>
+  </channel>
+</rss>

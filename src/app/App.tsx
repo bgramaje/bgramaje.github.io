@@ -11,6 +11,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:id/:locale" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogPage />} />
         </Route>
       </Routes>

@@ -136,16 +136,58 @@ const defaultMetadata: BlogMetadata = {
 /** Map blog path → metadata from eager frontmatter glob */
 const blogFrontmatterMap = new Map<string, BlogMetadata>();
 
+function frontmatterKey(postId: string, locale: string | null): string {
+  return locale ? `${postId}:${locale}` : postId;
+}
+
 for (const [path, frontmatter] of Object.entries(blogFrontmatter)) {
   const parsed = parseBlogPath(path);
-  if (!parsed) continue;
-  const postId = parsed.postId;
-  const key = parsed.locale ?? ROOT_KEY;
-  // For multi-locale posts, only store the default locale's metadata
-  const map = modulesByPost.get(postId);
-  const locales = map ? [...map.keys()] : [];
-  if (locales.length > 1 && key !== pickDefaultLocale(locales)) continue;
-  if (frontmatter) blogFrontmatterMap.set(postId, frontmatter as BlogMetadata);
+  if (!parsed || !frontmatter) continue;
+  blogFrontmatterMap.set(
+    frontmatterKey(parsed.postId, parsed.locale),
+    frontmatter as BlogMetadata,
+  );
+}
+
+export const BLOG_SITE_ORIGIN = "https://bgramaje.github.io";
+
+export function getBlogPostPath(postId: string, locale?: string): string {
+  const locales = getBlogLocales(postId);
+  if (locales.length) {
+    const loc =
+      locale && locales.includes(locale) ? locale : pickDefaultLocale(locales);
+    return `/blog/${postId}/${loc}`;
+  }
+  return `/blog/${postId}`;
+}
+
+export function getBlogPostUrl(postId: string, locale?: string): string {
+  return `${BLOG_SITE_ORIGIN}${getBlogPostPath(postId, locale)}`;
+}
+
+export function getBlogAlternates(
+  postId: string,
+): Array<{ hreflang: string; href: string }> {
+  const locales = getBlogLocales(postId);
+  if (!locales.length) return [];
+  const defaultLoc = pickDefaultLocale(locales);
+  return [
+    ...locales.map((loc) => ({
+      hreflang: loc,
+      href: getBlogPostUrl(postId, loc),
+    })),
+    { hreflang: "x-default", href: getBlogPostUrl(postId, defaultLoc) },
+  ];
+}
+
+export function getBlogMetadata(postId: string, locale?: string): BlogMetadata {
+  const locales = getBlogLocales(postId);
+  if (locales.length) {
+    const loc =
+      locale && locales.includes(locale) ? locale : pickDefaultLocale(locales);
+    return blogFrontmatterMap.get(frontmatterKey(postId, loc)) ?? defaultMetadata;
+  }
+  return blogFrontmatterMap.get(postId) ?? defaultMetadata;
 }
 
 let allPostsCache: Array<BlogMetadata & { id: string }> | null = null;
@@ -154,7 +196,7 @@ let allPostsCache: Array<BlogMetadata & { id: string }> | null = null;
 export function getAllBlogPosts(): Array<BlogMetadata & { id: string }> {
   if (allPostsCache) return allPostsCache;
   allPostsCache = getAllBlogIds().map((id) => {
-    const metadata = blogFrontmatterMap.get(id) ?? defaultMetadata;
+    const metadata = getBlogMetadata(id);
     return { ...metadata, id };
   });
   return allPostsCache;

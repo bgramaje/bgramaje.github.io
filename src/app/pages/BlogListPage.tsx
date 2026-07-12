@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { getAllBlogPosts, getDefaultBlogLocale } from "@/lib/blogLoader";
+import { getAllBlogPosts, getBlogPostPath, getDefaultBlogLocale } from "@/lib/blogLoader";
 import { pageShellClass } from "@/lib/utils";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 
@@ -59,7 +59,7 @@ export function BlogListPage() {
               transition={{ duration: 0.3, delay: 0.05 + i * 0.04 }}
             >
               <Link
-                to={`/blog/${post.id}`}
+                to={getBlogPostPath(post.id, getDefaultBlogLocale(post.id))}
                 className="group flex gap-4 rounded-xl border border-border/50 bg-card p-4 md:p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-border/80 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="flex-1 min-w-0">

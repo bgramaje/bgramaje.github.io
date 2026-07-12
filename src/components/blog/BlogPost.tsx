@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { MDXProvider } from "@mdx-js/react";
 import { useMDXComponents } from "@/lib/mdx-components";
 import { BlogLocaleBanner } from "@/components/blog/BlogLocaleBanner";
 import { PublishedBlock } from "@/components/shared/PublishedBlock";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 import {
+  getBlogAlternates,
   getBlogLocales,
-  getDefaultBlogLocale,
+  getBlogPostPath,
+  getBlogPostUrl,
   loadBlogContent,
   type BlogMetadata,
 } from "@/lib/blogLoader";
@@ -16,6 +18,7 @@ import { cn } from "@/lib/utils";
 
 interface BlogPostProps {
   id: string;
+  locale?: string;
 }
 
 function publishedCopy(locale: string | null) {
@@ -24,51 +27,30 @@ function publishedCopy(locale: string | null) {
   return { label: "Publicado el" as const, intl: "es-ES" as const };
 }
 
-export function BlogPost({ id }: BlogPostProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+function documentLang(locale: string | null): string {
+  if (locale === "en") return "en";
+  if (locale === "es") return "es";
+  return "en";
+}
+
+export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
+  const [searchParams] = useSearchParams();
   const locales = useMemo(() => getBlogLocales(id), [id]);
   const langParam = searchParams.get("lang");
+
   const effectiveLocale = useMemo(() => {
     if (!locales.length) return null;
-    if (langParam && locales.includes(langParam)) return langParam;
-    return getDefaultBlogLocale(id)!;
-  }, [id, locales, langParam]);
-
-  useEffect(() => {
-    loadHighlightCss();
-  }, []);
-
-  useEffect(() => {
-    if (!locales.length) {
-      if (langParam !== null) {
-        setSearchParams(
-          (prev) => {
-            const next = new URLSearchParams(prev);
-            next.delete("lang");
-            return next;
-          },
-          { replace: true }
-        );
-      }
-      return;
-    }
-    if (!langParam || !locales.includes(langParam)) {
-      setSearchParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
-          next.set("lang", effectiveLocale!);
-          return next;
-        },
-        { replace: true }
-      );
-    }
-  }, [id, locales, langParam, effectiveLocale, setSearchParams]);
+    if (localeParam && locales.includes(localeParam)) return localeParam;
+    return null;
+  }, [locales, localeParam]);
 
   const [MDXContent, setMDXContent] = useState<ComponentType | null>(null);
   const [meta, setMeta] = useState<BlogMetadata | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const canonical = `https://bgramaje.github.io/blog/${id}`;
+
+  const canonical = getBlogPostUrl(id, effectiveLocale ?? undefined);
+  const alternates = useMemo(() => getBlogAlternates(id), [id]);
   const structuredData = useMemo(
     () =>
       meta
@@ -85,12 +67,12 @@ export function BlogPost({ id }: BlogPostProps) {
             datePublished: meta.date,
             dateModified: meta.date,
             mainEntityOfPage: canonical,
+            inLanguage: effectiveLocale ?? undefined,
           }
         : undefined,
-    [canonical, meta]
+    [canonical, effectiveLocale, meta],
   );
   const components = useMDXComponents({
-    // Title comes from frontmatter — skip duplicate # heading in MDX body
     h1: () => null,
   });
 
@@ -98,10 +80,18 @@ export function BlogPost({ id }: BlogPostProps) {
     title: meta ? `${meta.title} | bgramaje` : "bgramaje | Borja",
     description: meta?.description,
     canonical,
+    lang: documentLang(effectiveLocale),
+    alternates: locales.length ? alternates : undefined,
     structuredData,
   });
 
   useEffect(() => {
+    loadHighlightCss();
+  }, []);
+
+  useEffect(() => {
+    if (!effectiveLocale && locales.length) return;
+
     let cancelled = false;
     setLoading(true);
     setError(null);
@@ -123,19 +113,25 @@ export function BlogPost({ id }: BlogPostProps) {
     return () => {
       cancelled = true;
     };
-  }, [id, effectiveLocale]);
+  }, [id, effectiveLocale, locales.length]);
+
+  if (langParam && locales.includes(langParam)) {
+    return <Navigate to={getBlogPostPath(id, langParam)} replace />;
+  }
 
   const wrapperClass = "space-y-2 pr-0 md:pr-2 pl-0 md:pl-2 font-sans pb-20";
   const typesetClass = "typeset typeset-docs max-w-[42em]";
   const entryHeaderClass = "typeset typeset-docs w-full max-w-none";
-
   const pub = publishedCopy(effectiveLocale);
 
   if (loading) {
     return (
       <div className={wrapperClass}>
         <div className="flex items-center gap-2 py-6 text-muted-foreground text-sm">
-          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-border border-t-primary" aria-hidden="true" />
+          <span
+            className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-border border-t-primary"
+            aria-hidden="true"
+          />
           Loading…
         </div>
       </div>
@@ -174,9 +170,9 @@ export function BlogPost({ id }: BlogPostProps) {
             />
           ) : null}
         </div>
-        {locales.length > 1 ? (
+        {locales.length > 1 && effectiveLocale ? (
           <div className="not-typeset w-full">
-            <BlogLocaleBanner postId={id} className="w-full" />
+            <BlogLocaleBanner postId={id} currentLocale={effectiveLocale} className="w-full" />
           </div>
         ) : null}
       </header>

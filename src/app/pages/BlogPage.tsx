@@ -1,20 +1,60 @@
-import { useParams, Link } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowLeft, Github, Linkedin } from "lucide-react";
 import { BlogPost } from "@/components/blog/BlogPost";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { socialLinks } from "@/content/data/portfolio";
+import { getBlogLocales, getDefaultBlogLocale, getAllBlogIds } from "@/lib/blogLoader";
 import { pageShellClass } from "@/lib/utils";
 
 export function BlogPage() {
-  const { id } = useParams<{ id: string }>();
+  const { id, locale } = useParams<{ id: string; locale?: string }>();
 
-  if (!id) {
+  if (!id || !getAllBlogIds().includes(id)) {
     return (
       <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
         <p className="text-muted-foreground">Post no encontrado.</p>
-        <Link to="/blog" className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <Link
+          to="/blog"
+          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver al blog
+        </Link>
+      </div>
+    );
+  }
+
+  const locales = getBlogLocales(id);
+
+  if (locales.length && !locale) {
+    return <Navigate to={`/blog/${id}/${getDefaultBlogLocale(id)}`} replace />;
+  }
+
+  if (locale && locales.length && !locales.includes(locale)) {
+    return (
+      <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
+        <p className="text-muted-foreground">Post no encontrado.</p>
+        <Link
+          to="/blog"
+          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver al blog
+        </Link>
+      </div>
+    );
+  }
+
+  if (locale && !locales.length) {
+    return (
+      <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
+        <p className="text-muted-foreground">Post no encontrado.</p>
+        <Link
+          to="/blog"
+          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="h-4 w-4" />
           Volver al blog
         </Link>
@@ -48,10 +88,9 @@ export function BlogPage() {
         transition={{ duration: 0.3, delay: 0.05 }}
         className="pb-6 md:pb-20"
       >
-        <BlogPost id={id} />
+        <BlogPost id={id} locale={locale} />
       </motion.article>
 
-      {/* Botones LinkedIn y GitHub — sticky al fondo, cuadrados hasta hover */}
       <div className="sticky bottom-3 md:bottom-6 z-10 mt-3 md:mt-6 flex justify-center gap-3">
         {linkedinLink && (
           <RainbowButton

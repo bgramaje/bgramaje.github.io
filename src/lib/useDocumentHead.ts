@@ -1,9 +1,16 @@
 import { useEffect } from "react";
 
+interface HreflangAlternate {
+  hreflang: string;
+  href: string;
+}
+
 interface DocumentHead {
   title?: string;
   description?: string;
   canonical?: string;
+  lang?: string;
+  alternates?: readonly HreflangAlternate[];
   structuredData?: object;
 }
 
@@ -20,13 +27,21 @@ function upsertMeta(selector: string, content: string) {
   return el;
 }
 
-export function useDocumentHead({ title, description, canonical, structuredData }: DocumentHead) {
+export function useDocumentHead({
+  title,
+  description,
+  canonical,
+  lang,
+  alternates,
+  structuredData,
+}: DocumentHead) {
   useEffect(() => {
     const prevTitle = document.title;
+    const prevLang = document.documentElement.lang;
     const descEl = document.head.querySelector<HTMLMetaElement>('meta[name="description"]');
     const ogTitleEl = document.head.querySelector<HTMLMetaElement>('meta[property="og:title"]');
     const ogDescriptionEl = document.head.querySelector<HTMLMetaElement>(
-      'meta[property="og:description"]'
+      'meta[property="og:description"]',
     );
     const canonicalEl = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     const ogUrlEl = document.head.querySelector<HTMLMetaElement>('meta[property="og:url"]');
@@ -44,9 +59,14 @@ export function useDocumentHead({ title, description, canonical, structuredData 
     let updatedCanonicalEl: HTMLLinkElement | null = null;
     const updatedOgUrlEl = canonical ? upsertMeta('meta[property="og:url"]', canonical) : null;
     let structuredDataEl: HTMLScriptElement | null = null;
+    const alternateEls: HTMLLinkElement[] = [];
 
     if (title) {
       document.title = title;
+    }
+
+    if (lang) {
+      document.documentElement.lang = lang;
     }
 
     if (canonical) {
@@ -54,6 +74,17 @@ export function useDocumentHead({ title, description, canonical, structuredData 
       updatedCanonicalEl.rel = "canonical";
       updatedCanonicalEl.href = canonical;
       if (!canonicalEl) document.head.appendChild(updatedCanonicalEl);
+    }
+
+    if (alternates?.length) {
+      for (const { hreflang, href } of alternates) {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.hreflang = hreflang;
+        link.href = href;
+        document.head.appendChild(link);
+        alternateEls.push(link);
+      }
     }
 
     if (structuredData) {
@@ -65,6 +96,9 @@ export function useDocumentHead({ title, description, canonical, structuredData 
 
     return () => {
       document.title = prevTitle;
+      document.documentElement.lang = prevLang;
+      alternateEls.forEach((el) => el.remove());
+
       if (description) {
         if (descEl) {
           if (prevDesc == null) descEl.remove();
@@ -103,5 +137,5 @@ export function useDocumentHead({ title, description, canonical, structuredData 
       }
       structuredDataEl?.remove();
     };
-  }, [title, description, canonical, structuredData]);
+  }, [title, description, canonical, lang, alternates, structuredData]);
 }

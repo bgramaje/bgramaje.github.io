@@ -1,6 +1,5 @@
-import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Languages } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
 import {
   Alert,
   AlertAction,
@@ -8,7 +7,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { getBlogLocales, getDefaultBlogLocale } from "@/lib/blogLoader";
+import { getBlogLocales, getBlogPostPath } from "@/lib/blogLoader";
 import { cn } from "@/lib/utils";
 
 const LOCALE_LABELS: Record<string, string> = {
@@ -42,23 +41,15 @@ function bannerCopy(currentLocale: string, targetLocale: string) {
 
 interface BlogLocaleBannerProps {
   postId: string;
+  currentLocale: string;
   className?: string;
 }
 
-export function BlogLocaleBanner({ postId, className }: BlogLocaleBannerProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const locales = useMemo(() => getBlogLocales(postId), [postId]);
-  const langParam = searchParams.get("lang");
-
-  const currentLocale = useMemo(() => {
-    if (!locales.length) return null;
-    if (langParam && locales.includes(langParam)) return langParam;
-    return getDefaultBlogLocale(postId)!;
-  }, [postId, locales, langParam]);
-
+export function BlogLocaleBanner({ postId, currentLocale, className }: BlogLocaleBannerProps) {
+  const locales = getBlogLocales(postId);
   const alternateLocale = locales.find((loc) => loc !== currentLocale);
 
-  if (!alternateLocale || !currentLocale) return null;
+  if (!alternateLocale) return null;
 
   const copy = bannerCopy(currentLocale, alternateLocale);
 
@@ -75,22 +66,8 @@ export function BlogLocaleBanner({ postId, className }: BlogLocaleBannerProps) {
         {copy.description}
       </AlertDescription>
       <AlertAction className="top-2 right-2.5">
-        <Button
-          size="sm"
-          variant="default"
-          className="h-8 px-3 text-sm"
-          onClick={() =>
-            setSearchParams(
-              (prev) => {
-                const next = new URLSearchParams(prev);
-                next.set("lang", alternateLocale);
-                return next;
-              },
-              { replace: true }
-            )
-          }
-        >
-          {copy.actionLabel}
+        <Button size="sm" variant="default" className="h-8 px-3 text-sm" asChild>
+          <Link to={getBlogPostPath(postId, alternateLocale)}>{copy.actionLabel}</Link>
         </Button>
       </AlertAction>
     </Alert>
