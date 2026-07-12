@@ -1,6 +1,4 @@
-import { memo } from "react";
-import { motion } from "motion/react";
-import { forwardRef, type ReactNode } from "react";
+import { memo, forwardRef, type ReactNode } from "react";
 import { TerminalPrompt } from "./TerminalPrompt";
 
 interface TerminalOutputProps {
@@ -10,20 +8,13 @@ interface TerminalOutputProps {
 
 function TerminalOutputInner({ command, output }: TerminalOutputProps, ref: React.ForwardedRef<HTMLDivElement>) {
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={{ duration: 0.12 }}
-      className="mb-3 text-sm"
-    >
+    <div ref={ref} className="mb-3 text-sm animate-fade-in">
       <div className="flex items-center gap-2 flex-wrap mb-0.5 text-xs">
         <TerminalPrompt compact />
-        <span className="text-terminal-text">{command}</span>
+        <span className="text-foreground">{command}</span>
       </div>
       <div className="mt-2">{output}</div>
-    </motion.div>
+    </div>
   );
 }
 

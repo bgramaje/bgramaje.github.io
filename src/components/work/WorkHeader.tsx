@@ -6,11 +6,18 @@ interface WorkHeaderProps {
   className?: string;
 }
 
-/** Wraps WorkCompany + WorkTitle in a row with flex justify-between */
+/** Sticky job header — opaque, full-bleed, no scroll bleed */
 export function WorkHeader({ children, className }: WorkHeaderProps) {
   return (
-    <div className={cn("flex justify-between items-center flex-wrap gap-2 mb-1.5", className)}>
+    <header
+      className={cn(
+        "not-typeset sticky top-0 z-20 -mx-3 mb-3 flex items-start justify-between gap-2",
+        "border-b border-border/40 bg-card px-3 py-2",
+        "md:-mx-5 md:px-5",
+        className
+      )}
+    >
       {children}
-    </div>
+    </header>
   );
 }

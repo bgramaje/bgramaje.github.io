@@ -8,12 +8,10 @@ interface WorkCompanyProps {
   className?: string;
 }
 
-/** Company name as a chip — clickable to open company link if href is provided */
+/** Company name chip — compact, top-right in header */
 export function WorkCompany({ children, href, className }: WorkCompanyProps) {
   const baseClass =
-    "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs md:text-sm font-medium " +
-    "border border-terminal-border bg-terminal-bg/80 text-terminal-text " +
-    "transition-colors duration-150";
+    "inline-flex shrink-0 items-center gap-1 rounded-md border border-border/60 bg-background/80 px-2 py-0.5 text-[0.6875rem] font-medium text-foreground transition-colors duration-200 md:text-xs";
 
   if (href) {
     return (
@@ -23,19 +21,19 @@ export function WorkCompany({ children, href, className }: WorkCompanyProps) {
         rel="noopener noreferrer"
         className={cn(
           baseClass,
-          "hover:bg-terminal-border/40 hover:border-terminal-cyan/50 hover:text-terminal-cyan cursor-pointer",
+          "hover:border-primary/40 hover:bg-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]",
           className
         )}
         aria-label={`Visit ${typeof children === "string" ? children : "company"} website`}
       >
         {children}
-        <ExternalLink className="w-3 h-3 shrink-0 opacity-70" aria-hidden />
+        <ExternalLink className="h-2.5 w-2.5 shrink-0 opacity-50" aria-hidden />
       </a>
     );
   }
 
   return (
-    <span className={cn(baseClass, "text-terminal-muted", className)}>
+    <span className={cn(baseClass, "text-muted-foreground", className)}>
       {children}
     </span>
   );

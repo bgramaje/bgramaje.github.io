@@ -1,4 +1,4 @@
-import { JobPost } from "@/components/JobPost";
+import { JobPost } from "@/components/jobs/JobPost";
 import { HelpOutput } from "@/components/commands/commands-output/HelpOutput";
 import { JobsOutput } from "@/components/commands/commands-output/JobsOutput";
 import { ProjectsOutput } from "@/components/commands/commands-output/ProjectsOutput";
@@ -10,7 +10,6 @@ import { ErrorOutput } from "@/components/commands/commands-output/ErrorOutput";
 import { getAllJobIds } from "@/lib/jobLoader";
 
 interface ProcessCommandOptions {
-  onCommandClick?: (command: string) => void;
   onOpenModal?: (content: React.ReactNode, title: string, placeholder?: string) => void;
   onOpenJobModal?: (jobId: string, title: string) => void;
   onNavigate?: (path: string) => void;
@@ -70,15 +69,13 @@ export function processCommand(
         options.onNavigate("/blog");
         return null;
       }
-      return <div className="text-terminal-muted text-sm">Open /blog from the app shell to read posts.</div>;
+      return <div className="text-muted-foreground text-sm">Open /blog from the app shell to read posts.</div>;
     case "home":
       if (options?.onNavigate) {
         options.onNavigate("/");
         return null;
       }
-      return <div className="text-terminal-muted text-sm">Already on home page</div>;
-    case "clear":
-      return null;
+      return <div className="text-muted-foreground text-sm">Already on home page</div>;
     case "":
       return null;
     default:

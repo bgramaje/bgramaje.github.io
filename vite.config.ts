@@ -1,5 +1,7 @@
 import path from "path";
+import type { Plugin } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import mdx from "@mdx-js/rollup";
 
@@ -10,6 +12,23 @@ import remarkGfm from "remark-gfm";
 import mdxMermaid from "mdx-mermaid";
 import rehypeHighlight from "rehype-highlight";
 
+function modulePreloadEntry(): Plugin {
+  return {
+    name: "module-preload-entry",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(html) {
+        const match = html.match(/src="(\/assets\/index-[^"]+\.js)"/);
+        if (!match) return html;
+        const tag = `    <link rel="modulepreload" crossorigin href="${match[1]}">\n`;
+        if (html.includes('rel="modulepreload"')) return html;
+        return html.replace("  </head>", `${tag}  </head>`);
+      },
+    },
+  };
+}
+
 export default defineConfig({
   base: "/", // Para repositorios de usuario (bgramaje.github.io), usar "/"
   build: {
@@ -17,6 +36,7 @@ export default defineConfig({
     assetsDir: "assets",
   },
   plugins: [
+    tailwindcss(),
     react(),
     {
       enforce: "pre",
@@ -34,6 +54,7 @@ export default defineConfig({
         ],
       }),
     },
+    modulePreloadEntry(),
   ],
   resolve: {
     alias: {

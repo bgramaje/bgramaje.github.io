@@ -6,16 +6,16 @@ executor: read the plan fully before starting, honor its STOP conditions, and
 update your row when done.
 
 A second deep audit (blog-focused) ran on 2026-07-11 against the merged tree
-`dc0b0ad` (after integrating `origin/main`, which added the i18n blog system,
-CV/PDF, `PublishedBlock`, segmented-nav). Plans 011-015 come from that second
-audit and are blog-focused. Recon facts below still apply.
+`dc0b0ad`. Plans 011-015 come from that second audit. A third improve audit
+on 2026-07-12 against `9af401a` found the items in plans 016-020.
 
-The audit was read-only; no source code was modified. Recon facts that apply
-to every plan: Vite 6 + React 18 + TypeScript 5.6 (strict, `noUnusedLocals`/
-`noUnusedParameters`) + Tailwind v3 + shadcn (new-york, no CSS vars). Build is
-`npm run build` (`tsc -b && vite build`); lint is `npm run lint` (`eslint .`).
-Use the `@/` alias for `src/` imports. Use terminal tokens (`text-terminal-*`,
-`bg-terminal-*`) over raw hex. No new deps for one-liners.
+Recon facts that apply to every plan: Vite 6 + React 18 + TypeScript 5.6
+(strict, `noUnusedLocals`/`noUnusedParameters`) + Tailwind **v4** + shadcn
+(new-york, **cssVariables: true**). Build is `npm run build`
+(`node scripts/generate-sitemap.mjs && tsc -b && vite build`); lint is
+`npm run lint` (`eslint .`). Use the `@/` alias for `src/` imports. Use
+shadcn semantic tokens (`background`, `foreground`, `primary`, `border`,
+etc.) over raw hex. No new deps for one-liners.
 
 ## Execution order & status
 
@@ -36,6 +36,11 @@ Use the `@/` alias for `src/` imports. Use terminal tokens (`text-terminal-*`,
 | 013  | Delete dead `BlogListOutput.tsx` | P3 | S | — | DONE |
 | 014  | Remove the stray `pnpm-lock.yaml` (project is npm-only) | P3 | S | — | DONE |
 | 015  | Make blog-list date formatting locale-aware | P3 | S | — | DONE |
+| 016  | Clean dead code and unused dependencies | P1 | S | — | DONE |
+| 017  | Fix data bugs (email, CV, sitemap, ticker) | P1 | S | — | DONE |
+| 018  | Fix stale docs (AGENTS.md, README.md) | P2 | S | — | DONE |
+| 019  | Fix tab completion aliases + deduplicate MDX registries | P2 | S | — | DONE |
+| 020  | Code-split routes and fix syntax highlighting | P2 | M | 016 | TODO |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale — finding fixed independently or approach abandoned)
 
@@ -68,6 +73,14 @@ Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJE
 - **012 vs 015**: 015 reads `getDefaultBlogLocale` from `blogLoader.ts`. 012
   does not remove that export, so 015 is safe whether 012 has landed or not
   (015's STOP conditions guard against drift).
+- **020 depends on 016**: Plan 020 removes `rehype-highlight` from
+  `package.json`, so 016's bulk dep-removal should land first to avoid
+  manual re-removal. 016 also deletes `tailwind.config.js` and
+  `postcss.config.js` — no conflict, just convenience.
+- **New plans are independent** unless noted: 016-019 touch no overlapping
+  files (016: deps + dead files + directives; 017: data + CV + sitemap +
+  ticker; 018: docs only; 019: portfolio.ts + MDX registries).
+  Executable in any order after verifying no file overlap.
 
 ## Findings considered and rejected
 

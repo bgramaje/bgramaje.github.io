@@ -1,24 +1,16 @@
-"use client";
-
 import { NavLink } from "react-router-dom";
-import { Bitcoin, Github, GraduationCap, Linkedin, Mail } from "lucide-react";
-import { socialLinks } from "@/data/portfolio";
-import { BitcoinTicker } from "@/components/BitcoinTicker";
-import { CvPdfDownloadButton } from "@/components/CvPdfDownloadButton";
+import { Bitcoin } from "lucide-react";
+import { BitcoinTicker } from "@/components/shared/BitcoinTicker";
+import { CvPdfDownloadButton } from "@/components/cv/CvPdfDownloadButton";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SegmentedNavGroup, segmentedNavItemClassName } from "@/components/ui/segmented-nav";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { requestTerminalInputFocus } from "@/lib/terminal-focus";
-
-const iconMap = {
-  github: Github,
-  linkedin: Linkedin,
-  scholar: GraduationCap,
-  mail: Mail,
-} as const;
+import { pageShellClass } from "@/lib/utils";
 
 const navItems: Record<string, { name: string }> = {
   "/": { name: "me" },
@@ -27,24 +19,24 @@ const navItems: Record<string, { name: string }> = {
 
 export function MorphicNavbar() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-2 py-1 flex items-center">
+    <div className={`${pageShellClass} py-1 flex items-center`}>
       {/* Nombre + Bitcoin (en mobile solo icono coin con popover al pulsar) */}
       <div className="flex flex-1 min-w-0 items-center gap-2">
-        <span className="text-sm font-medium text-white">bgramaje</span>
+        <span className="text-sm font-medium text-foreground">bgramaje</span>
         <Popover>
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="md:hidden flex items-center justify-center w-9 h-9 rounded-md text-neutral-400 hover:text-white hover:bg-white/5 transition-colors"
+              className="md:hidden flex items-center justify-center w-9 h-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
               aria-label="Bitcoin price"
             >
-              <Bitcoin size={20} />
+              <Bitcoin size={20} aria-hidden />
             </button>
           </PopoverTrigger>
           <PopoverContent
             align="center"
             sideOffset={8}
-            className="w-auto rounded-lg border border-white/10 bg-neutral-900/95 backdrop-blur-xl shadow-lg dark:border-white/10 dark:bg-neutral-900/95 p-0 flex items-center justify-center"
+            className="w-auto rounded-lg border border-border/60 bg-popover/95 backdrop-blur-xl shadow-lg p-0 flex items-center justify-center"
           >
             <div className="flex items-center justify-center px-4 py-3">
               <BitcoinTicker inline />
@@ -57,7 +49,7 @@ export function MorphicNavbar() {
       </div>
 
       {/* Navbar (me | blog) */}
-      <nav className="flex shrink-0 items-center justify-center">
+      <nav className="flex shrink-0 items-center justify-center" aria-label="Main">
         <SegmentedNavGroup>
           {Object.entries(navItems).map(([path, { name }]) => (
             <NavLink
@@ -77,28 +69,13 @@ export function MorphicNavbar() {
         </SegmentedNavGroup>
       </nav>
 
-      {/* CV + redes */}
+      {/* Tema + CV */}
       <div className="flex flex-1 min-w-0 items-center justify-end gap-1 sm:gap-1.5">
+        <ThemeToggle />
         <CvPdfDownloadButton />
-        {socialLinks.map((link) => {
-          const Icon = iconMap[link.icon as keyof typeof iconMap];
-          if (!Icon) return null;
-          return (
-            <a
-              key={link.name}
-              href={link.url}
-              target={link.icon === "mail" ? undefined : "_blank"}
-              rel={link.icon === "mail" ? undefined : "noopener noreferrer"}
-              className="flex items-center justify-center w-8 h-8 rounded-md text-neutral-400 hover:text-white hover:bg-white/5 transition-colors"
-              aria-label={link.name}
-            >
-              <Icon size={18} />
-            </a>
-          );
-        })}
       </div>
     </div>
   );
 }
 
-export default MorphicNavbar;
+

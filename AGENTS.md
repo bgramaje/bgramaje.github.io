@@ -13,8 +13,8 @@ Personal portfolio for Borja Gramaje. The home page is an interactive terminal; 
 | Runtime | Browser-only SPA — **no server, no API routes, no SSR** |
 | Framework | React **18** + React Router **7** |
 | Build | Vite **6** + TypeScript **5.6** (strict) |
-| Styling | Tailwind CSS **v3** + custom `terminal.*` tokens |
-| UI kit | shadcn/ui (Radix, **new-york** style, `cssVariables: false`) |
+| Styling | Tailwind CSS **v4** + shadcn semantic tokens |
+| UI kit | shadcn/ui (Radix, **new-york** style, `cssVariables: true`) |
 | Icons | **lucide-react** (see `components.json` → `iconLibrary`) |
 | Content | MDX in `src/mdx/` with frontmatter |
 | Deploy | GitHub Actions → GitHub Pages (`https://bgramaje.github.io`) |
@@ -83,31 +83,41 @@ flowchart TB
 
 ```
 src/
-├── App.tsx                 # Routes
-├── main.tsx                # BrowserRouter + StrictMode
-├── index.css               # Global styles
-├── pages/                  # Route-level components
+├── app/
+│   ├── App.tsx              # Routes
+│   ├── main.tsx             # BrowserRouter + StrictMode
+│   ├── Layout.tsx           # App shell (navbar + footer + outlet)
+│   └── providers/
+│       └── theme-provider.tsx
+├── pages/                   # Route-level components
 ├── components/
-│   ├── terminal/           # Terminal UI (prompt, output, modals, toolbar)
-│   ├── commands/           # Command router + *Output components
-│   ├── ui/                 # shadcn + Magic UI / Kokonut UI primitives
-│   ├── kokonutui/          # Navbar, toolbar (registry components)
-│   ├── work/               # Job MDX layout components (WorkHeader, etc.)
-│   └── …                   # BlogPost, JobPost, Layout, modals
-├── data/portfolio.ts       # Static portfolio data + command descriptions
+│   ├── ui/                  # shadcn + Magic UI / Kokonut UI primitives
+│   ├── terminal/            # Terminal UI (prompt, output, modals, toolbar)
+│   ├── commands/            # Command router + *Output components
+│   │   └── commands-output/
+│   ├── kokonutui/           # Navbar, toolbar (registry components)
+│   ├── blog/                # BlogPost, BlogLocaleBanner
+│   ├── jobs/                # JobModal, JobPost
+│   ├── cv/                  # CV PDF components + download
+│   ├── work/                # Job MDX layout components (WorkHeader, etc.)
+│   └── shared/              # Callout, SiteFooter, Snowfall, BitcoinTicker, ThemeToggle, PublishedBlock
+├── content/
+│   ├── data/portfolio.ts    # Static portfolio data + command descriptions
+│   └── mdx/
+│       ├── blogs/*.mdx      # Blog posts (YAML frontmatter)
+│       └── jobs/*.mdx       # Job write-ups (YAML frontmatter + Work* components)
 ├── lib/
-│   ├── blogLoader.ts       # MDX glob + cache for blogs
-│   ├── jobLoader.ts        # MDX glob + cache for jobs
-│   ├── terminal-focus.ts   # Custom focus event for terminal input
-│   └── utils.ts            # cn() — clsx + tailwind-merge
-├── mdx/
-│   ├── blogs/*.mdx         # Blog posts (YAML frontmatter)
-│   └── jobs/*.mdx          # Job write-ups (YAML frontmatter + Work* components)
-├── mdx-components.tsx      # MDX overrides for blog content
-└── mdx-work-components.tsx # MDX overrides for job content
+│   ├── mdx/                 # MDX component overrides (mdx-components, mdx-work-components)
+│   ├── blogLoader.ts        # MDX glob + cache for blogs
+│   ├── jobLoader.ts         # MDX glob + cache for jobs
+│   ├── use-media-query.ts
+│   ├── terminal-focus.ts    # Custom focus event for terminal input
+│   └── utils.ts             # cn() — clsx + tailwind-merge
+├── styles/                  # index.css, typeset.css, fonts-latin.css
+└── generated/               # Removed — blog metadata read from MDX frontmatter at build time
 ```
 
-Do **not** use `src/blogs/` — that path in README is outdated. Content lives under `src/mdx/`.
+Do **not** use `src/blogs/` or `src/mdx/` at root — content lives under `src/content/mdx/`.
 
 ---
 
@@ -122,12 +132,12 @@ Do **not** use `src/blogs/` — that path in README is outdated. Content lives u
 ### Styling
 
 - Use `cn()` from `@/lib/utils` for conditional classes.
-- Prefer semantic **terminal** tokens over raw hex in feature code:
+- Prefer semantic **shadcn** tokens over raw hex in feature code:
 
-  `terminal-bg`, `terminal-surface`, `terminal-border`, `terminal-text`, `terminal-muted`, `terminal-accent`, `terminal-success`, `terminal-warning`, `terminal-error`, `terminal-purple`, `terminal-cyan`, `terminal-pink`
+  `background`, `foreground`, `card`, `border`, `muted-foreground`, `primary`, `destructive`, `success`, `warning`, `chart-*`
 
 - Typography: `font-mono` for terminal/headings, `font-sans` for body prose.
-- shadcn config: `components.json` — style **new-york**, base **zinc**, **no CSS variables**. Add UI via `npx shadcn@latest add …`; registries include `@magicui` and `@kokonutui`.
+- shadcn config: `components.json` — style **new-york**, base **zinc**, **CSS variables**. Add UI via `npx shadcn@latest add …`; registries include `@magicui` and `@kokonutui`.
 
 ### React patterns
 
@@ -232,7 +242,7 @@ Loaders cache promises in a `Map` — preserve that pattern when extending.
 ## What not to do
 
 - Do not add a backend, database, or env secrets — static portfolio only.
-- Do not migrate to Tailwind v4 or React 19 without an explicit request — config and patterns target v3 / 18.
+- Do not migrate to React 19 without an explicit request — config and patterns target React 18.
 - Do not hardcode blog/job slugs in multiple places — filenames are the source of truth via glob loaders.
 - Do not add dependencies for one-liners; prefer stdlib and existing utilities.
 - Do not create commits, push, or open PRs unless the user asks.
@@ -256,7 +266,7 @@ Detailed playbooks live in `.agents/skills/` (mirrored in `CLAUDE.md`). Load the
 | `vercel-composition-patterns` | Component architecture refactors |
 | `typescript-advanced-types` | Complex typing |
 
-**Note:** Several skills mention Next.js, Tailwind v4, or React 19. Apply only what fits this Vite + React 18 + Tailwind v3 stack.
+**Note:** Several skills mention Next.js, Tailwind v4, or React 19. Apply only what fits this Vite + React 18 + Tailwind v4 stack.
 
 ---
 

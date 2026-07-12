@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import { Terminal } from "./Terminal";
 import { TerminalOutput } from "./TerminalOutput";
 import { CommandChips } from "./CommandChips";
-import { TerminalTitleBar } from "./TerminalTitleBar";
-import { useFocusTrap } from "@/lib/useFocusTrap";
+import { TerminalDialogShell } from "./TerminalDialogShell";
 
 interface TerminalModalProps {
   isOpen: boolean;
@@ -26,8 +25,6 @@ export function TerminalModal({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(isOpen, containerRef, inputRef);
 
   const scrollToBottom = useCallback(() => {
     if (terminalRef.current) {
@@ -75,19 +72,18 @@ export function TerminalModal({
         return;
       }
 
-      // Only allow close command in modal
       setHistory((prev) => [
         ...prev,
         {
           id: Date.now(),
           command: input,
           output: (
-            <div className="space-y-1">
-              <p className="text-terminal-error">
-                Unknown command: <span className="text-terminal-text">{input}</span>
+            <div className="flex flex-col gap-1">
+              <p className="text-destructive">
+                Unknown command: <span className="text-foreground">{input}</span>
               </p>
-              <p className="text-terminal-muted text-sm">
-                Type <span className="text-terminal-success">close</span> to close this modal
+              <p className="text-muted-foreground text-sm">
+                Type <span className="text-success">close</span> to close this modal
               </p>
             </div>
           ),
@@ -137,53 +133,29 @@ export function TerminalModal({
     [commandHistory, historyIndex, onClose]
   );
 
-  if (!isOpen) return null;
-
   return (
-    <AnimatePresence>
-      <div 
-        className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/80"
-        onClick={onClose}
-      >
-        <motion.div
-          ref={containerRef}
-          tabIndex={-1}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
-          className="w-full max-w-4xl h-[95dvh] bg-terminal-surface border-2 border-terminal-border shadow-2xl flex flex-col relative rounded-lg overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Title Bar */}
-          <TerminalTitleBar title={title} onClose={onClose} />
+    <TerminalDialogShell
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      size="terminal"
+      className="md:max-h-[95dvh]"
+      scrollRef={terminalRef}
+      footer={<CommandChips onCommandClick={handleCommand} allowedCommands={["close"]} />}
+    >
+      <div className="-mx-1 min-h-0">
+        <AnimatePresence mode="popLayout">
+          {history.map((item) => (
+            <TerminalOutput key={item.id} command={item.command} output={item.output} />
+          ))}
+        </AnimatePresence>
 
-          {/* Terminal Content Container */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Terminal Content */}
-            <div
-              ref={terminalRef}
-              className="flex-1 overflow-y-auto pt-2 pb-4 px-2 md:pt-3 md:pb-6 md:px-4 scroll-smooth text-sm"
-            >
-              <AnimatePresence mode="popLayout">
-                {history.map((item) => (
-                  <TerminalOutput key={item.id} command={item.command} output={item.output} />
-                ))}
-              </AnimatePresence>
-
-              <Terminal
-                onSubmit={handleCommand}
-                onKeyDown={handleKeyDown}
-                inputRef={inputRef}
-              />
-            </div>
-
-            <div className="border-t-2 border-terminal-border bg-terminal-surface shrink-0">
-              <CommandChips onCommandClick={handleCommand} allowedCommands={["close"]} />
-            </div>
-          </div>
-        </motion.div>
+        <Terminal
+          onSubmit={handleCommand}
+          onKeyDown={handleKeyDown}
+          inputRef={inputRef}
+        />
       </div>
-    </AnimatePresence>
+    </TerminalDialogShell>
   );
 }

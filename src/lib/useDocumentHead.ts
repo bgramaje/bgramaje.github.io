@@ -3,6 +3,8 @@ import { useEffect } from "react";
 interface DocumentHead {
   title?: string;
   description?: string;
+  canonical?: string;
+  structuredData?: object;
 }
 
 function upsertMeta(selector: string, content: string) {
@@ -18,7 +20,7 @@ function upsertMeta(selector: string, content: string) {
   return el;
 }
 
-export function useDocumentHead({ title, description }: DocumentHead) {
+export function useDocumentHead({ title, description, canonical, structuredData }: DocumentHead) {
   useEffect(() => {
     const prevTitle = document.title;
     const descEl = document.head.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -26,18 +28,39 @@ export function useDocumentHead({ title, description }: DocumentHead) {
     const ogDescriptionEl = document.head.querySelector<HTMLMetaElement>(
       'meta[property="og:description"]'
     );
+    const canonicalEl = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const ogUrlEl = document.head.querySelector<HTMLMetaElement>('meta[property="og:url"]');
     const prevDesc = descEl?.getAttribute("content") ?? null;
     const prevOgTitle = ogTitleEl?.getAttribute("content") ?? null;
     const prevOgDescription = ogDescriptionEl?.getAttribute("content") ?? null;
+    const prevCanonical = canonicalEl?.getAttribute("href") ?? null;
+    const prevOgUrl = ogUrlEl?.getAttribute("content") ?? null;
 
     const updatedTitleEl = title ? upsertMeta('meta[property="og:title"]', title) : null;
     const updatedDescEl = description ? upsertMeta('meta[name="description"]', description) : null;
     const updatedOgDescriptionEl = description
       ? upsertMeta('meta[property="og:description"]', description)
       : null;
+    let updatedCanonicalEl: HTMLLinkElement | null = null;
+    const updatedOgUrlEl = canonical ? upsertMeta('meta[property="og:url"]', canonical) : null;
+    let structuredDataEl: HTMLScriptElement | null = null;
 
     if (title) {
       document.title = title;
+    }
+
+    if (canonical) {
+      updatedCanonicalEl = canonicalEl ?? document.createElement("link");
+      updatedCanonicalEl.rel = "canonical";
+      updatedCanonicalEl.href = canonical;
+      if (!canonicalEl) document.head.appendChild(updatedCanonicalEl);
+    }
+
+    if (structuredData) {
+      structuredDataEl = document.createElement("script");
+      structuredDataEl.type = "application/ld+json";
+      structuredDataEl.text = JSON.stringify(structuredData);
+      document.head.appendChild(structuredDataEl);
     }
 
     return () => {
@@ -64,6 +87,21 @@ export function useDocumentHead({ title, description }: DocumentHead) {
           updatedTitleEl?.remove();
         }
       }
+      if (canonical) {
+        if (canonicalEl) {
+          if (prevCanonical == null) canonicalEl.remove();
+          else canonicalEl.setAttribute("href", prevCanonical);
+        } else {
+          updatedCanonicalEl?.remove();
+        }
+        if (ogUrlEl) {
+          if (prevOgUrl == null) ogUrlEl.remove();
+          else ogUrlEl.setAttribute("content", prevOgUrl);
+        } else {
+          updatedOgUrlEl?.remove();
+        }
+      }
+      structuredDataEl?.remove();
     };
-  }, [title, description]);
+  }, [title, description, canonical, structuredData]);
 }

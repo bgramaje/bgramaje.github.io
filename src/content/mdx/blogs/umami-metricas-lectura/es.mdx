@@ -1,0 +1,123 @@
+---
+title: "Cómo monitorizo qué se lee (y qué no) con Umami"
+description: "Mi flujo para medir qué contenidos funcionan en la web y detectar posts que se abandonan pronto usando Umami."
+date: "2026-04-14"
+tags:
+  - Analítica
+  - Umami
+  - Contenido
+  - Blog
+---
+
+# Cómo monitorizo qué se lee (y qué no) con Umami
+
+Publicar contenido está bien, pero mejorar contenido requiere datos. En mi caso uso <Highlighter action="highlight" color="#16a34a">Umami</Highlighter> para ver qué artículos se leen de verdad y cuáles se quedan a medias.
+
+## Por qué uso Umami
+
+Elegí Umami porque es <Highlighter action="underline" color="#d97706">simple, rápido y centrado en privacidad</Highlighter>. No necesito una herramienta pesada para responder preguntas muy concretas:
+
+- Qué páginas atraen más lectura.
+- En qué posts cae el interés.
+- Qué rutas apenas reciben visitas.
+- Qué cambios editoriales mejoran resultados.
+
+Puedes verlo en su web oficial: [Umami](https://umami.is/).
+
+## Las métricas que reviso cada semana
+
+Para no perderme en datos, me quedo con un cuadro pequeño de métricas:
+
+1. <Highlighter action="box" color="#2563eb">Pageviews por post</Highlighter>: me dice qué temas interesan.
+2. <Highlighter action="box" color="#dc2626">Visitantes únicos</Highlighter>: me evita confundir repeticiones con alcance real.
+3. <Highlighter action="box" color="#7c3aed">Tiempo en página</Highlighter>: si es bajo, puede haber desajuste entre título y contenido.
+4. <Highlighter action="box" color="#0891b2">Tasa de rebote</Highlighter>: cuando sube mucho, reviso apertura, estructura y claridad.
+
+Con solo esto ya puedo decidir si un post necesita:
+
+- Mejor introducción.
+- Cambios de estructura (subtítulos más claros).
+- Actualización técnica.
+- Enlace interno desde artículos más fuertes.
+
+## Cómo detecto contenido que se deja de leer
+
+Mi criterio es práctico: si una página tiene visitas, pero combina <Highlighter action="highlight" color="#be185d">tiempo bajo + rebote alto</Highlighter>, la considero candidata a mejora.
+
+Normalmente el problema suele estar en uno de estos puntos:
+
+- El título promete algo que el inicio no entrega rápido.
+- Bloques de texto largos sin cortes visuales.
+- Falta de ejemplos concretos.
+- No queda claro el siguiente paso para quien lee.
+
+Cuando detecto uno de esos casos, rehago el arranque del artículo y vuelvo a medir durante una o dos semanas.
+
+## Mi ciclo de mejora continuo
+
+Trabajo en un ciclo corto:
+
+1. Publico o actualizo un artículo.
+2. Mido en Umami durante varios días.
+3. Marco qué funciona y qué no.
+4. Aplico cambios pequeños en copy, estructura y enlaces.
+5. Vuelvo a medir para validar si hubo mejora real.
+
+Este enfoque me ayuda a escribir con menos intuición y más evidencia: <Highlighter action="underline" color="#ca8a04">menos suposiciones, más decisiones con datos</Highlighter>.
+
+## Despliegue con Docker (YAML)
+
+Si quieres montarlo por tu cuenta, este sería un ejemplo básico de `docker-compose.yml` para levantar Umami con Postgres:
+
+<CodeBlock
+  title="docker-compose.yml"
+  language="yaml"
+  code={`services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@db:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: cambia-esto-por-un-secreto-largo
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: umami-db
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  umami-db-data:`}
+/>
+
+## Script de Umami para monitorizar
+
+Este es el `script` que te suele dar Umami para insertar en tu web y empezar a monitorizar visitas, rutas y eventos:
+
+<CodeBlock
+  title="Script de tracking"
+  language="html"
+  code={`<script
+  async
+  defer
+  data-website-id="TU_WEBSITE_ID"
+  src="https://tu-dominio-umami.example/script.js"
+></script>`}
+/>
+
+La idea es simple: al cargar este script, Umami registra navegación y métricas de uso para que puedas analizar qué contenido funciona mejor.
+
+## Conclusión
+
+Umami me da justo lo que necesito para un blog personal: visibilidad clara de rendimiento sin complejidad innecesaria. Si quieres saber qué se lee más o qué contenidos se abandonan, empezar por estas métricas básicas ya te da una ventaja enorme.

@@ -1,4 +1,3 @@
-"use client"
 
 import type { HTMLAttributes, ReactNode } from "react"
 import { createContext, memo, useContext, useMemo } from "react"
@@ -55,7 +54,7 @@ export const Ticker = memo(
       <TickerContext.Provider value={{ formatter }}>
         <button
           className={cn(
-            "inline-flex items-center gap-1.5 whitespace-nowrap align-middle",
+            "inline-flex items-center gap-1.5 whitespace-nowrap align-middle focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             className,
           )}
           type="button"
@@ -79,9 +78,9 @@ export const TickerIcon = memo(({ src, symbol, className, ...props }: TickerIcon
     return null
   }
   return (
-    <Avatar className={cn("size-7 border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800", className)}>
+    <Avatar className={cn("size-7 border border-border bg-muted p-1", className)}>
       <AvatarImage src={src} {...props} />
-      <AvatarFallback className="font-semibold text-zinc-500 text-sm dark:text-zinc-400">
+      <AvatarFallback className="font-semibold text-muted-foreground text-sm">
         {symbol.slice(0, 2).toUpperCase()}
       </AvatarFallback>
     </Avatar>
@@ -110,7 +109,7 @@ export const TickerPrice = memo(({ price, className, ...props }: TickerPriceProp
   const formattedPrice = useMemo(() => context.formatter.format(price), [price, context])
 
   return (
-    <span className={cn("text-zinc-500 dark:text-zinc-400", className)} {...props}>
+    <span className={cn("text-muted-foreground", className)} {...props}>
       {formattedPrice}
     </span>
   )
@@ -138,9 +137,7 @@ export const TickerPriceChange = memo(
       <span
         className={cn(
           "flex items-center gap-0.5",
-          isPositiveChange
-            ? "text-green-600 dark:text-green-500"
-            : "text-red-600 dark:text-red-500",
+          isPositiveChange ? "text-success" : "text-destructive",
           className,
         )}
         {...props}
@@ -200,13 +197,13 @@ const cryptoData = [
 export function Demo() {
   return (
     <div className="fixed inset-0 flex items-center justify-center">
-      <div className="flex flex-col gap-4 p-6 rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-        <h3 className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Crypto Prices</h3>
+      <div className="flex flex-col gap-4 p-6 rounded-xl border border-border bg-card">
+        <h3 className="text-sm font-medium text-muted-foreground">Crypto Prices</h3>
         <div className="flex flex-col gap-3">
           {cryptoData.map(crypto => (
             <Ticker
               key={crypto.symbol}
-              className="justify-between gap-4 hover:bg-zinc-100/50 rounded-lg p-2 -m-2 transition-colors dark:hover:bg-zinc-800/50"
+              className="justify-between gap-4 hover:bg-accent/50 rounded-lg p-2 -m-2 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <TickerIcon src={crypto.icon} symbol={crypto.symbol} />

@@ -8,7 +8,7 @@ export function SegmentedNavGroup({
   return (
     <div
       className={cn(
-        "flex overflow-hidden rounded-lg border border-white/10 bg-white/5 shadow-md backdrop-blur-xl dark:border-white/10 dark:bg-black/20",
+        "flex overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-md backdrop-blur-xl",
         className
       )}
       {...props}
@@ -18,9 +18,9 @@ export function SegmentedNavGroup({
 
 export function segmentedNavItemClassName(active: boolean) {
   return cn(
-    "flex items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-200",
+    "flex min-h-6 items-center justify-center px-3 py-1.5 text-xs font-medium transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     active
-      ? "bg-white/20 text-white dark:bg-white/20 dark:text-white"
-      : "text-neutral-400 hover:bg-white/5 hover:text-white dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white"
+      ? "bg-accent text-accent-foreground"
+      : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
   );
 }

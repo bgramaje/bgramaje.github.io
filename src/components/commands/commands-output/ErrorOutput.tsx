@@ -5,11 +5,11 @@ interface ErrorOutputProps {
 export function ErrorOutput({ command }: ErrorOutputProps) {
   return (
     <div className="space-y-1">
-      <p className="text-terminal-error">
-        bgramaje: command not found: <span className="text-terminal-text">{command}</span>
+      <p className="text-destructive">
+        bgramaje: command not found: <span className="text-foreground">{command}</span>
       </p>
-      <p className="text-terminal-muted text-sm">
-        Type <span className="text-terminal-success">help</span> to see available commands
+      <p className="text-muted-foreground text-sm">
+        Type <span className="text-success">help</span> to see available commands
       </p>
     </div>
   );

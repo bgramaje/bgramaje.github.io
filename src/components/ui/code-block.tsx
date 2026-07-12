@@ -14,11 +14,17 @@ import { AnimatePresence, motion } from "motion/react";
 import { Highlight, type Language, themes } from "prism-react-renderer";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/app/theme-provider";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogTitle,
+} from "@/components/ui/responsive-dialog";
 
 type CodeBlockVariant =
   | "default"
@@ -32,6 +38,7 @@ type ThemeType =
   | "oneDark"
   | "dracula"
   | "github"
+  | "githubDark"
   | "nightOwl"
   | "oceanicNext"
   | "palenight"
@@ -40,7 +47,7 @@ type ThemeType =
   | "vsDark"
   | "vsLight";
 
-// Terminal theme — matches site palette (terminal-*)
+// Site code palette — uses semantic theme tokens
 const terminalTheme = {
   plain: {
     color: "#ffffff",
@@ -58,12 +65,30 @@ const terminalTheme = {
   ],
 };
 
+const githubDarkTheme = {
+  plain: {
+    color: "#c9d1d9",
+    backgroundColor: "#0d1117",
+  },
+  styles: [
+    { types: ["comment", "prolog", "doctype", "cdata"], style: { color: "#8b949e" } },
+    { types: ["keyword", "atrule"], style: { color: "#ff7b72" } },
+    { types: ["function", "class-name"], style: { color: "#d2a8ff" } },
+    { types: ["number", "boolean", "constant", "symbol", "attr-name"], style: { color: "#79c0ff" } },
+    { types: ["string", "char", "attr-value", "regex"], style: { color: "#a5d6ff" } },
+    { types: ["builtin", "inserted"], style: { color: "#7ee787" } },
+    { types: ["tag", "selector"], style: { color: "#7ee787" } },
+    { types: ["deleted"], style: { color: "#ffa198" } },
+  ],
+};
+
 // Theme mapping
 const themeMap: Record<ThemeType, typeof themes.oneDark> = {
   terminal: terminalTheme as typeof themes.oneDark,
   oneDark: themes.oneDark,
   dracula: themes.dracula,
   github: themes.github,
+  githubDark: githubDarkTheme as typeof themes.oneDark,
   nightOwl: themes.nightOwl,
   oceanicNext: themes.oceanicNext,
   palenight: themes.palenight,
@@ -142,6 +167,40 @@ interface CodeBlockProps {
   showBorder?: boolean;
 }
 
+const codeBlockTooltipClass =
+  "pointer-events-none absolute left-1/2 bottom-full z-50 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border/60 bg-popover px-2 py-1 text-popover-foreground text-xs opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100";
+
+function CodeBlockActionButton({
+  label,
+  className,
+  onClick,
+  children,
+}: {
+  label: string;
+  className?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group relative rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+        className,
+      )}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      aria-label={label}
+    >
+      {children}
+      <span className={codeBlockTooltipClass} role="tooltip">
+        {label}
+      </span>
+    </motion.button>
+  );
+}
+
 // Copy button component
 const CopyButton = ({
   code,
@@ -151,6 +210,7 @@ const CopyButton = ({
   className?: string;
 }) => {
   const [copied, setCopied] = React.useState(false);
+  const label = copied ? "Copied!" : "Copy code";
 
   const handleCopy = async () => {
     try {
@@ -163,17 +223,7 @@ const CopyButton = ({
   };
 
   return (
-    <motion.button
-      onClick={handleCopy}
-      className={cn(
-        "rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-        className,
-      )}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      aria-label={copied ? "Copied!" : "Copy code"}
-      title={copied ? "Copied!" : "Copy code"}
-    >
+    <CodeBlockActionButton label={label} className={className} onClick={handleCopy}>
       <AnimatePresence mode="wait">
         {copied ? (
           <motion.div
@@ -197,7 +247,7 @@ const CopyButton = ({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.button>
+    </CodeBlockActionButton>
   );
 };
 
@@ -226,16 +276,9 @@ const DownloadButton = ({
   };
 
   return (
-    <motion.button
-      onClick={handleDownload}
-      className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      aria-label="Download code"
-      title="Download code"
-    >
+    <CodeBlockActionButton label="Download code" onClick={handleDownload}>
       <Download className="h-4 w-4" />
-    </motion.button>
+    </CodeBlockActionButton>
   );
 };
 
@@ -365,11 +408,11 @@ const TypewriterCode = ({
                   className={cn(
                     "flex",
                     isHighlighted &&
-                      "-mx-4 border-zinc-900 border-l-2 bg-zinc-900/10 px-4 dark:border-zinc-50 dark:bg-zinc-50/10",
+                      "-mx-4 border-foreground border-l-2 bg-foreground/10 px-4",
                   )}
                 >
                   {showLineNumbers && (
-                    <span className="mr-4 inline-block w-8 shrink-0 select-none text-right text-zinc-500/50 dark:text-zinc-400/50">
+                    <span className="mr-4 inline-block w-8 shrink-0 select-none text-right text-muted-foreground/50">
                       {lineNumber}
                     </span>
                   )}
@@ -386,7 +429,7 @@ const TypewriterCode = ({
       </Highlight>
       {currentIndex < code.length && (
         <motion.span
-          className="absolute inline-block h-4 w-2 bg-zinc-900 dark:bg-zinc-50"
+          className="absolute inline-block h-4 w-2 bg-foreground"
           animate={{ opacity: [1, 0] }}
           transition={{ duration: 0.5, repeat: Infinity }}
         />
@@ -407,14 +450,14 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
       addedLines = [],
       removedLines = [],
       variant = "default",
-      animation = "fadeIn",
+      animation = "none",
       animationDelay = 0,
       className,
       copyable = true,
       downloadable = false,
       downloadFileName,
       maxHeight,
-      theme = "oneDark",
+      theme,
       wrapLongLines = false,
       showLanguage = true,
       collapsible = true,
@@ -428,26 +471,29 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const [open, setOpen] = React.useState(!defaultCollapsed);
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [wordWrap, setWordWrap] = React.useState(wrapLongLines);
+    const { resolved } = useTheme();
     const trimmedCode = code.trim();
-    const selectedTheme = themeMap[theme] || themes.oneDark;
+    const selectedTheme = themeMap[theme ?? (resolved === "dark" ? "githubDark" : "github")];
+    const codeSurfaceClass = resolved === "dark" ? "bg-[#0d1117] text-[#c9d1d9]" : "bg-white text-[#24292f]";
+    const codeHeaderClass = resolved === "dark" ? "bg-[#010409] text-[#c9d1d9]" : "bg-muted text-foreground";
 
-    const borderClass = showBorder ? "border border-zinc-200 shadow-sm dark:border-zinc-800" : "border-0 shadow-none";
-    const headerBorderClass = showBorder ? "border-b border-zinc-200 dark:border-zinc-800" : "border-b-0";
+    const borderClass = showBorder ? "border border-border shadow-sm" : "border-0 shadow-none";
+    const headerBorderClass = showBorder ? "border-b border-border" : "border-b-0";
 
     const variantStyles: Record<CodeBlockVariant, string> = {
-      default: `bg-white dark:bg-zinc-950 ${borderClass}`,
-      terminal: `bg-terminal-surface ${showBorder ? "border border-terminal-border shadow-lg" : "border-0 shadow-none"}`,
-      minimal: "bg-zinc-100/50 dark:bg-zinc-800/50 border-0 shadow-none",
-      gradient: `bg-gradient-to-br from-card via-card to-primary/5 dark:border-zinc-800 ${showBorder ? "border border-zinc-200 shadow-md dark:border-zinc-800" : "border-0 shadow-none"}`,
-      glass: `bg-white/80 backdrop-blur-xl dark:bg-zinc-950/80 dark:border-zinc-800/50 ${showBorder ? "border border-zinc-200 border-zinc-200/50 shadow-xl dark:border-zinc-800 dark:border-zinc-800/50" : "border-0 shadow-none"}`,
+      default: `${codeSurfaceClass} ${borderClass}`,
+      terminal: `${codeSurfaceClass} ${showBorder ? "border border-border shadow-lg" : "border-0 shadow-none"}`,
+      minimal: "bg-muted/50 border-0 shadow-none",
+      gradient: `bg-gradient-to-br from-card via-card to-primary/5 ${showBorder ? "border border-border shadow-md" : "border-0 shadow-none"}`,
+      glass: `bg-card/80 backdrop-blur-xl ${showBorder ? "border border-border/50 shadow-xl" : "border-0 shadow-none"}`,
     };
 
     const headerStyles: Record<CodeBlockVariant, string> = {
-      default: `bg-zinc-100/50 dark:bg-zinc-800/50 ${headerBorderClass}`,
-      terminal: `bg-terminal-bg ${showBorder ? "border-b border-terminal-border" : "border-b-0"}`,
-      minimal: `dark:border-zinc-800/50 ${showBorder ? "border-b border-zinc-200/50 dark:border-zinc-800/50" : "border-b-0"}`,
-      gradient: `bg-zinc-100/30 dark:bg-zinc-800/30 ${headerBorderClass}`,
-      glass: `bg-zinc-100/30 backdrop-blur-sm dark:bg-zinc-800/30 ${showBorder ? "border-b border-zinc-200/50 dark:border-zinc-800/50" : "border-b-0"}`,
+      default: `${codeHeaderClass} ${headerBorderClass}`,
+      terminal: `${codeHeaderClass} ${showBorder ? "border-b border-border" : "border-b-0"}`,
+      minimal: showBorder ? "border-b border-border/50" : "border-b-0",
+      gradient: `bg-muted/30 ${headerBorderClass}`,
+      glass: `bg-muted/30 backdrop-blur-sm ${showBorder ? "border-b border-border/50" : "border-b-0"}`,
     };
 
     const containerAnimation = {
@@ -500,7 +546,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
           {/* Title or language */}
           <div className={cn(
             "flex items-center gap-1.5 text-sm",
-            variant === "terminal" ? "text-terminal-muted" : "text-zinc-500 dark:text-zinc-400",
+            variant === "terminal" ? "text-muted-foreground" : "text-muted-foreground",
           )}>
             {variant === "terminal" ? (
               <Terminal className="h-3.5 w-3.5" />
@@ -512,7 +558,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
             </span>
           </div>
           {collapsible && (
-            <span className="text-zinc-500 dark:text-zinc-400">
+            <span className="text-muted-foreground">
               {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </span>
           )}
@@ -520,38 +566,24 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
 
         {/* Action buttons */}
         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-          {/* Word wrap toggle */}
-          <motion.button
+          <CodeBlockActionButton
+            label={wordWrap ? "Disable word wrap" : "Enable word wrap"}
+            className={wordWrap ? "text-foreground" : undefined}
             onClick={() => setWordWrap(!wordWrap)}
-            className={cn(
-              "rounded-md p-2 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800",
-              wordWrap
-                ? "text-zinc-900 dark:text-zinc-50"
-                : "text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
-            )}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Toggle word wrap"
-            title="Toggle word wrap"
           >
             <WrapText className="h-4 w-4" />
-          </motion.button>
+          </CodeBlockActionButton>
 
-          {/* Expand toggle */}
-          <motion.button
+          <CodeBlockActionButton
+            label={isExpanded ? "Minimize" : "Maximize"}
             onClick={() => setIsExpanded(!isExpanded)}
-            className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label={isExpanded ? "Minimize" : "Maximize"}
-            title={isExpanded ? "Minimize" : "Maximize"}
           >
             {isExpanded ? (
               <Minimize2 className="h-4 w-4" />
             ) : (
               <Maximize2 className="h-4 w-4" />
             )}
-          </motion.button>
+          </CodeBlockActionButton>
 
           {/* Download button */}
           {downloadable && (
@@ -571,7 +603,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const codeContent = (
       <div
         className={cn(
-          "overflow-auto p-1.5",
+          "overflow-auto p-0",
           wordWrap && "whitespace-pre-wrap break-words",
         )}
         style={maxHeight && !isExpanded ? { maxHeight } : undefined}
@@ -601,7 +633,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                     <pre
                       className={cn(
                         preClassName,
-                        "!bg-transparent font-mono text-sm leading-relaxed",
+                        "!bg-transparent text-[13px] leading-6 subpixel-antialiased [font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace] [font-variant-ligatures:none]",
                       )}
                       style={{ ...style, background: "transparent" }}
                     >
@@ -619,7 +651,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                             className={cn(
                               "flex",
                               isHighlighted &&
-                                "-mx-4 border-zinc-900 border-l-2 bg-zinc-900/10 px-4 dark:border-zinc-50 dark:bg-zinc-50/10",
+                                "-mx-4 border-foreground border-l-2 bg-foreground/10 px-4",
                               isAdded &&
                                 "-mx-4 border-green-500 border-l-2 bg-green-500/10 px-4",
                               isRemoved &&
@@ -648,7 +680,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                             }}
                           >
                             {showLineNumbers && (
-                              <span className="mr-4 inline-block w-8 shrink-0 select-none text-right text-zinc-500/50 dark:text-zinc-400/50">
+                              <span className="mr-4 inline-block w-8 shrink-0 select-none text-right text-muted-foreground/50">
                                 {isAdded && (
                                   <span className="mr-1 text-green-500">+</span>
                                 )}
@@ -679,9 +711,8 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
       <motion.div
         ref={ref}
         className={cn(
-          "overflow-hidden rounded-lg mt-5 md:mt-6 mb-5 md:mb-6 border-2 border-neutral-500/80",
+          "not-typeset overflow-hidden rounded-lg border-0 m-0",
           variantStyles[variant],
-          isExpanded && "fixed inset-4 z-50",
           className,
         )}
         initial={currentAnimation.initial}
@@ -704,10 +735,36 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
 
         {/* Caption */}
         {caption && (
-          <div className="border-zinc-200 border-t px-4 py-2 text-zinc-500 text-xs dark:border-zinc-800 dark:text-zinc-400">
+          <div className="border-border border-t px-4 py-2 text-muted-foreground text-xs">
             {caption}
           </div>
         )}
+
+        <ResponsiveDialog open={isExpanded} onOpenChange={setIsExpanded}>
+          <ResponsiveDialogContent
+            showHandle={false}
+            className="h-[88dvh] w-full max-w-[min(1100px,94vw)] gap-0 overflow-hidden rounded-t-xl p-0 md:h-auto md:max-h-[90dvh] md:rounded-xl"
+          >
+            <div className={cn("flex items-center justify-between border-b border-border px-4 py-2", codeHeaderClass)}>
+              <ResponsiveDialogTitle className="font-mono text-sm">
+                {title || (showLanguage && getLanguageDisplayName(language)) || "Code"}
+              </ResponsiveDialogTitle>
+              <div className="flex items-center gap-1">
+                <CodeBlockActionButton
+                  label={wordWrap ? "Disable word wrap" : "Enable word wrap"}
+                  className={wordWrap ? "text-foreground" : undefined}
+                  onClick={() => setWordWrap(!wordWrap)}
+                >
+                  <WrapText className="h-4 w-4" />
+                </CodeBlockActionButton>
+                {copyable && <CopyButton code={trimmedCode} />}
+              </div>
+            </div>
+            <div className={cn("max-h-[calc(90dvh-3rem)] overflow-auto p-3", codeSurfaceClass)}>
+              {codeContent}
+            </div>
+          </ResponsiveDialogContent>
+        </ResponsiveDialog>
       </motion.div>
     );
   },

@@ -6,10 +6,10 @@ interface WorkTitleBlockProps {
   className?: string;
 }
 
-/** Wraps WorkTitle + WorkTimerange in a flex-col block */
+/** Role on top, period underneath */
 export function WorkTitleBlock({ children, className }: WorkTitleBlockProps) {
   return (
-    <div className={cn("flex flex-col gap-0", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-0.5", className)}>
       {children}
     </div>
   );

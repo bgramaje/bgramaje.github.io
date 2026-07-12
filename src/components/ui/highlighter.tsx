@@ -1,9 +1,7 @@
-"use client";
-
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import type React from "react";
-import { useInView } from "motion/react";
-import { annotate } from "rough-notation";
+import { motion, useInView } from "motion/react";
+import { cn } from "@/lib/utils";
 
 type AnnotationAction =
   | "highlight"
@@ -26,124 +24,103 @@ interface HighlighterProps {
   isView?: boolean;
 }
 
+function withAlpha(color: string, alpha: number): string {
+  if (color.startsWith("#") && color.length === 7) {
+    const a = Math.round(alpha * 255)
+      .toString(16)
+      .padStart(2, "0");
+    return `${color}${a}`;
+  }
+  return color;
+}
+
+function decorationClass(action: AnnotationAction): string {
+  switch (action) {
+    case "highlight":
+      return "box-decoration-clone rounded-[3px] px-0.5 py-px";
+    case "underline":
+      return "underline underline-offset-[5px] decoration-2";
+    case "box":
+      return "rounded-[3px] px-0.5 py-px";
+    case "circle":
+      return "rounded-full px-1 py-px";
+    case "strike-through":
+      return "line-through decoration-2";
+    case "crossed-off":
+      return "line-through opacity-70 decoration-2";
+    case "bracket":
+      return "border-x-2 px-1 mx-0.5";
+    default:
+      return "";
+  }
+}
+
+function decorationStyle(action: AnnotationAction, color: string, strokeWidth: number): React.CSSProperties {
+  const thickness = `${strokeWidth}px`;
+
+  switch (action) {
+    case "highlight":
+      return {
+        backgroundColor: withAlpha(color, 0.35),
+        boxDecorationBreak: "clone",
+        WebkitBoxDecorationBreak: "clone",
+      };
+    case "underline":
+    case "strike-through":
+    case "crossed-off":
+      return {
+        textDecorationColor: color,
+        textDecorationThickness: thickness,
+      };
+    case "box":
+    case "circle":
+      return {
+        outline: `${thickness} solid ${color}`,
+        outlineOffset: "3px",
+      };
+    case "bracket":
+      return { borderColor: color };
+    default:
+      return {};
+  }
+}
+
 export function Highlighter({
   children,
   action = "highlight",
   color = "#ffd1dc",
   strokeWidth = 1.5,
-  animationDuration = 600,
-  iterations = 2,
-  padding = 2,
-  multiline = true,
   isView = false,
 }: HighlighterProps) {
-  const elementRef = useRef<HTMLSpanElement>(null);
-  const annotationRef = useRef<ReturnType<typeof annotate> | null>(null);
-  const showTimeoutRef = useRef<number | undefined>(undefined);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const visible = !isView || isInView;
 
-  const isInView = useInView(elementRef, {
-    once: true,
-    margin: "-10%",
-  });
+  const className = cn(
+    "relative inline w-fit max-w-full [text-decoration-skip-ink:none]",
+    decorationClass(action),
+    isView && !visible && "opacity-0"
+  );
 
-  const shouldShow = !isView || isInView;
+  const style = decorationStyle(action, color, strokeWidth);
 
-  useEffect(() => {
-    if (!shouldShow) return;
-
-    const element = elementRef.current;
-    if (!element) return;
-
-    const annotation = annotate(element, {
-      type: action,
-      color,
-      strokeWidth,
-      animationDuration,
-      iterations,
-      padding,
-      multiline,
-    });
-    annotationRef.current = annotation;
-
-    // Esperar a que el layout esté resuelto antes de medir y dibujar
-    let cancelled = false;
-    let timeoutId: number | undefined;
-    const rafId = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (cancelled) return;
-        timeoutId = window.setTimeout(() => {
-          if (cancelled) return;
-          if (elementRef.current) annotation.show();
-        }, 80);
-      });
-    });
-
-    // Ocultar el highlight cuando el texto sale de la vista; mostrarlo cuando vuelve.
-    // Así el SVG no se queda visible/arrastrado por todo el overflow.
-    // Al volver a mostrar, esperamos un frame para que el layout/scroll esté estable
-    // y rough-notation mida la posición correcta de la palabra.
-    const intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        const ann = annotationRef.current;
-        if (!entry || !ann) return;
-        if (entry.isIntersecting) {
-          if (showTimeoutRef.current != null) window.clearTimeout(showTimeoutRef.current);
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              showTimeoutRef.current = window.setTimeout(() => {
-                showTimeoutRef.current = undefined;
-                if (annotationRef.current) annotationRef.current.show();
-              }, 50);
-            });
-          });
-        } else {
-          if (showTimeoutRef.current != null) {
-            window.clearTimeout(showTimeoutRef.current);
-            showTimeoutRef.current = undefined;
-          }
-          ann.hide();
-        }
-      },
-      { root: null, rootMargin: "0px", threshold: 0 }
+  if (isView) {
+    return (
+      <motion.span
+        ref={ref}
+        className={className}
+        style={style}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: visible ? 1 : 0 }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.span>
     );
-    intersectionObserver.observe(element);
-
-    const resizeObserver = new ResizeObserver(() => {
-      if (annotationRef.current) {
-        annotationRef.current.hide();
-        annotationRef.current.show();
-      }
-    });
-    resizeObserver.observe(element);
-
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(rafId);
-      if (timeoutId != null) window.clearTimeout(timeoutId);
-      if (showTimeoutRef.current != null) window.clearTimeout(showTimeoutRef.current);
-      showTimeoutRef.current = undefined;
-      intersectionObserver.disconnect();
-      resizeObserver.disconnect();
-      annotation.remove();
-      annotationRef.current = null;
-    };
-  }, [
-    shouldShow,
-    action,
-    color,
-    strokeWidth,
-    animationDuration,
-    iterations,
-    padding,
-    multiline,
-  ]);
+  }
 
   return (
-    <span
-      ref={elementRef}
-      className="relative inline-block w-fit max-w-full bg-transparent"
-    >
+    <span ref={ref} className={className} style={style}>
       {children}
     </span>
   );

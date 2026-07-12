@@ -67,5 +67,5 @@ npm run preview
 - **Tailwind CSS** - Estilos
 - **MDX** - Contenido de blog
 - **React Router** - Navegación
-- **Framer Motion** - Animaciones
+- **Motion (motion v12)** - Animaciones
 

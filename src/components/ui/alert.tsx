@@ -4,15 +4,19 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
-  "relative w-full rounded-xl border px-4 py-3 text-sm font-sans [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg~*]:pl-7",
+  "relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
     variants: {
       variant: {
-        default: "border-terminal-border bg-terminal-surface text-terminal-text [&>svg]:text-terminal-cyan",
-        destructive: "border-terminal-error bg-terminal-error/10 text-terminal-error [&>svg]:text-terminal-error",
-        warning: "border-terminal-warning bg-terminal-warning/10 text-terminal-warning [&>svg]:text-terminal-warning",
-        success: "border-terminal-success bg-terminal-success/10 text-terminal-success [&>svg]:text-terminal-success",
-        info: "border-terminal-cyan bg-terminal-cyan/10 text-terminal-cyan [&>svg]:text-terminal-cyan",
+        default: "bg-card text-card-foreground border-border",
+        destructive:
+          "border-destructive/50 bg-destructive/10 text-destructive *:data-[slot=alert-description]:text-destructive/90 [&>svg]:text-destructive",
+        warning:
+          "border-warning bg-warning/10 text-warning *:data-[slot=alert-description]:text-warning/90 [&>svg]:text-warning",
+        success:
+          "border-success bg-success/10 text-success *:data-[slot=alert-description]:text-success/90 [&>svg]:text-success",
+        info:
+          "border-chart-3 bg-chart-3/10 text-chart-3 *:data-[slot=alert-description]:text-chart-3/90 [&>svg]:text-chart-3",
       },
     },
     defaultVariants: {
@@ -21,41 +25,58 @@ const alertVariants = cva(
   }
 )
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-))
-Alert.displayName = "Alert"
+function Alert({
+  className,
+  variant,
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+  return (
+    <div
+      data-slot="alert"
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      {...props}
+    />
+  )
+}
 
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight font-sans", className)}
-    {...props}
-  />
-))
-AlertTitle.displayName = "AlertTitle"
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn(
+        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm [&_p]:leading-relaxed font-sans", className)}
-    {...props}
-  />
-))
-AlertDescription.displayName = "AlertDescription"
+function AlertDescription({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn(
+        "col-start-2 grid justify-items-start gap-1 text-sm text-muted-foreground [&_p]:leading-relaxed",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-export { Alert, AlertTitle, AlertDescription }
+function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-action"
+      className={cn("absolute top-2.5 right-3", className)}
+      {...props}
+    />
+  )
+}
+
+export { Alert, AlertTitle, AlertDescription, AlertAction }

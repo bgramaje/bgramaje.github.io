@@ -55,8 +55,8 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 text-terminal-muted text-sm mx-2">
-        <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-terminal-border border-t-terminal-accent" />
+      <div className="flex items-center gap-2 text-muted-foreground text-sm mx-2">
+        <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-border border-t-primary" />
         Loading jobs…
       </div>
     );
@@ -68,14 +68,14 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
         <div
           key={job.slug}
           onClick={() => onJobClick?.(job.slug)}
-          className="flex items-start gap-3 cursor-pointer group rounded-lg px-2 py-1.5 -mx-2 -my-1.5 hover:bg-terminal-border/25 transition-colors"
+          className="flex items-start gap-3 cursor-pointer group rounded-lg px-2 py-1.5 -mx-2 -my-1.5 hover:bg-border/25 transition-colors"
         >
-          <span className="text-terminal-success shrink-0 mt-0.5">▸</span>
+          <span className="text-success shrink-0 mt-0.5">▸</span>
           <div className="flex-1 min-w-0">
-            <p className="text-terminal-text text-sm font-medium group-hover:text-terminal-success transition-colors min-w-0 truncate">
+            <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate">
               {job.role}
             </p>
-            <p className="text-terminal-muted text-xs mt-0.5">
+            <p className="text-muted-foreground text-xs mt-0.5">
               {job.company} · {job.period}
             </p>
           </div>

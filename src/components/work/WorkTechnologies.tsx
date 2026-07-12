@@ -43,7 +43,7 @@ export function WorkTechnologies({
   return (
     <div
       className={cn(
-        "mt-3 md:mt-4 w-fit flex flex-wrap justify-between gap-1.5",
+        "mt-4 flex w-full flex-wrap gap-1.5",
         className
       )}
     >
@@ -51,7 +51,7 @@ export function WorkTechnologies({
         <Badge
           key={slug}
           variant="secondary"
-          className="font-mono font-medium uppercase tracking-wide"
+          className="font-mono text-[0.7rem] font-medium uppercase tracking-wide"
         >
           {label}
         </Badge>

@@ -1,4 +1,4 @@
-import { commands } from "@/data/portfolio";
+import { commands } from "@/content/data/portfolio";
 
 interface CommandChipsProps {
   onCommandClick: (command: string) => void;
@@ -17,7 +17,7 @@ export function CommandChips({ onCommandClick, allowedCommands }: CommandChipsPr
           <button
             key={cmd}
             onClick={() => onCommandClick(cmd)}
-            className="px-3 py-1.5 text-xs font-medium border border-terminal-border bg-terminal-surface text-terminal-muted hover:bg-terminal-border/50 hover:text-terminal-text transition-colors cursor-pointer shrink-0 rounded-md"
+            className="min-h-6 px-3 py-1.5 text-xs font-medium border border-border bg-card text-muted-foreground hover:bg-border/50 hover:text-foreground transition-colors cursor-pointer shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             type="button"
           >
             {cmd}

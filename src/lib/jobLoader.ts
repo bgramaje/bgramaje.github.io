@@ -5,11 +5,11 @@ export interface JobMDXModule {
   frontmatter?: { title?: string; company?: string; role?: string; period?: string };
 }
 
-const jobModules = import.meta.glob<JobMDXModule>("../mdx/jobs/*.mdx", { eager: false });
+const jobModules = import.meta.glob<JobMDXModule>("../content/mdx/jobs/*.mdx", { eager: false });
 
-/** Extract id from glob path: "../mdx/jobs/0.mdx" -> "0" */
+/** Extract id from glob path: "../content/mdx/jobs/0.mdx" -> "0" */
 function idFromPath(path: string): string {
-  const match = path.match(/mdx\/jobs\/([^/]+)\.mdx$/);
+  const match = path.match(/content\/mdx\/jobs\/([^/]+)\.mdx$/);
   return match ? match[1] : "";
 }
 
@@ -27,7 +27,7 @@ export async function loadJobContent(id: string): Promise<JobMDXModule> {
   const cached = contentCache.get(id);
   if (cached) return cached;
 
-  const path = `../mdx/jobs/${id}.mdx`;
+  const path = `../content/mdx/jobs/${id}.mdx`;
   const loader = jobModules[path];
   if (!loader) {
     const err = new Error(`Job not found: ${id}`);
