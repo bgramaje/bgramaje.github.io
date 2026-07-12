@@ -40,12 +40,12 @@ export function CommandToolbar({ onCommandClick, className }: CommandToolbarProp
           title={item.title}
           onClick={() => onCommandClick(item.id)}
           className={cn(
-            "group relative flex items-center justify-center shrink-0 w-9 h-9 rounded-md",
+            "group relative flex h-10 w-10 items-center justify-center shrink-0 rounded-md",
             "bg-transparent text-muted-foreground hover:text-foreground border border-transparent hover:border-border/50 hover:bg-accent/50",
-            "transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            "transition-[color,background-color,border-color,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           )}
           whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.98 }}
+          whileTap={{ scale: 0.96 }}
         >
           <item.icon className="h-4 w-4" aria-hidden />
           <span className="sr-only">{item.title}</span>

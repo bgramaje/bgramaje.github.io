@@ -47,38 +47,38 @@ type ThemeType =
   | "vsDark"
   | "vsLight";
 
-// Site code palette — uses semantic theme tokens
+// ponytail: mirrors --code-* tokens in index.css — Prism needs literal color strings
 const terminalTheme = {
   plain: {
-    color: "#ffffff",
-    backgroundColor: "#1a1a1a",
+    color: "oklch(1 0 0)",
+    backgroundColor: "oklch(0.218 0 0)",
   },
   styles: [
-    { types: ["comment", "prolog", "doctype", "cdata"], style: { color: "#888888" } },
-    { types: ["punctuation"], style: { color: "#cccccc" } },
-    { types: ["property", "tag", "boolean", "number", "constant", "symbol"], style: { color: "#aaaaaa" } },
-    { types: ["selector", "attr-name", "string", "char", "builtin", "inserted"], style: { color: "#bbbbbb" } },
-    { types: ["operator", "entity", "url", "variable"], style: { color: "#cccccc" } },
-    { types: ["atrule", "attr-value", "keyword", "function", "class-name"], style: { color: "#ffffff" } },
-    { types: ["regex", "important"], style: { color: "#cccccc" } },
-    { types: ["deleted"], style: { color: "#888888" } },
+    { types: ["comment", "prolog", "doctype", "cdata"], style: { color: "oklch(0.627 0 0)" } },
+    { types: ["punctuation"], style: { color: "oklch(0.83 0 0)" } },
+    { types: ["property", "tag", "boolean", "number", "constant", "symbol"], style: { color: "oklch(0.708 0 0)" } },
+    { types: ["selector", "attr-name", "string", "char", "builtin", "inserted"], style: { color: "oklch(0.771 0 0)" } },
+    { types: ["operator", "entity", "url", "variable"], style: { color: "oklch(0.83 0 0)" } },
+    { types: ["atrule", "attr-value", "keyword", "function", "class-name"], style: { color: "oklch(1 0 0)" } },
+    { types: ["regex", "important"], style: { color: "oklch(0.83 0 0)" } },
+    { types: ["deleted"], style: { color: "oklch(0.627 0 0)" } },
   ],
 };
 
 const githubDarkTheme = {
   plain: {
-    color: "#c9d1d9",
-    backgroundColor: "#0d1117",
+    color: "oklch(0.857 0.014 247.992)",
+    backgroundColor: "oklch(0.176 0.014 258.357)",
   },
   styles: [
-    { types: ["comment", "prolog", "doctype", "cdata"], style: { color: "#8b949e" } },
-    { types: ["keyword", "atrule"], style: { color: "#ff7b72" } },
-    { types: ["function", "class-name"], style: { color: "#d2a8ff" } },
-    { types: ["number", "boolean", "constant", "symbol", "attr-name"], style: { color: "#79c0ff" } },
-    { types: ["string", "char", "attr-value", "regex"], style: { color: "#a5d6ff" } },
-    { types: ["builtin", "inserted"], style: { color: "#7ee787" } },
-    { types: ["tag", "selector"], style: { color: "#7ee787" } },
-    { types: ["deleted"], style: { color: "#ffa198" } },
+    { types: ["comment", "prolog", "doctype", "cdata"], style: { color: "oklch(0.662 0.018 250.922)" } },
+    { types: ["keyword", "atrule"], style: { color: "oklch(0.734 0.163 25.784)" } },
+    { types: ["function", "class-name"], style: { color: "oklch(0.801 0.127 305.856)" } },
+    { types: ["number", "boolean", "constant", "symbol", "attr-name"], style: { color: "oklch(0.786 0.115 246.66)" } },
+    { types: ["string", "char", "attr-value", "regex"], style: { color: "oklch(0.856 0.077 244.093)" } },
+    { types: ["builtin", "inserted"], style: { color: "oklch(0.842 0.164 145.752)" } },
+    { types: ["tag", "selector"], style: { color: "oklch(0.842 0.164 145.752)" } },
+    { types: ["deleted"], style: { color: "oklch(0.801 0.113 25.812)" } },
   ],
 };
 
@@ -168,7 +168,7 @@ interface CodeBlockProps {
 }
 
 const codeBlockTooltipClass =
-  "pointer-events-none absolute left-1/2 bottom-full z-50 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border/60 bg-popover px-2 py-1 text-popover-foreground text-xs opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100";
+  "pointer-events-none absolute left-1/2 top-full z-50 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border/60 bg-popover px-2 py-1 text-popover-foreground text-xs shadow-sm opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100";
 
 function CodeBlockActionButton({
   label,
@@ -190,7 +190,7 @@ function CodeBlockActionButton({
         className,
       )}
       whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.96 }}
       aria-label={label}
     >
       {children}
@@ -200,6 +200,8 @@ function CodeBlockActionButton({
     </motion.button>
   );
 }
+
+const iconSwapTransition = { type: "spring" as const, duration: 0.3, bounce: 0 };
 
 // Copy button component
 const CopyButton = ({
@@ -224,29 +226,33 @@ const CopyButton = ({
 
   return (
     <CodeBlockActionButton label={label} className={className} onClick={handleCopy}>
-      <AnimatePresence mode="wait">
-        {copied ? (
-          <motion.div
-            key="check"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 180 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Check className="h-4 w-4 text-green-500" />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="copy"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Copy className="h-4 w-4" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <span className="relative flex h-4 w-4 items-center justify-center">
+        <AnimatePresence mode="wait" initial={false}>
+          {copied ? (
+            <motion.span
+              key="check"
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+              animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+              exit={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+              transition={iconSwapTransition}
+            >
+              <Check className="h-4 w-4 text-green-500" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="copy"
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+              animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+              exit={{ scale: 0.25, opacity: 0, filter: "blur(4px)" }}
+              transition={iconSwapTransition}
+            >
+              <Copy className="h-4 w-4" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </span>
     </CodeBlockActionButton>
   );
 };
@@ -474,8 +480,8 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const { resolved } = useTheme();
     const trimmedCode = code.trim();
     const selectedTheme = themeMap[theme ?? (resolved === "dark" ? "githubDark" : "github")];
-    const codeSurfaceClass = resolved === "dark" ? "bg-[#0d1117] text-[#c9d1d9]" : "bg-white text-[#24292f]";
-    const codeHeaderClass = resolved === "dark" ? "bg-[#010409] text-[#c9d1d9]" : "bg-muted text-foreground";
+    const codeSurfaceClass = resolved === "dark" ? "bg-[var(--code-background)] text-[var(--code-foreground)]" : "bg-card text-[var(--code-foreground-light)]";
+    const codeHeaderClass = resolved === "dark" ? "bg-[var(--code-header)] text-[var(--code-foreground)]" : "bg-muted text-foreground";
 
     const borderClass = showBorder ? "border border-border shadow-sm" : "border-0 shadow-none";
     const headerBorderClass = showBorder ? "border-b border-border" : "border-b-0";
@@ -530,7 +536,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const headerRow = (
       <div
         className={cn(
-          "flex items-center justify-between px-2 py-0.5",
+          "flex items-center justify-between px-2 py-0.5 overflow-visible",
           headerStyles[variant],
           collapsible && "cursor-pointer select-none",
         )}
@@ -565,7 +571,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+        <div className="relative z-10 flex items-center gap-1 overflow-visible" onClick={(e) => e.stopPropagation()}>
           <CodeBlockActionButton
             label={wordWrap ? "Disable word wrap" : "Enable word wrap"}
             className={wordWrap ? "text-foreground" : undefined}
@@ -603,7 +609,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const codeContent = (
       <div
         className={cn(
-          "overflow-auto p-0",
+          "overflow-auto rounded-b-lg p-0",
           wordWrap && "whitespace-pre-wrap break-words",
         )}
         style={maxHeight && !isExpanded ? { maxHeight } : undefined}
@@ -633,7 +639,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                     <pre
                       className={cn(
                         preClassName,
-                        "!bg-transparent text-[13px] leading-6 subpixel-antialiased [font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace] [font-variant-ligatures:none]",
+                        "!bg-transparent text-sm leading-6 subpixel-antialiased [font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace] [font-variant-ligatures:none]",
                       )}
                       style={{ ...style, background: "transparent" }}
                     >
@@ -663,7 +669,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                                 : animation === "highlight"
                                   ? {
                                       backgroundColor:
-                                        "hsl(var(--primary) / 0.2)",
+                                        "color-mix(in oklch, var(--primary) 20%, transparent)",
                                     }
                                   : {}
                             }
@@ -711,7 +717,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
       <motion.div
         ref={ref}
         className={cn(
-          "not-typeset overflow-hidden rounded-lg border-0 m-0",
+          "not-typeset rounded-lg border-0 m-0",
           variantStyles[variant],
           className,
         )}

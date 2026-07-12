@@ -111,7 +111,7 @@ export function BitcoinTicker({ inline = false }: BitcoinTickerProps) {
         {priceFormatter.format(price)}
       </span>
       {change24h !== 0 ? (
-        <span className={`text-[10px] font-medium tabular-nums ${priceColor}`}>
+        <span className={`text-xs font-medium tabular-nums ${priceColor}`}>
           {isUp ? "+" : ""}
           {change24h.toFixed(2)}%
         </span>

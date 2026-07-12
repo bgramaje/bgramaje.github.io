@@ -11,7 +11,7 @@ interface WorkCompanyProps {
 /** Company name chip — compact, top-right in header */
 export function WorkCompany({ children, href, className }: WorkCompanyProps) {
   const baseClass =
-    "inline-flex shrink-0 items-center gap-1 rounded-md border border-border/60 bg-background/80 px-2 py-0.5 text-[0.6875rem] font-medium text-foreground transition-colors duration-200 md:text-xs";
+    "inline-flex shrink-0 items-center gap-1 rounded-md border border-border/60 bg-background/80 px-2 py-0.5 text-xs font-medium text-foreground transition-[color,background-color,border-color,transform] duration-200";
 
   if (href) {
     return (
@@ -21,7 +21,7 @@ export function WorkCompany({ children, href, className }: WorkCompanyProps) {
         rel="noopener noreferrer"
         className={cn(
           baseClass,
-          "hover:border-primary/40 hover:bg-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]",
+          "hover:border-primary/40 hover:bg-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.96]",
           className
         )}
         aria-label={`Visit ${typeof children === "string" ? children : "company"} website`}

@@ -24,14 +24,28 @@ interface HighlighterProps {
   isView?: boolean;
 }
 
+function resolveColor(color: string): string {
+  if (color.startsWith("var(") && typeof document !== "undefined") {
+    const prop = color.slice(4, -1).trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(prop).trim() || color;
+  }
+  return color;
+}
+
 function withAlpha(color: string, alpha: number): string {
-  if (color.startsWith("#") && color.length === 7) {
+  const resolved = resolveColor(color);
+  if (resolved.startsWith("oklch(")) {
+    return resolved.includes("/")
+      ? resolved.replace(/\/\s*[\d.]+\s*\)/, `/ ${alpha})`)
+      : resolved.replace(/\)$/, ` / ${alpha})`);
+  }
+  if (resolved.startsWith("#") && resolved.length === 7) {
     const a = Math.round(alpha * 255)
       .toString(16)
       .padStart(2, "0");
-    return `${color}${a}`;
+    return `${resolved}${a}`;
   }
-  return color;
+  return resolved;
 }
 
 function decorationClass(action: AnnotationAction): string {
@@ -57,6 +71,7 @@ function decorationClass(action: AnnotationAction): string {
 
 function decorationStyle(action: AnnotationAction, color: string, strokeWidth: number): React.CSSProperties {
   const thickness = `${strokeWidth}px`;
+  const resolved = resolveColor(color);
 
   switch (action) {
     case "highlight":
@@ -69,17 +84,17 @@ function decorationStyle(action: AnnotationAction, color: string, strokeWidth: n
     case "strike-through":
     case "crossed-off":
       return {
-        textDecorationColor: color,
+        textDecorationColor: resolved,
         textDecorationThickness: thickness,
       };
     case "box":
     case "circle":
       return {
-        outline: `${thickness} solid ${color}`,
+        outline: `${thickness} solid ${resolved}`,
         outlineOffset: "3px",
       };
     case "bracket":
-      return { borderColor: color };
+      return { borderColor: resolved };
     default:
       return {};
   }
@@ -88,7 +103,7 @@ function decorationStyle(action: AnnotationAction, color: string, strokeWidth: n
 export function Highlighter({
   children,
   action = "highlight",
-  color = "#ffd1dc",
+  color = "var(--highlight-default)",
   strokeWidth = 1.5,
   isView = false,
 }: HighlighterProps) {

@@ -31,9 +31,9 @@ export function PublishedBlock({
   const formatted = formatPublishedDate(date, locale);
   return (
     <div className={cn("flex items-center gap-1", className)}>
-      <span className="whitespace-nowrap text-muted-foreground text-[0.95rem] font-sans leading-none">
+      <span className="whitespace-nowrap text-muted-foreground text-sm font-sans leading-normal">
         {label}{" "}
-        <strong className="text-foreground font-semibold">{formatted}</strong>
+        <strong className="text-foreground font-semibold tabular-nums">{formatted}</strong>
       </span>
     </div>
   );

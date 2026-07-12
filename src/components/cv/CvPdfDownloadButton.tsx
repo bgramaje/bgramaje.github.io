@@ -25,13 +25,13 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
         asChild
         size="icon"
         variant="default"
-        className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-lg p-0"
+        className="h-10 w-10 shrink-0 rounded-lg p-0"
       >
         <button
           type="button"
           disabled={loading}
           onClick={runDownload}
-          className="flex h-8 w-8 items-center justify-center sm:h-9 sm:w-9 disabled:opacity-60"
+          className="flex h-10 w-10 items-center justify-center disabled:opacity-60"
           aria-busy={loading}
           aria-label="Download CV PDF"
           title="Download CV"

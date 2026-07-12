@@ -72,7 +72,7 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
         >
           <span className="text-success shrink-0 mt-0.5">▸</span>
           <div className="flex-1 min-w-0">
-            <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate">
+            <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate" title={job.role}>
               {job.role}
             </p>
             <p className="text-muted-foreground text-xs mt-0.5">

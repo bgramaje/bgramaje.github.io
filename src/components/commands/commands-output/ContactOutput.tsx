@@ -14,7 +14,7 @@ export function ContactOutput() {
             width={56}
             height={56}
             decoding="async"
-            className="w-14 h-14 rounded-xl border-2 border-border bg-background object-cover"
+            className="w-14 h-14 rounded-xl bg-background object-cover outline outline-1 outline-[oklch(0_0_0/0.1)] dark:outline-[oklch(1_0_0/0.1)]"
           />
         </picture>
         <div className="min-w-0 space-y-0.5">

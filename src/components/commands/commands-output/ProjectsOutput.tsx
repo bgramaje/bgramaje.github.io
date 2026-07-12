@@ -21,7 +21,7 @@ export function ProjectsOutput() {
               <span className="text-success shrink-0 mt-0.5">▸</span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate">
+                  <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate" title={project.name}>
                     {project.name}
                   </p>
                   {href ? (

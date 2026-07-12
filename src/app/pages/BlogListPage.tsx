@@ -25,7 +25,6 @@ const allPosts = getAllBlogPosts();
 const sortedPosts = [...allPosts].sort((a, b) => parsePostDate(b.date) - parsePostDate(a.date));
 
 export function BlogListPage() {
-
   useDocumentHead({
     title: "Blog | bgramaje",
     description: "Blog posts by Borja Gramaje",
@@ -33,20 +32,22 @@ export function BlogListPage() {
   });
 
   return (
-    <div className={`${pageShellClass} py-6 pb-12 bg-background min-h-full`}>
-
-      <header className="mb-5 border-b border-border/40 pb-4">
+    <div className={`${pageShellClass} py-8 pb-16 min-h-full`}>
+      <header className="mb-8">
         <motion.h1
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="text-foreground font-bold font-mono text-[28px] md:text-[32px] leading-tight mb-2 mt-0 uppercase tracking-tight"
+          className="text-foreground font-bold font-mono text-3xl md:text-4xl leading-tight uppercase tracking-tight text-balance"
         >
           Blog
         </motion.h1>
+        <p className="text-muted-foreground text-sm font-sans mt-1.5 text-pretty">
+          Pensamientos, proyectos y apuntes
+        </p>
       </header>
 
-      <ul className="space-y-2 md:space-y-3" role="list">
+      <ul className="space-y-4" role="list">
         {sortedPosts.map((post, i) => {
           const tags = post.tags?.filter(Boolean).slice(0, 4) ?? [];
           const locale = getDefaultBlogLocale(post.id) ?? "es-ES";
@@ -59,48 +60,33 @@ export function BlogListPage() {
             >
               <Link
                 to={`/blog/${post.id}`}
-                className="group flex gap-3 md:gap-4 cursor-pointer rounded-lg border border-border/50 bg-transparent px-3 py-3 md:px-4 md:py-4 transition-all duration-200 hover:border-border hover:bg-border/10 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group flex gap-4 rounded-xl border border-border/50 bg-card p-4 md:p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-border/80 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <div className="hidden sm:flex w-24 shrink-0 flex-col items-start gap-0.5 pt-0.5 border-r border-border/30 pr-3 md:pr-4">
+                <div className="flex-1 min-w-0">
                   <time
                     dateTime={post.date}
-                    className="font-mono text-[10px] md:text-xs text-muted-foreground tabular-nums"
+                    className="block font-mono text-xs text-muted-foreground/50 tabular-nums mb-1"
                   >
                     {formatListDate(post.date, locale)}
                   </time>
-                </div>
-
-                <article className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 mb-1">
-                    <h2 className="font-mono font-semibold text-foreground text-[13px] md:text-[15px] group-hover:text-chart-3 transition-colors">
-                      {post.title}
-                    </h2>
-                    <span className="sm:hidden font-mono text-[10px] text-muted-foreground/90 tabular-nums">
-                      {formatListDate(post.date, locale)}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-sans line-clamp-2 mb-2">
+                  <h2 className="font-mono font-semibold text-foreground text-sm md:text-base leading-snug text-balance group-hover:text-chart-3 transition-colors">
+                    {post.title}
+                  </h2>
+                  <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-sans line-clamp-2 text-pretty mt-1.5">
                     {post.description}
                   </p>
                   {tags.length > 0 && (
-                    <ul className="flex flex-wrap gap-1.5" aria-label="Etiquetas">
+                    <ul className="flex flex-wrap gap-1.5 mt-3" aria-label="Tags">
                       {tags.map((tag) => (
                         <li key={tag}>
-                          <span className="inline-block rounded border border-border/50 bg-card/80 px-1.5 py-0.5 font-mono text-[9px] md:text-[10px] uppercase tracking-wide text-muted-foreground group-hover:border-border/70">
+                          <span className="inline-block rounded-md border border-border/40 bg-muted/50 px-2 py-0.5 font-mono text-xs uppercase tracking-wider text-muted-foreground">
                             {tag}
                           </span>
                         </li>
                       ))}
                     </ul>
                   )}
-                </article>
-
-                <span
-                  className="flex h-9 w-9 shrink-0 items-center justify-center self-center rounded-md border border-transparent text-chart-3 text-base font-mono opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:border-border/40 group-hover:bg-border/10"
-                  aria-hidden
-                >
-                  &gt;
-                </span>
+                </div>
               </Link>
             </motion.li>
           );

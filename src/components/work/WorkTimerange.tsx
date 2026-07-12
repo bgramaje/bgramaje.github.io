@@ -16,7 +16,7 @@ export function WorkTimerange({ children, className }: WorkTimerangeProps) {
         className
       )}
     >
-      <Highlighter action="underline" color="#525252">
+      <Highlighter action="underline" color="var(--accent-timerange)">
         {children}
       </Highlighter>
     </time>

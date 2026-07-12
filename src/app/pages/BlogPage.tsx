@@ -58,13 +58,13 @@ export function BlogPage() {
             asChild
             size="icon"
             variant="default"
-            className="h-9 w-9 shrink-0 rounded-lg p-0 transition-[width] duration-300 ease-out"
+            className="h-10 w-10 shrink-0 rounded-lg p-0 transition-[width,transform] duration-300 ease-out"
           >
             <a
               href={linkedinLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-9 w-9 min-w-9 items-center justify-center overflow-hidden transition-[width] duration-300 ease-out hover:w-[112px]"
+              className="group flex h-10 w-10 min-w-10 items-center justify-center overflow-hidden transition-[width,transform] duration-300 ease-out hover:w-[112px]"
               aria-label="Open Borja Gramaje on LinkedIn"
             >
               <span className="flex w-full items-center justify-center">
@@ -81,13 +81,13 @@ export function BlogPage() {
             asChild
             size="icon"
             variant="default"
-            className="h-9 w-9 shrink-0 rounded-lg p-0 transition-[width] duration-300 ease-out"
+            className="h-10 w-10 shrink-0 rounded-lg p-0 transition-[width,transform] duration-300 ease-out"
           >
             <a
               href={githubLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-9 w-9 min-w-9 items-center justify-center overflow-hidden transition-[width] duration-300 ease-out hover:w-[112px]"
+              className="group flex h-10 w-10 min-w-10 items-center justify-center overflow-hidden transition-[width,transform] duration-300 ease-out hover:w-[112px]"
               aria-label="Open Borja Gramaje on GitHub"
             >
               <span className="flex w-full items-center justify-center">

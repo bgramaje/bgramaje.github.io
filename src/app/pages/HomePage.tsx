@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Terminal } from "@/components/terminal/Terminal";
 import { TerminalOutput } from "@/components/terminal/TerminalOutput";
 import { CommandToolbar } from "@/components/terminal/CommandToolbar";
@@ -36,7 +35,6 @@ export function HomePage() {
     canonical: "https://bgramaje.github.io/",
   });
 
-  const navigate = useNavigate();
   const [history, setHistory] = useState<HistoryItem[]>(initialHistory);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -93,9 +91,6 @@ export function HomePage() {
           setJobModalTitle(title);
           setJobModalOpen(true);
         },
-        onNavigate: (path: string) => {
-          navigate(path);
-        },
       });
 
       setHistory((prev) => [
@@ -108,7 +103,7 @@ export function HomePage() {
       }
       setHistoryIndex(-1);
     },
-    [navigate]
+    [],
   );
 
   const handleToolbarCommand = useCallback(
@@ -189,8 +184,8 @@ export function HomePage() {
               ))}
 
               {history.length === 1 && (
-                <p className="text-muted-foreground text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed" aria-hidden>
-                  Prueba: <span className="text-chart-3">help</span>, <span className="text-chart-3">jobs</span>, <span className="text-chart-3">blog</span>, <span className="text-chart-3">contact</span>.{" "}
+                <p className="text-muted-foreground text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed text-pretty" aria-hidden>
+                  Prueba: <span className="text-chart-3">help</span>, <span className="text-chart-3">jobs</span>, <span className="text-chart-3">contact</span>.{" "}
                   <span className="text-muted-foreground/80">↑↓ historial · Tab autocompleta</span>
                 </p>
               )}

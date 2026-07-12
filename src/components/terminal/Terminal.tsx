@@ -26,7 +26,7 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2 text-sm" aria-label="Terminal command form">
+    <form onSubmit={handleSubmit} className="flex items-center gap-2 text-base sm:text-sm" aria-label="Terminal command form">
       <TerminalPrompt />
       <div className="relative flex-1 min-w-0">
         <input

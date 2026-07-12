@@ -11,6 +11,7 @@ const rainbowButtonVariants = cva(
     "inline-flex items-center justify-center gap-2",
     "rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring aria-invalid:border-destructive",
     "text-sm font-medium whitespace-nowrap",
+    "transition-transform active:scale-[0.96]",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
   ),
@@ -24,7 +25,7 @@ const rainbowButtonVariants = cva(
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-xl px-3 text-xs",
         lg: "h-11 rounded-xl px-8",
-        icon: "size-9",
+        icon: "size-10",
       },
     },
     defaultVariants: {

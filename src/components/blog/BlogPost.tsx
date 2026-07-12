@@ -163,7 +163,7 @@ export function BlogPost({ id }: BlogPostProps) {
           )}
         >
           {meta?.title ? (
-            <h1 className="min-w-0 flex-1 !mt-0 mb-0">{meta.title}</h1>
+            <h1 className="min-w-0 flex-1 !mt-0 mb-0 text-balance">{meta.title}</h1>
           ) : null}
           {meta?.date ? (
             <PublishedBlock

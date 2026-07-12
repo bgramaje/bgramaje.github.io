@@ -51,7 +51,7 @@ export function WorkTechnologies({
         <Badge
           key={slug}
           variant="secondary"
-          className="font-mono text-[0.7rem] font-medium uppercase tracking-wide"
+          className="font-mono text-xs font-medium uppercase tracking-wide"
         >
           {label}
         </Badge>

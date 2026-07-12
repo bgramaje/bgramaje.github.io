@@ -12,7 +12,6 @@ import { getAllJobIds } from "@/lib/jobLoader";
 interface ProcessCommandOptions {
   onOpenModal?: (content: React.ReactNode, title: string, placeholder?: string) => void;
   onOpenJobModal?: (jobId: string, title: string) => void;
-  onNavigate?: (path: string) => void;
 }
 
 export function processCommand(
@@ -28,8 +27,6 @@ export function processCommand(
     case "help":
       return <HelpOutput />;
     case "jobs":
-    case "work":
-    case "experience":
       if (args[0]) {
         const slug = args[0];
         const validIds = getAllJobIds();
@@ -48,34 +45,15 @@ export function processCommand(
         />
       );
     case "projects":
-    case "project":
       return <ProjectsOutput />;
     case "publications":
-    case "papers":
-    case "research":
       return <PublicationsOutput />;
     case "skills":
       return <SkillsOutput />;
     case "studies":
-    case "education":
       return <StudiesOutput />;
     case "contact":
-    case "social":
       return <ContactOutput />;
-    case "blog":
-    case "posts":
-    case "articles":
-      if (options?.onNavigate) {
-        options.onNavigate("/blog");
-        return null;
-      }
-      return <div className="text-muted-foreground text-sm">Open /blog from the app shell to read posts.</div>;
-    case "home":
-      if (options?.onNavigate) {
-        options.onNavigate("/");
-        return null;
-      }
-      return <div className="text-muted-foreground text-sm">Already on home page</div>;
     case "":
       return null;
     default:

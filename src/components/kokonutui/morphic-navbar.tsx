@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import { Bitcoin } from "lucide-react";
 import { BitcoinTicker } from "@/components/shared/BitcoinTicker";
@@ -7,34 +8,42 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { SegmentedNavGroup, segmentedNavItemClassName } from "@/components/ui/segmented-nav";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { requestTerminalInputFocus } from "@/lib/terminal-focus";
-import { pageShellClass } from "@/lib/utils";
+import { cn, pageShellClass } from "@/lib/utils";
 
-const navItems: Record<string, { name: string }> = {
-  "/": { name: "me" },
-  "/blog": { name: "blog" },
-};
+const navItems: { path: string; name: string }[] = [
+  { path: "/", name: "me" },
+  { path: "/blog", name: "blog" },
+];
+
+function shellNavLinkClass(isActive: boolean) {
+  return cn(
+    "inline-flex min-h-10 items-center px-0.5 font-mono text-sm transition-[color,transform] active:scale-[0.96]",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm",
+    isActive
+      ? "text-foreground underline decoration-chart-3 decoration-2 underline-offset-[6px]"
+      : "text-muted-foreground hover:text-foreground"
+  );
+}
 
 export function MorphicNavbar() {
   return (
     <div className={`${pageShellClass} py-1 flex items-center`}>
-      {/* Nombre + Bitcoin (en mobile solo icono coin con popover al pulsar) */}
       <div className="flex flex-1 min-w-0 items-center gap-2">
-        <span className="text-sm font-medium text-foreground">bgramaje</span>
+        <span className="shrink-0 text-sm font-medium text-foreground">bgramaje</span>
         <Popover>
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="md:hidden flex items-center justify-center w-9 h-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              className="md:hidden flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground transition-[color,background-color,transform] hover:bg-accent hover:text-foreground active:scale-[0.96]"
               aria-label="Bitcoin price"
             >
               <Bitcoin size={20} aria-hidden />
             </button>
           </PopoverTrigger>
           <PopoverContent
-            align="center"
+            align="start"
             sideOffset={8}
             className="w-auto rounded-lg border border-border/60 bg-popover/95 backdrop-blur-xl shadow-lg p-0 flex items-center justify-center"
           >
@@ -43,17 +52,20 @@ export function MorphicNavbar() {
             </div>
           </PopoverContent>
         </Popover>
-        <div className="hidden md:block">
+        <div className="hidden md:block min-w-0">
           <BitcoinTicker />
         </div>
       </div>
 
-      {/* Navbar (me | blog) */}
-      <nav className="flex shrink-0 items-center justify-center" aria-label="Main">
-        <SegmentedNavGroup>
-          {Object.entries(navItems).map(([path, { name }]) => (
+      <nav className="flex shrink-0 items-center justify-center gap-1.5 px-2" aria-label="Main">
+        {navItems.map(({ path, name }, index) => (
+          <Fragment key={path}>
+            {index > 0 ? (
+              <span className="font-mono text-sm text-muted-foreground/35 select-none" aria-hidden>
+                /
+              </span>
+            ) : null}
             <NavLink
-              key={path}
               to={path}
               end={path === "/"}
               onClick={() => {
@@ -61,15 +73,14 @@ export function MorphicNavbar() {
                   requestTerminalInputFocus();
                 }
               }}
-              className={({ isActive }) => segmentedNavItemClassName(isActive)}
+              className={({ isActive }) => shellNavLinkClass(isActive)}
             >
               {name}
             </NavLink>
-          ))}
-        </SegmentedNavGroup>
+          </Fragment>
+        ))}
       </nav>
 
-      {/* Tema + CV */}
       <div className="flex flex-1 min-w-0 items-center justify-end gap-1 sm:gap-1.5">
         <ThemeToggle />
         <CvPdfDownloadButton />
@@ -77,5 +88,3 @@ export function MorphicNavbar() {
     </div>
   );
 }
-
-

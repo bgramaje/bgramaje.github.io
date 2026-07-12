@@ -11,11 +11,11 @@ export function ThemeToggle({ className }: { className?: string }) {
       type="button"
       onClick={(event) => toggle(event.clientX, event.clientY)}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-md",
-        "text-muted-foreground transition-colors duration-200",
+        "relative flex h-10 w-10 items-center justify-center rounded-md",
+        "text-muted-foreground transition-[color,background-color,transform] duration-200",
         "hover:bg-accent hover:text-accent-foreground",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "active:scale-95",
+        "active:scale-[0.96]",
         className
       )}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}

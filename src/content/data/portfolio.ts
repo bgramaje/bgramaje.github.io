@@ -199,22 +199,11 @@ export const studies: Study[] = [
 export const commands = {
   help: "Show available commands",
   jobs: "List jobs",
-  work: "Alias for jobs",
-  experience: "Alias for jobs",
   projects: "Show side projects",
-  project: "Alias for projects",
   publications: "Show publications",
-  papers: "Alias for publications",
-  research: "Alias for publications",
   skills: "Show technical skills",
   contact: "Display contact information",
-  social: "Alias for contact",
   studies: "Show academic studies",
-  education: "Alias for studies",
-  blog: "Navigate to blog",
-  posts: "Alias for blog",
-  articles: "Alias for blog",
-  home: "Navigate to home page",
   clear: "Clear the terminal",
 };
 
