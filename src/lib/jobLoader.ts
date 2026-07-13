@@ -1,8 +1,15 @@
 import type React from "react";
 
+export interface JobFrontmatter {
+  title?: string;
+  company?: string;
+  role?: string;
+  period?: string;
+}
+
 export interface JobMDXModule {
   default: React.ComponentType;
-  frontmatter?: { title?: string; company?: string; role?: string; period?: string };
+  frontmatter?: JobFrontmatter;
 }
 
 const jobModules = import.meta.glob<JobMDXModule>("../content/mdx/jobs/*.mdx", { eager: false });

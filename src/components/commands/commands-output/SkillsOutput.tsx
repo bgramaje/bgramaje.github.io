@@ -1,4 +1,5 @@
 import { skills } from "@/content/data/portfolio";
+import { TechChip } from "@/components/shared/TechChip";
 
 export function SkillsOutput() {
   return (
@@ -8,14 +9,9 @@ export function SkillsOutput() {
         {skills.map((skill) => (
           <div key={skill.category} className="space-y-2">
             <h3 className="text-foreground font-medium">{skill.category}</h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {skill.items.map((item) => (
-                <span
-                  key={item}
-                  className="px-1.5 py-0 text-xs text-success rounded-md"
-                >
-                  {item}
-                </span>
+                <TechChip key={item} label={item} tier="default" />
               ))}
             </div>
           </div>

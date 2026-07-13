@@ -6,57 +6,49 @@ import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { socialLinks } from "@/content/data/portfolio";
 import { getBlogLocales, getDefaultBlogLocale, getAllBlogIds } from "@/lib/blogLoader";
+import { useDocumentHead } from "@/lib/useDocumentHead";
 import { pageShellClass } from "@/lib/utils";
+
+const backLinkClass =
+  "inline-flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted-foreground transition-[color,transform] active:scale-[0.96] hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export function BlogPage() {
   const { id, locale } = useParams<{ id: string; locale?: string }>();
 
-  if (!id || !getAllBlogIds().includes(id)) {
+  const postMissing = !id || !getAllBlogIds().includes(id);
+  const locales = id && !postMissing ? getBlogLocales(id) : [];
+  const localeInvalid =
+    Boolean(locale && locales.length && !locales.includes(locale)) ||
+    Boolean(locale && !locales.length);
+
+  useDocumentHead({
+    title: postMissing || localeInvalid ? "Post not found | bgramaje" : undefined,
+    lang: postMissing || localeInvalid ? "en" : undefined,
+  });
+
+  if (postMissing) {
     return (
       <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
-        <p className="text-muted-foreground">Post no encontrado.</p>
-        <Link
-          to="/blog"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Volver al blog
+        <p className="text-muted-foreground">Post not found.</p>
+        <Link to="/blog" className={`mt-4 ${backLinkClass}`}>
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to blog
         </Link>
       </div>
     );
   }
-
-  const locales = getBlogLocales(id);
 
   if (locales.length && !locale) {
     return <Navigate to={`/blog/${id}/${getDefaultBlogLocale(id)}`} replace />;
   }
 
-  if (locale && locales.length && !locales.includes(locale)) {
+  if (localeInvalid) {
     return (
       <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
-        <p className="text-muted-foreground">Post no encontrado.</p>
-        <Link
-          to="/blog"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Volver al blog
-        </Link>
-      </div>
-    );
-  }
-
-  if (locale && !locales.length) {
-    return (
-      <div className={`${pageShellClass} py-8 bg-background min-h-full`}>
-        <p className="text-muted-foreground">Post no encontrado.</p>
-        <Link
-          to="/blog"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Volver al blog
+        <p className="text-muted-foreground">Post not found.</p>
+        <Link to="/blog" className={`mt-4 ${backLinkClass}`}>
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to blog
         </Link>
       </div>
     );
@@ -74,12 +66,9 @@ export function BlogPage() {
         transition={{ duration: 0.25 }}
         className="mb-3 md:mb-6"
       >
-        <Link
-          to="/blog"
-          className="inline-flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted-foreground transition-[color,transform] active:scale-[0.96] hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-        >
+        <Link to="/blog" className={backLinkClass}>
           <ArrowLeft className="h-4 w-4" aria-hidden />
-          Volver al blog
+          Back to blog
         </Link>
       </motion.div>
       <motion.article

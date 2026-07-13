@@ -35,7 +35,7 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => onKeyDown(e, value, setValue)}
-          className="w-full bg-transparent text-foreground caret-transparent outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="w-full bg-transparent text-foreground caret-transparent outline-none"
           placeholder={placeholder ?? ""}
           spellCheck={false}
           autoComplete="off"

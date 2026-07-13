@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { AnimatePresence } from "motion/react";
 import { Terminal } from "@/components/terminal/Terminal";
 import { TerminalOutput } from "@/components/terminal/TerminalOutput";
 import { CommandToolbar } from "@/components/terminal/CommandToolbar";
@@ -10,7 +11,7 @@ import { ContactOutput } from "@/components/commands/commands-output/ContactOutp
 import { commands as availableCommands } from "@/content/data/portfolio";
 import { processCommand } from "@/components/commands/commands";
 import { FOCUS_TERMINAL_INPUT_EVENT, requestTerminalInputFocus } from "@/lib/terminal-focus";
-import { pageShellClass } from "@/lib/utils";
+import { pageWidthClass } from "@/lib/utils";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 
 export interface HistoryItem {
@@ -33,6 +34,7 @@ export function HomePage() {
     description:
       "Software engineer portfolio of Borja Gramaje, focused on full-stack development, IoT, data platforms, and technical writing.",
     canonical: "https://bgramaje.github.io/",
+    lang: "en",
   });
 
   const [history, setHistory] = useState<HistoryItem[]>(initialHistory);
@@ -162,7 +164,7 @@ export function HomePage() {
       <Snowfall />
 
       <div
-        className={`${pageShellClass} min-w-0 flex-1 flex flex-col gap-1 md:gap-1.5 py-1 md:py-1.5 relative z-10 min-h-0`}
+        className={`${pageWidthClass} min-w-0 flex-1 flex flex-col gap-1 md:gap-1.5 py-1 md:py-1.5 relative z-10 min-h-0`}
         onClick={focusInput}
       >
         <div className="flex-1 min-h-0 min-w-0 w-full bg-transparent border border-border/60 dark:border-border/90 overflow-hidden relative flex flex-col rounded-lg">
@@ -179,14 +181,20 @@ export function HomePage() {
               </div>
             </div>
             <div className="pr-11 md:pr-12 min-w-0">
-              {history.map((item) => (
-                <TerminalOutput key={item.id} command={item.command} output={item.output} />
-              ))}
+              <h1 className="sr-only">Borja Gramaje — interactive portfolio terminal</h1>
+
+              <div aria-live="polite" aria-relevant="additions" className="min-w-0">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {history.map((item) => (
+                    <TerminalOutput key={item.id} command={item.command} output={item.output} />
+                  ))}
+                </AnimatePresence>
+              </div>
 
               {history.length === 1 && (
-                <p className="text-muted-foreground text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed text-pretty" aria-hidden>
-                  Prueba: <span className="text-chart-3">help</span>, <span className="text-chart-3">jobs</span>, <span className="text-chart-3">contact</span>.{" "}
-                  <span className="text-muted-foreground/80">↑↓ historial · Tab autocompleta</span>
+                <p className="text-muted-foreground text-xs mb-2 mt-0.5 px-0.5 max-w-[min(100%,28rem)] leading-relaxed text-pretty">
+                  Try: <span className="text-chart-3">help</span>, <span className="text-chart-3">jobs</span>, <span className="text-chart-3">contact</span>.{" "}
+                  <span className="text-muted-foreground/80">↑↓ history · Tab completes</span>
                 </p>
               )}
 

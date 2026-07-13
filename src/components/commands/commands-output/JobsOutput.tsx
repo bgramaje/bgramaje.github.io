@@ -18,6 +18,9 @@ function startYearFromPeriod(period: string): number {
   return match ? parseInt(match[0], 10) : 0;
 }
 
+const rowClass =
+  "flex w-full min-h-10 items-start gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-left transition-[color,background-color,transform] active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+
 export function JobsOutput({ onJobClick }: JobsOutputProps) {
   const [jobs, setJobs] = useState<JobListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,8 +58,14 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 text-muted-foreground text-sm mx-2">
-        <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-border border-t-primary" />
+      <div
+        role="status"
+        className="flex items-center gap-2 text-muted-foreground text-sm mx-2"
+      >
+        <span
+          className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-border border-t-primary"
+          aria-hidden
+        />
         Loading jobs…
       </div>
     );
@@ -65,21 +74,25 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
   return (
     <div className="space-y-3 mx-2">
       {jobs.map((job) => (
-        <div
+        <button
           key={job.slug}
+          type="button"
           onClick={() => onJobClick?.(job.slug)}
-          className="flex items-start gap-3 cursor-pointer group rounded-lg px-2 py-1.5 -mx-2 -my-1.5 hover:bg-border/25 transition-colors"
+          aria-label={`View ${job.role} at ${job.company}`}
+          className={`${rowClass} group cursor-pointer hover:bg-border/25`}
         >
-          <span className="text-success shrink-0 mt-0.5">▸</span>
+          <span className="text-success shrink-0 mt-0.5" aria-hidden>
+            ▸
+          </span>
           <div className="flex-1 min-w-0">
             <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate" title={job.role}>
               {job.role}
             </p>
-            <p className="text-muted-foreground text-xs mt-0.5">
+            <p className="text-muted-foreground text-xs mt-0.5 tabular-nums">
               {job.company} · {job.period}
             </p>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );

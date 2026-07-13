@@ -144,11 +144,13 @@ export function TerminalModal({
       footer={<CommandChips onCommandClick={handleCommand} allowedCommands={["close"]} />}
     >
       <div className="-mx-1 min-h-0">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {history.map((item) => (
-            <TerminalOutput key={item.id} command={item.command} output={item.output} />
-          ))}
-        </AnimatePresence>
+        <div aria-live="polite" aria-relevant="additions" className="min-w-0">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {history.map((item) => (
+              <TerminalOutput key={item.id} command={item.command} output={item.output} />
+            ))}
+          </AnimatePresence>
+        </div>
 
         <Terminal
           onSubmit={handleCommand}

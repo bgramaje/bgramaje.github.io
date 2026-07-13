@@ -3,7 +3,7 @@ import { PROFILE_PHOTO_PATH, PROFILE_PHOTO_WEBP_PATH } from "@/components/cv/pro
 
 export function ContactOutput() {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <p className="text-primary font-semibold">Contact:</p>
       <div className="flex items-center gap-3">
         <picture>
@@ -17,15 +17,18 @@ export function ContactOutput() {
             className="w-14 h-14 rounded-xl bg-background object-cover"
           />
         </picture>
-        <div className="min-w-0 space-y-0.5">
+        <div className="flex min-w-0 flex-col gap-2">
           <p className="text-foreground font-medium">{personalInfo.name}</p>
           <p className="text-muted-foreground text-xs">{personalInfo.title}</p>
-          <a href={`mailto:${personalInfo.email}`} className="rounded-sm text-chart-3 text-xs hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+          <a
+            href={`mailto:${personalInfo.email}`}
+            className="inline-flex min-h-10 items-center rounded-sm text-chart-3 text-xs transition-[color,transform] active:scale-[0.96] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
             {personalInfo.email}
           </a>
         </div>
       </div>
-      <div className="flex flex-wrap gap-2 pt-0">
+      <div className="flex flex-wrap gap-2">
         {socialLinks.map((link) => (
           <a
             key={link.name}
@@ -39,7 +42,7 @@ export function ContactOutput() {
           </a>
         ))}
       </div>
-      <p className="text-muted-foreground text-sm pt-0">
+      <p className="text-muted-foreground text-sm">
         Type <span className="text-foreground">help</span> to see available commands
       </p>
     </div>

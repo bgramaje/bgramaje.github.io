@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 export interface PublishedBlockProps {
   /** Fecha en `YYYY-MM-DD` u otra cadena que entienda `Date.parse`. */
   date: string;
-  /** Texto antes de la fecha (por defecto en español). */
+  /** Text before the date (defaults to English). */
   label?: string;
-  /** Locale para formatear la fecha (por defecto `es-ES`). */
+  /** Locale for formatting the date (defaults to `en-GB`). */
   locale?: string;
   className?: string;
 }
@@ -24,8 +24,8 @@ function formatPublishedDate(value: string, locale: string): string {
 
 export function PublishedBlock({
   date,
-  label = "Publicado el",
-  locale = "es-ES",
+  label = "Published on",
+  locale = "en-GB",
   className,
 }: PublishedBlockProps) {
   const formatted = formatPublishedDate(date, locale);

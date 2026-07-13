@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { MorphicNavbar } from "@/components/kokonutui/morphic-navbar";
+import { Navbar } from "@/app/navbar";
 import { SiteFooter } from "@/app/footer";
 import { ScrollContainerContext } from "@/components/ui/scroll-progress";
 
@@ -19,7 +19,7 @@ export function Layout() {
           Skip to main content
         </a>
         <header className="shrink-0 pb-0">
-          <MorphicNavbar />
+          <Navbar />
         </header>
         <main
           id="main-content"

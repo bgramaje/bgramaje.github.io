@@ -14,7 +14,7 @@ function parsePostDate(value: string): number {
   return Number.isNaN(t) ? 0 : t;
 }
 
-function formatListDate(value: string, locale = "es-ES"): string {
+function formatListDate(value: string, locale = "en-GB"): string {
   const t = Date.parse(value);
   if (Number.isNaN(t)) return value;
   return new Intl.DateTimeFormat(locale, {
@@ -34,6 +34,7 @@ export function BlogListPage() {
     title: "Blog | bgramaje",
     description: "Blog posts by Borja Gramaje",
     canonical: "https://bgramaje.github.io/blog",
+    lang: "en",
   });
 
   return (
@@ -56,14 +57,14 @@ export function BlogListPage() {
           transition={{ duration: 0.3 }}
           className="text-muted-foreground text-sm font-sans mt-1.5 text-pretty"
         >
-          Pensamientos, proyectos y apuntes
+          Thoughts, projects, and notes
         </motion.p>
       </motion.header>
 
       <ul className="space-y-4" role="list">
         {sortedPosts.map((post, i) => {
           const tags = post.tags?.filter(Boolean).slice(0, 4) ?? [];
-          const locale = getDefaultBlogLocale(post.id) ?? "es-ES";
+          const locale = getDefaultBlogLocale(post.id) ?? "en-GB";
           return (
             <motion.li
               key={post.id}
@@ -73,12 +74,12 @@ export function BlogListPage() {
             >
               <Link
                 to={getBlogPostPath(post.id, getDefaultBlogLocale(post.id))}
-                className="group flex gap-4 rounded-xl bg-card p-4 md:p-5 shadow-[var(--shadow-border)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-border-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="group flex gap-4 rounded-xl bg-card p-4 md:p-5 shadow-[var(--shadow-border)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-border-hover)] active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="flex-1 min-w-0">
                   <time
                     dateTime={post.date}
-                    className="block font-mono text-xs text-muted-foreground/50 tabular-nums mb-1"
+                    className="block font-mono text-xs text-muted-foreground tabular-nums mb-1"
                   >
                     {formatListDate(post.date, locale)}
                   </time>
@@ -108,7 +109,7 @@ export function BlogListPage() {
 
       {sortedPosts.length === 0 && (
         <p className="text-muted-foreground text-sm font-sans rounded-lg border border-dashed border-border/50 px-4 py-6 text-center">
-          No hay posts todavía.
+          No posts yet.
         </p>
       )}
     </div>

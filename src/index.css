@@ -215,6 +215,12 @@
     overflow: hidden;
     height: 100dvh;
     scroll-padding-top: 3rem;
+    scroll-padding-bottom: 4rem;
+  }
+
+  :focus-visible {
+    scroll-margin-top: 3.5rem;
+    scroll-margin-bottom: 4.5rem;
   }
 
   body {

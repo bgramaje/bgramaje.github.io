@@ -22,15 +22,12 @@ interface BlogPostProps {
 }
 
 function publishedCopy(locale: string | null) {
-  if (locale === "en") return { label: "Published on" as const, intl: "en-GB" as const };
   if (locale === "es") return { label: "Publicado el" as const, intl: "es-ES" as const };
-  return { label: "Publicado el" as const, intl: "es-ES" as const };
+  return { label: "Published on" as const, intl: "en-GB" as const };
 }
 
-function documentLang(locale: string | null): string {
-  if (locale === "en") return "en";
-  if (locale === "es") return "es";
-  return "en";
+function contentLang(locale: string | null): "en" | "es" {
+  return locale === "es" ? "es" : "en";
 }
 
 export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
@@ -80,7 +77,7 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
     title: meta ? `${meta.title} | bgramaje` : "bgramaje | Borja",
     description: meta?.description,
     canonical,
-    lang: documentLang(effectiveLocale),
+    lang: contentLang(effectiveLocale),
     alternates: locales.length ? alternates : undefined,
     structuredData,
   });
@@ -123,11 +120,12 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
   const typesetClass = "typeset typeset-docs max-w-[42em]";
   const entryHeaderClass = "typeset typeset-docs w-full max-w-none";
   const pub = publishedCopy(effectiveLocale);
+  const lang = contentLang(effectiveLocale);
 
   if (loading) {
     return (
-      <div className={wrapperClass}>
-        <div className="flex items-center gap-2 py-6 text-muted-foreground text-sm">
+      <div className={wrapperClass} lang={lang}>
+        <div role="status" className="flex items-center gap-2 py-6 text-muted-foreground text-sm">
           <span
             className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-border border-t-primary"
             aria-hidden="true"
@@ -140,8 +138,8 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
 
   if (error || !MDXContent) {
     return (
-      <div className={wrapperClass}>
-        <p className="text-destructive">
+      <div className={wrapperClass} lang={lang}>
+        <p className="text-destructive" role="alert">
           {error ?? "Failed to load post"}: <span className="text-foreground">{id}</span>
         </p>
       </div>
@@ -150,7 +148,7 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
 
   const Content = MDXContent;
   return (
-    <div className={wrapperClass}>
+    <div className={wrapperClass} lang={lang}>
       <header className="mb-4 w-full space-y-3">
         <div
           className={cn(

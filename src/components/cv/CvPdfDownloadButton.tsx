@@ -8,15 +8,17 @@ const iconTransition = { type: "spring" as const, duration: 0.3, bounce: 0 };
 
 export function CvPdfDownloadButton({ className }: { className?: string }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const runDownload = async () => {
     setLoading(true);
+    setError(null);
     try {
       const { downloadResumePdfFromYaml } = await import("@/components/cv/downloadResumePdf");
       await downloadResumePdfFromYaml("en");
     } catch (err) {
       console.error(err);
-      alert("Could not generate the CV PDF. Check the console or try again.");
+      setError("Could not generate the CV PDF. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -24,6 +26,11 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
 
   return (
     <span className={cn("relative inline-flex shrink-0 rounded-lg", className)}>
+      {error ? (
+        <span role="alert" className="sr-only">
+          {error}
+        </span>
+      ) : null}
       <RainbowButton
         asChild
         size="icon"
