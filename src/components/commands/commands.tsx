@@ -7,7 +7,7 @@ import { SkillsOutput } from "@/components/commands/commands-output/SkillsOutput
 import { StudiesOutput } from "@/components/commands/commands-output/StudiesOutput";
 import { ContactOutput } from "@/components/commands/commands-output/ContactOutput";
 import { ErrorOutput } from "@/components/commands/commands-output/ErrorOutput";
-import { getAllJobIds } from "@/lib/jobLoader";
+import { getAllJobIds } from "@/lib/loaders/jobLoader";
 
 interface ProcessCommandOptions {
   onOpenModal?: (content: React.ReactNode, title: string, placeholder?: string) => void;

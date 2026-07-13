@@ -7,7 +7,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { getBlogLocales, getBlogPostPath } from "@/lib/blogLoader";
+import { getBlogLocales, getBlogPostPath } from "@/lib/loaders/blogLoader";
 import { cn } from "@/lib/utils";
 
 const LOCALE_LABELS: Record<string, string> = {

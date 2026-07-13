@@ -12,7 +12,7 @@ export interface JobMDXModule {
   frontmatter?: JobFrontmatter;
 }
 
-const jobModules = import.meta.glob<JobMDXModule>("../content/mdx/jobs/*.mdx", { eager: false });
+const jobModules = import.meta.glob<JobMDXModule>("../../content/mdx/jobs/*.mdx", { eager: false });
 
 /** Extract id from glob path: "../content/mdx/jobs/0.mdx" -> "0" */
 function idFromPath(path: string): string {

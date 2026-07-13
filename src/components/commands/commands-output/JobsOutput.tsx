@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllJobIds, loadJobContent } from "@/lib/jobLoader";
+import { getAllJobIds, loadJobContent } from "@/lib/loaders/jobLoader";
 
 interface JobListItem {
   slug: string;

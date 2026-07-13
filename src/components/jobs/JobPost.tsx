@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
-import { useMDXWorkComponents } from "@/lib/mdx-work-components";
-import { loadJobContent } from "@/lib/jobLoader";
-import { loadHighlightCss } from "@/lib/load-highlight-css";
+import { useMDXWorkComponents } from "@/lib/mdx/work-components";
+import { loadJobContent } from "@/lib/loaders/jobLoader";
 
 interface JobPostProps {
   id: string;
@@ -20,10 +19,6 @@ export function JobPost({ id }: JobPostProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const components = useMDXWorkComponents({});
-
-  useEffect(() => {
-    loadHighlightCss();
-  }, []);
 
   useEffect(() => {
     let cancelled = false;

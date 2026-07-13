@@ -1,7 +1,7 @@
 import type React from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "@/components/shared/Callout";
-import { sharedMDXComponents } from "@/lib/mdx-shared-components";
+import { sharedMDXComponents } from "@/lib/mdx/shared-components";
 import { WorkTitle } from "@/components/work/WorkTitle";
 import { WorkTimerange } from "@/components/work/WorkTimerange";
 import { WorkCompany } from "@/components/work/WorkCompany";

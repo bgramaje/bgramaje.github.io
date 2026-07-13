@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { MDXProvider } from "@mdx-js/react";
-import { useMDXComponents } from "@/lib/mdx-components";
+import { useMDXComponents } from "@/lib/mdx/components";
 import { BlogLocaleBanner } from "@/components/blog/BlogLocaleBanner";
 import { PublishedBlock } from "@/components/shared/PublishedBlock";
 import { useDocumentHead } from "@/lib/useDocumentHead";
@@ -12,8 +12,7 @@ import {
   getBlogPostUrl,
   loadBlogContent,
   type BlogMetadata,
-} from "@/lib/blogLoader";
-import { loadHighlightCss } from "@/lib/load-highlight-css";
+} from "@/lib/loaders/blogLoader";
 import { cn } from "@/lib/utils";
 
 interface BlogPostProps {
@@ -81,10 +80,6 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
     alternates: locales.length ? alternates : undefined,
     structuredData,
   });
-
-  useEffect(() => {
-    loadHighlightCss();
-  }, []);
 
   useEffect(() => {
     if (!effectiveLocale && locales.length) return;

@@ -10,7 +10,8 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkGfm from "remark-gfm";
 
 import mdxMermaid from "mdx-mermaid";
-import rehypeHighlight from "rehype-highlight";
+import rehypeShiki from "@shikijs/rehype";
+import { rehypeShikiOptions } from "./src/lib/shiki/config";
 
 function modulePreloadEntry(): Plugin {
   return {
@@ -49,9 +50,7 @@ export default defineConfig({
           remarkGfm,
           [mdxMermaid, { output: "svg" }],
         ],
-        rehypePlugins: [
-          rehypeHighlight,
-        ],
+        rehypePlugins: [[rehypeShiki, rehypeShikiOptions]],
       }),
     },
     modulePreloadEntry(),
@@ -66,6 +65,13 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "@react-pdf/renderer"],
+    include: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@react-pdf/renderer",
+    ],
+    exclude: ["shiki", "@shikijs/transformers"],
   },
 });

@@ -107,11 +107,12 @@ src/
 │       ├── blogs/*.mdx      # Blog posts (YAML frontmatter)
 │       └── jobs/*.mdx       # Job write-ups (YAML frontmatter + Work* components)
 ├── lib/
-│   ├── mdx/                 # MDX component overrides (mdx-components, mdx-work-components)
-│   ├── blogLoader.ts        # MDX glob + cache for blogs
-│   ├── jobLoader.ts         # MDX glob + cache for jobs
-│   ├── use-media-query.ts
+│   ├── shiki/               # Shiki config, themes, highlightCode()
+│   ├── mdx/                 # MDX component registries (components, work-components, shared-components)
+│   ├── loaders/             # blogLoader.ts, jobLoader.ts — MDX glob + cache
 │   ├── terminal-focus.ts    # Custom focus event for terminal input
+│   ├── tech.ts              # Stack slug labels
+│   ├── useDocumentHead.ts
 │   └── utils.ts             # cn() — clsx + tailwind-merge
 ├── styles/                  # index.css, typeset.css, fonts-latin.css
 └── generated/               # Removed — blog metadata read from MDX frontmatter at build time
@@ -170,7 +171,7 @@ Do **not** use `src/blogs/` or `src/mdx/` at root — content lives under `src/c
    ---
    ```
 
-2. Write MDX body. Available components (from `mdx-components.tsx`): `Callout`, `Highlighter`, `CodeBlock`, Mermaid via ` ```mermaid ` fences.
+2. Write MDX body. Available components (from `lib/mdx/components.tsx`): `Callout`, `Highlighter`, `CodeBlock`, Mermaid via ` ```mermaid ` fences.
 3. Post appears automatically at `/blog/my-slug` — routing uses filename as id.
 4. Optional: link from terminal via existing `blog` command (navigates to `/blog`).
 
@@ -208,9 +209,9 @@ Place generated files in `src/components/ui/` unless the registry specifies othe
 Configured in `vite.config.ts`:
 
 - **remark:** frontmatter, GFM, mermaid
-- **rehype:** syntax highlighting (`rehype-highlight`)
-- Blog MDX uses `useMDXComponents` from `mdx-components.tsx`
-- Job MDX uses `useMDXWorkComponents` from `mdx-work-components.tsx`
+- **rehype:** syntax highlighting (`@shikijs/rehype`)
+- Blog MDX uses `useMDXComponents` from `lib/mdx/components.tsx`
+- Job MDX uses `useMDXWorkComponents` from `lib/mdx/work-components.tsx`
 
 Loaders cache promises in a `Map` — preserve that pattern when extending.
 

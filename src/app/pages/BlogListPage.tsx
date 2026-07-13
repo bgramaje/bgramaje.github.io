@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { getAllBlogPosts, getBlogPostPath, getDefaultBlogLocale } from "@/lib/blogLoader";
+import { getAllBlogPosts, getBlogPostPath, getDefaultBlogLocale } from "@/lib/loaders/blogLoader";
 import { pageShellClass } from "@/lib/utils";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 

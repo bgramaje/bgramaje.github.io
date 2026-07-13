@@ -5,7 +5,7 @@ import { BlogPost } from "@/components/blog/BlogPost";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { socialLinks } from "@/content/data/portfolio";
-import { getBlogLocales, getDefaultBlogLocale, getAllBlogIds } from "@/lib/blogLoader";
+import { getBlogLocales, getDefaultBlogLocale, getAllBlogIds } from "@/lib/loaders/blogLoader";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 import { pageShellClass } from "@/lib/utils";
 

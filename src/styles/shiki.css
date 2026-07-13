@@ -1,0 +1,77 @@
+/* Dual-theme tokens for build-time (rehype) and client CodeBlock output */
+html:not(.dark) .shiki,
+html:not(.dark) .shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+.typeset pre.shiki,
+.code-block-shiki pre.shiki {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background-color: transparent !important;
+}
+
+.code-block-shiki pre.shiki .line,
+.typeset pre.shiki .line {
+  display: block;
+  line-height: 1.625;
+}
+
+.typeset pre.shiki code,
+.code-block-shiki pre.shiki code {
+  display: block;
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  font-variant-ligatures: none;
+  white-space: normal;
+  background-color: transparent !important;
+}
+
+.code-line-number {
+  display: inline-block;
+  width: 2rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: var(--muted-foreground);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.code-block-shiki .line-highlight {
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  border-inline-start: 2px solid var(--foreground);
+  background-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+
+.code-block-shiki .line-add {
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  border-inline-start: 2px solid var(--success, oklch(0.7 0.15 145));
+  background-color: color-mix(in oklch, var(--success, oklch(0.7 0.15 145)) 10%, transparent);
+}
+
+.code-block-shiki .line-remove {
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  border-inline-start: 2px solid var(--destructive);
+  background-color: color-mix(in oklch, var(--destructive) 10%, transparent);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
