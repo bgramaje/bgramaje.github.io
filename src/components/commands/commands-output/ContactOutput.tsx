@@ -17,12 +17,12 @@ export function ContactOutput() {
             className="w-14 h-14 rounded-xl bg-background object-cover"
           />
         </picture>
-        <div className="flex min-w-0 flex-col gap-2">
+        <div className="flex min-w-0 flex-col gap-1">
           <p className="text-foreground font-medium">{personalInfo.name}</p>
           <p className="text-muted-foreground text-xs">{personalInfo.title}</p>
           <a
             href={`mailto:${personalInfo.email}`}
-            className="inline-flex min-h-10 items-center rounded-sm text-chart-3 text-xs transition-[color,transform] active:scale-[0.96] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="inline-flex items-center rounded-sm text-chart-3 text-xs transition-[color,transform] active:scale-[0.96] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             {personalInfo.email}
           </a>
