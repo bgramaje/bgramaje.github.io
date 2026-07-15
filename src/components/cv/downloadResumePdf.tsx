@@ -1,10 +1,10 @@
 import { pdf } from "@react-pdf/renderer";
 import { parse } from "yaml";
-import type { YamlResume } from "./types";
+import type { YamlResume } from "@/components/cv/types";
 import {
   ResumePdfDocument,
   type ResumeLocale,
-} from "./ResumePdfDocument";
+} from "@/components/cv/ResumePdfDocument";
 
 const YAML_URL_BY_LOCALE: Record<ResumeLocale, string> = {
   es: "/borja-gramaje.es.yml",

@@ -30,9 +30,9 @@ const initialHistory: HistoryItem[] = [
 
 export function HomePage() {
   useDocumentHead({
-    title: "Borja Gramaje | Software Engineer",
+    title: "bgramaje | Software Engineer",
     description:
-      "Software engineer portfolio of Borja Gramaje, focused on full-stack development, IoT, data platforms, and technical writing.",
+      "Software engineer portfolio by bgramaje, focused on full-stack development, IoT, data platforms, and technical writing.",
     canonical: "https://bgramaje.github.io/",
     lang: "en",
   });
@@ -181,7 +181,7 @@ export function HomePage() {
               </div>
             </div>
             <div className="pr-11 md:pr-12 min-w-0">
-              <h1 className="sr-only">Borja Gramaje — interactive portfolio terminal</h1>
+              <h1 className="sr-only">bgramaje — interactive portfolio terminal</h1>
 
               <div aria-live="polite" aria-relevant="additions" className="min-w-0">
                 <AnimatePresence mode="popLayout" initial={false}>

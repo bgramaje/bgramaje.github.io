@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { AnimatePresence } from "motion/react";
-import { Terminal } from "./Terminal";
-import { TerminalOutput } from "./TerminalOutput";
-import { CommandChips } from "./CommandChips";
-import { TerminalDialogShell } from "./TerminalDialogShell";
+import { Terminal } from "@/components/terminal/Terminal";
+import { TerminalOutput } from "@/components/terminal/TerminalOutput";
+import { CommandChips } from "@/components/terminal/CommandChips";
+import { TerminalDialogShell } from "@/components/terminal/TerminalDialogShell";
 
 interface TerminalModalProps {
   isOpen: boolean;

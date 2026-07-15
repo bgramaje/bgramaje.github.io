@@ -3,7 +3,7 @@
   <channel>
     <title>bgramaje | Blog</title>
     <link>https://bgramaje.github.io/blog</link>
-    <description>Blog posts by Borja Gramaje on software engineering, IoT, and data platforms.</description>
+    <description>Blog posts by bgramaje on software engineering, IoT, and data platforms.</description>
     <language>en</language>
     <lastBuildDate>Tue, 14 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://bgramaje.github.io/feed.xml" rel="self" type="application/rss+xml"/>

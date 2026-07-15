@@ -1,6 +1,6 @@
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { TerminalTitleBar } from "./TerminalTitleBar";
+import { TerminalTitleBar } from "@/components/terminal/TerminalTitleBar";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -12,7 +12,7 @@ type TerminalDialogSize = "job" | "terminal";
 
 const sizeClasses: Record<TerminalDialogSize, string> = {
   job: "w-full md:max-w-2xl lg:max-w-[42rem]",
-  terminal: "w-full max-w-4xl",
+  terminal: "w-full md:max-w-4xl",
 };
 
 interface TerminalDialogShellProps {
@@ -49,7 +49,7 @@ export function TerminalDialogShell({
         showHandle={false}
         className={cn(
           sizeClasses[size],
-          "h-[88dvh] md:h-fit md:max-h-[92dvh] p-0 overflow-hidden flex flex-col",
+          "flex h-[88dvh] flex-col p-0 md:h-fit md:max-h-[92dvh]",
           "bg-card border-border/50 shadow-2xl shadow-black/40",
           "rounded-t-xl md:rounded-xl",
           className
@@ -61,7 +61,7 @@ export function TerminalDialogShell({
         </ResponsiveDialogDescription>
         <TerminalTitleBar title={title} onClose={onClose} />
 
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-b-none md:rounded-b-xl">
           <div
             ref={scrollRef}
             className="dialog-scroll flex-1 overflow-y-auto overscroll-contain scroll-smooth px-3 pb-5 md:px-5 md:pb-7 text-sm"

@@ -7,17 +7,17 @@ interface TerminalTitleBarProps {
 }
 
 export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBarProps) {
-  const trafficLightsWidth = "w-14";
+  const trafficLightsWidth = "w-12";
 
   return (
-    <div className="flex shrink-0 items-center gap-1.5 border-b border-border/50 bg-card/90 px-2 py-1.5 backdrop-blur-md">
-      <div className={cn(trafficLightsWidth, "flex shrink-0 gap-2")}>
-        <div className="h-3 w-3 rounded-full bg-[var(--traffic-red)]" aria-hidden />
-        <div className="h-3 w-3 rounded-full bg-[var(--traffic-yellow)]" aria-hidden />
-        <div className="h-3 w-3 rounded-full bg-[var(--traffic-green)]" aria-hidden />
+    <div className="flex shrink-0 items-center gap-1 border-b border-border/50 bg-card/90 px-2 py-1 backdrop-blur-md">
+      <div className={cn(trafficLightsWidth, "flex shrink-0 gap-1.5")}>
+        <div className="h-2.5 w-2.5 rounded-full bg-[var(--traffic-red)]" aria-hidden />
+        <div className="h-2.5 w-2.5 rounded-full bg-[var(--traffic-yellow)]" aria-hidden />
+        <div className="h-2.5 w-2.5 rounded-full bg-[var(--traffic-green)]" aria-hidden />
       </div>
       <div className="min-w-0 flex-1 text-center">
-        <span className="truncate text-sm font-medium tracking-tight text-muted-foreground">
+        <span className="truncate text-xs font-medium tracking-tight text-muted-foreground">
           {title}
         </span>
       </div>
@@ -26,10 +26,10 @@ export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBar
           <button
             type="button"
             onClick={onClose}
-            className="relative flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground transition-[color,background-color,transform] duration-200 hover:bg-border/20 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.96]"
+            className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[color,background-color,transform] duration-200 hover:bg-border/20 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.96]"
             aria-label="Close dialog"
           >
-            <X size={15} />
+            <X size={14} />
           </button>
         ) : null}
       </div>

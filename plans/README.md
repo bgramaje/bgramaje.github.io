@@ -41,6 +41,7 @@ etc.) over raw hex. No new deps for one-liners.
 | 018  | Fix stale docs (AGENTS.md, README.md) | P2 | S | — | DONE |
 | 019  | Fix tab completion aliases + deduplicate MDX registries | P2 | S | — | DONE |
 | 020  | Code-split routes and fix syntax highlighting | P2 | M | 016 | TODO |
+| 021  | Fade BlogPost load → content (match JobPost) | P2 | S | — | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale — finding fixed independently or approach abandoned)
 
@@ -81,6 +82,10 @@ Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJE
   files (016: deps + dead files + directives; 017: data + CV + sitemap +
   ticker; 018: docs only; 019: portfolio.ts + MDX registries).
   Executable in any order after verifying no file overlap.
+- **021** (improve-animations, commit `eb16c01`): independent. Touches only
+  `src/components/blog/BlogPost.tsx`. Does not depend on 020; safe to run
+  anytime. Do not edit `BlogPage.tsx` while executing 021 (outer article
+  motion stays as-is).
 
 ## Findings considered and rejected
 

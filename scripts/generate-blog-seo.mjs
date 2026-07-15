@@ -128,7 +128,7 @@ const feed = `<?xml version="1.0" encoding="UTF-8"?>
   <channel>
     <title>bgramaje | Blog</title>
     <link>${site}/blog</link>
-    <description>Blog posts by Borja Gramaje on software engineering, IoT, and data platforms.</description>
+    <description>Blog posts by bgramaje on software engineering, IoT, and data platforms.</description>
     <language>en</language>
     <lastBuildDate>${toRfc822(latestDate ?? new Date().toISOString().slice(0, 10))}</lastBuildDate>
     <atom:link href="${site}/feed.xml" rel="self" type="application/rss+xml"/>

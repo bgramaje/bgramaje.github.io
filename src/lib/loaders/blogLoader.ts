@@ -12,10 +12,10 @@ export interface BlogMDXModule {
   frontmatter?: BlogMetadata;
 }
 
-const blogModules = import.meta.glob<BlogMDXModule>("../../content/mdx/blogs/**/*.mdx");
+const blogModules = import.meta.glob<BlogMDXModule>("@/content/mdx/blogs/**/*.mdx");
 
 /** Eager load just the frontmatter from each MDX file (no React component code). */
-const blogFrontmatter = import.meta.glob<BlogMetadata>("../../content/mdx/blogs/**/*.mdx", {
+const blogFrontmatter = import.meta.glob<BlogMetadata>("@/content/mdx/blogs/**/*.mdx", {
   import: "frontmatter",
   eager: true,
 });

@@ -577,9 +577,13 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
         <ResponsiveDialog open={isExpanded} onOpenChange={setIsExpanded}>
           <ResponsiveDialogContent
             showHandle={false}
-            className="h-[88dvh] w-full max-w-[min(1100px,94vw)] gap-0 overflow-hidden rounded-t-xl p-0 md:h-auto md:max-h-[90dvh] md:rounded-xl"
+            className={cn(
+              "flex h-[88dvh] w-full flex-col gap-0 rounded-t-xl p-0",
+              "md:h-auto md:max-h-[90dvh] md:max-w-[min(1100px,94vw)] md:rounded-xl",
+              codeSurfaceClass,
+            )}
           >
-            <div className={cn("flex items-center justify-between border-b border-border px-4 py-2", codeHeaderClass)}>
+            <div className={cn("flex shrink-0 items-center justify-between rounded-t-xl border-b border-border px-4 py-2", codeHeaderClass)}>
               <ResponsiveDialogTitle className="font-mono text-sm">
                 {title || (showLanguage && getLanguageDisplayName(language)) || "Code"}
               </ResponsiveDialogTitle>
@@ -594,7 +598,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                 {copyable && <CopyButton code={trimmedCode} />}
               </div>
             </div>
-            <div className={cn("max-h-[calc(90dvh-3rem)] overflow-auto p-3", codeSurfaceClass)}>
+            <div className="min-h-0 flex-1 overflow-auto p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {codeContent}
             </div>
           </ResponsiveDialogContent>

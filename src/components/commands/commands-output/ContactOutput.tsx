@@ -4,7 +4,6 @@ import { PROFILE_PHOTO_PATH, PROFILE_PHOTO_WEBP_PATH } from "@/components/cv/pro
 export function ContactOutput() {
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-primary font-semibold">Contact:</p>
       <div className="flex items-center gap-3">
         <picture>
           <source srcSet={PROFILE_PHOTO_WEBP_PATH} type="image/webp" />

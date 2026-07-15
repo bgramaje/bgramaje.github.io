@@ -12,30 +12,34 @@ export interface JobMDXModule {
   frontmatter?: JobFrontmatter;
 }
 
-const jobModules = import.meta.glob<JobMDXModule>("../../content/mdx/jobs/*.mdx", { eager: false });
+const jobModules = import.meta.glob<JobMDXModule>("@/content/mdx/jobs/*.mdx");
 
-/** Extract id from glob path: "../content/mdx/jobs/0.mdx" -> "0" */
 function idFromPath(path: string): string {
-  const match = path.match(/content\/mdx\/jobs\/([^/]+)\.mdx$/);
+  const match = path.match(/jobs\/([^/]+)\.mdx$/);
   return match ? match[1] : "";
 }
 
-/** All job IDs from src/mdx/jobs/*.mdx */
+type JobModuleLoader = () => Promise<JobMDXModule>;
+
+const loadersById = new Map<string, JobModuleLoader>();
+for (const [path, loader] of Object.entries(jobModules)) {
+  const id = idFromPath(path);
+  if (id && loader) loadersById.set(id, loader);
+}
+
+/** All job IDs from src/content/mdx/jobs/*.mdx */
 export function getAllJobIds(): string[] {
-  return Object.keys(jobModules)
-    .map(idFromPath)
-    .filter(Boolean);
+  return [...loadersById.keys()];
 }
 
 const contentCache = new Map<string, Promise<JobMDXModule>>();
 
-/** Load MDX for one job by id (e.g. "0", "1", "2"). Cached. */
+/** Load MDX for one job by slug (e.g. "devoltec-sl"). Cached. */
 export async function loadJobContent(id: string): Promise<JobMDXModule> {
   const cached = contentCache.get(id);
   if (cached) return cached;
 
-  const path = `../content/mdx/jobs/${id}.mdx`;
-  const loader = jobModules[path];
+  const loader = loadersById.get(id);
   if (!loader) {
     const err = new Error(`Job not found: ${id}`);
     contentCache.set(id, Promise.reject(err));

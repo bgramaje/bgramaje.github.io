@@ -93,7 +93,7 @@ export function BlogPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex h-10 w-10 min-w-10 items-center justify-center overflow-hidden transition-[width,transform] duration-300 ease-out hover:w-[112px]"
-              aria-label="Open Borja Gramaje on LinkedIn"
+              aria-label="Open bgramaje on LinkedIn"
             >
               <span className="flex w-full items-center justify-center">
                 <Linkedin size={18} className="shrink-0" aria-hidden />
@@ -116,7 +116,7 @@ export function BlogPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex h-10 w-10 min-w-10 items-center justify-center overflow-hidden transition-[width,transform] duration-300 ease-out hover:w-[112px]"
-              aria-label="Open Borja Gramaje on GitHub"
+              aria-label="Open bgramaje on GitHub"
             >
               <span className="flex w-full items-center justify-center">
                 <Github size={18} className="shrink-0" aria-hidden />

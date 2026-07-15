@@ -1,6 +1,6 @@
 import { memo, type ReactNode } from "react";
 import { motion } from "motion/react";
-import { TerminalPrompt } from "./TerminalPrompt";
+import { TerminalPrompt } from "@/components/terminal/TerminalPrompt";
 
 interface TerminalOutputProps {
   command: string;

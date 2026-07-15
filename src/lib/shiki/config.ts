@@ -3,7 +3,7 @@ import { transformerRemoveLineBreak } from "@shikijs/transformers";
 import {
   portfolioDarkTheme,
   portfolioLightTheme,
-} from "./themes";
+} from "@/lib/shiki/themes";
 
 export const SHIKI_DUAL_THEMES = {
   light: portfolioLightTheme,

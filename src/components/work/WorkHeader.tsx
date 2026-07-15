@@ -12,7 +12,7 @@ export function WorkHeader({ children, className }: WorkHeaderProps) {
     <header
       className={cn(
         "not-typeset sticky top-0 z-20 -mx-3 mb-3 flex items-start justify-between gap-2",
-        "border-b border-border/40 bg-card px-3 pb-2",
+        "border-b border-border/40 bg-card px-3 py-3",
         "shadow-[0_-0.75rem_0_0.75rem_var(--color-card)]",
         "md:-mx-5 md:px-5",
         className

@@ -1,4 +1,4 @@
-import { JobPost } from "./JobPost";
+import { JobPost } from "@/components/jobs/JobPost";
 import { TerminalDialogShell } from "@/components/terminal/TerminalDialogShell";
 
 interface JobModalProps {

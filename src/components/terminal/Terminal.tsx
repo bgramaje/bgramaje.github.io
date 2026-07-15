@@ -1,5 +1,5 @@
 import { useState, useEffect, type RefObject } from "react";
-import { TerminalPrompt } from "./TerminalPrompt";
+import { TerminalPrompt } from "@/components/terminal/TerminalPrompt";
 
 interface TerminalProps {
   onSubmit: (command: string) => void;

@@ -30,7 +30,12 @@ export function WorkTechnologies(props: WorkTechnologiesProps) {
   let chipIndex = 0;
 
   return (
-    <div className={cn("mt-4 space-y-3", className)}>
+    <div
+      className={cn(
+        "mt-4 grid grid-cols-1 gap-x-5 gap-y-3 sm:grid-cols-2",
+        className
+      )}
+    >
       {groupEntries.map(([groupKey, value]) => {
         const slugs = parseSlugList(value!);
         if (slugs.length === 0) return null;
@@ -40,11 +45,14 @@ export function WorkTechnologies(props: WorkTechnologiesProps) {
           groupKey.charAt(0).toUpperCase() + groupKey.slice(1);
 
         return (
-          <div key={groupKey} className="flex items-start gap-3">
-            <span className="w-18 shrink-0 pt-0.5 font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+          <div
+            key={groupKey}
+            className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-x-2.5"
+          >
+            <span className="shrink-0 font-mono text-[10px] font-medium uppercase leading-none tracking-widest text-muted-foreground">
               {label}
             </span>
-            <div className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
               {slugs.map((slug) => {
                 const i = chipIndex++;
                 return (

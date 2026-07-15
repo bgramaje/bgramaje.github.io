@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
+import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import { useMDXComponents } from "@/lib/mdx/components";
 import { BlogLocaleBanner } from "@/components/blog/BlogLocaleBanner";
@@ -29,6 +30,12 @@ function contentLang(locale: string | null): "en" | "es" {
   return locale === "es" ? "es" : "en";
 }
 
+const contentMotion = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as const },
+};
+
 export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
   const [searchParams] = useSearchParams();
   const locales = useMemo(() => getBlogLocales(id), [id]);
@@ -57,7 +64,7 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
             description: meta.description,
             author: {
               "@type": "Person",
-              name: "Borja Gramaje",
+              name: "bgramaje",
               url: "https://bgramaje.github.io/",
             },
             datePublished: meta.date,
@@ -73,7 +80,7 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
   });
 
   useDocumentHead({
-    title: meta ? `${meta.title} | bgramaje` : "bgramaje | Borja",
+    title: meta ? `${meta.title} | bgramaje` : "bgramaje",
     description: meta?.description,
     canonical,
     lang: contentLang(effectiveLocale),
@@ -119,7 +126,14 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
 
   if (loading) {
     return (
-      <div className={wrapperClass} lang={lang}>
+      <motion.div
+        key={`loading-${id}-${effectiveLocale ?? "default"}`}
+        className={wrapperClass}
+        lang={lang}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      >
         <div role="status" className="flex items-center gap-2 py-6 text-muted-foreground text-sm">
           <span
             className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-border border-t-primary"
@@ -127,23 +141,33 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
           />
           Loading…
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   if (error || !MDXContent) {
     return (
-      <div className={wrapperClass} lang={lang}>
+      <motion.div
+        key={`error-${id}-${effectiveLocale ?? "default"}`}
+        className={wrapperClass}
+        lang={lang}
+        {...contentMotion}
+      >
         <p className="text-destructive" role="alert">
           {error ?? "Failed to load post"}: <span className="text-foreground">{id}</span>
         </p>
-      </div>
+      </motion.div>
     );
   }
 
   const Content = MDXContent;
   return (
-    <div className={wrapperClass} lang={lang}>
+    <motion.div
+      key={`content-${id}-${effectiveLocale ?? "default"}`}
+      className={wrapperClass}
+      lang={lang}
+      {...contentMotion}
+    >
       <header className="mb-4 w-full space-y-3">
         <div
           className={cn(
@@ -174,6 +198,6 @@ export function BlogPost({ id, locale: localeParam }: BlogPostProps) {
           <Content />
         </MDXProvider>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -7,9 +7,9 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { ResumeContent } from "./types";
-import { getProfilePhotoSrcForPdf } from "./profilePhoto";
-import { bulletLines, introLines, paragraphLines, plainFromMarkdown } from "./plainText";
+import type { ResumeContent } from "@/components/cv/types";
+import { getProfilePhotoSrcForPdf } from "@/components/cv/profilePhoto";
+import { bulletLines, introLines, paragraphLines, plainFromMarkdown } from "@/components/cv/plainText";
 
 export type ResumeLocale = "es" | "en";
 

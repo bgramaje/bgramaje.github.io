@@ -32,7 +32,7 @@ const sortedPosts = [...allPosts].sort((a, b) => parsePostDate(b.date) - parsePo
 export function BlogListPage() {
   useDocumentHead({
     title: "Blog | bgramaje",
-    description: "Blog posts by Borja Gramaje",
+    description: "Blog posts by bgramaje",
     canonical: "https://bgramaje.github.io/blog",
     lang: "en",
   });

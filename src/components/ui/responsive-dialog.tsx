@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -63,7 +64,8 @@ export function ResponsiveDialogContent({
   return isDesktop ? (
     <DialogContent className={className}>{children}</DialogContent>
   ) : (
-    <DrawerContent className={className} showHandle={showHandle}>
+    // Full-bleed wins over shared desktop max-w (twMerge: last conflict wins).
+    <DrawerContent className={cn(className, "w-full max-w-none")} showHandle={showHandle}>
       {children}
     </DrawerContent>
   );
