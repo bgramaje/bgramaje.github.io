@@ -26,7 +26,7 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2 text-base sm:text-sm" aria-label="Terminal command form">
+    <form onSubmit={handleSubmit} className="flex items-center gap-2 text-sm" aria-label="Terminal command form">
       <TerminalPrompt />
       <div className="relative flex-1 min-w-0">
         <input
@@ -45,7 +45,7 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
         />
         <span className="absolute left-0 top-0 pointer-events-none text-foreground whitespace-pre">
           {value || (placeholder ? <span className="text-muted-foreground">{placeholder}</span> : null)}
-          <span className="inline-block w-2.5 h-5 bg-primary animate-blink ml-px align-middle -mb-0.5" aria-hidden />
+          <span className="inline-block w-2 h-4 bg-primary animate-blink ml-px align-middle -mb-0.5" aria-hidden />
         </span>
       </div>
     </form>
