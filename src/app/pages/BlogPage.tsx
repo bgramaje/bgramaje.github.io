@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, Github, Linkedin } from "lucide-react";
 import { BlogPost } from "@/components/blog/BlogPost";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
@@ -9,11 +9,17 @@ import { getBlogLocales, getDefaultBlogLocale, getAllBlogIds } from "@/lib/loade
 import { useDocumentHead } from "@/lib/useDocumentHead";
 import { pageShellClass } from "@/lib/utils";
 
+const springEnter = { type: "spring" as const, bounce: 0, duration: 0.35 };
+
 const backLinkClass =
-  "inline-flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted-foreground transition-[color,transform] active:scale-[0.96] hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted-foreground transition-[color,transform] duration-100 ease-out active:scale-[0.97] hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export function BlogPage() {
   const { id, locale } = useParams<{ id: string; locale?: string }>();
+  const reduceMotion = useReducedMotion();
+  const enterHidden = reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 };
+  const enterVisible = reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 };
+  const enterTransition = reduceMotion ? { duration: 0.2 } : springEnter;
 
   const postMissing = !id || !getAllBlogIds().includes(id);
   const locales = id && !postMissing ? getBlogLocales(id) : [];
@@ -61,9 +67,9 @@ export function BlogPage() {
     <div className={`${pageShellClass} relative py-6 pb-4 md:pb-12 bg-background min-h-full`}>
       <ScrollProgress className="top-0 z-50" />
       <motion.div
-        initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.25 }}
+        initial={enterHidden}
+        animate={enterVisible}
+        transition={enterTransition}
         className="mb-3 md:mb-6"
       >
         <Link to="/blog" className={backLinkClass}>
@@ -72,9 +78,12 @@ export function BlogPage() {
         </Link>
       </motion.div>
       <motion.article
-        initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        initial={enterHidden}
+        animate={enterVisible}
+        transition={{
+          ...enterTransition,
+          delay: reduceMotion ? 0 : 0.05,
+        }}
         className="pb-6 md:pb-20"
       >
         <BlogPost id={id} locale={locale} />

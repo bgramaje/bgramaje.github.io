@@ -1,5 +1,5 @@
 import { memo, type ReactNode } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { TerminalPrompt } from "@/components/terminal/TerminalPrompt";
 
 interface TerminalOutputProps {
@@ -7,38 +7,32 @@ interface TerminalOutputProps {
   output: ReactNode;
 }
 
-const enterEase = [0.16, 1, 0.3, 1] as const;
+const springEnter = { type: "spring" as const, bounce: 0, duration: 0.28 };
 
 export const TerminalOutput = memo(function TerminalOutput({
   command,
   output,
 }: TerminalOutputProps) {
+  const reduceMotion = useReducedMotion();
+  const enterHidden = reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 };
+  const enterVisible = reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 };
+  const exit = reduceMotion ? { opacity: 0 } : { opacity: 0, y: 2 };
+  const transition = reduceMotion ? { duration: 0.15 } : springEnter;
+
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 4 }}
-      transition={{ duration: 0.25, ease: enterEase }}
+      initial={enterHidden}
+      animate={enterVisible}
+      exit={exit}
+      transition={transition}
       className="mb-3 text-sm"
     >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2, ease: enterEase }}
-        className="mb-0.5 flex flex-wrap items-center gap-2 text-xs"
-      >
+      <div className="mb-0.5 flex flex-wrap items-center gap-2 text-xs">
         <TerminalPrompt compact />
         <span className="text-foreground">{command}</span>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.25, ease: enterEase }}
-        className="mt-2"
-      >
-        {output}
-      </motion.div>
+      </div>
+      <div className="mt-2">{output}</div>
     </motion.div>
   );
 });

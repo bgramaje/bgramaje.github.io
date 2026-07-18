@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { getAllBlogPosts, getBlogPostPath, getDefaultBlogLocale } from "@/lib/loaders/blogLoader";
-import { pageShellClass } from "@/lib/utils";
+import { cn, pageShellClass } from "@/lib/utils";
 import { useDocumentHead } from "@/lib/useDocumentHead";
 
-const enterVariants = {
-  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
-  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-};
+const springEnter = { type: "spring" as const, bounce: 0, duration: 0.35 };
 
 function parsePostDate(value: string): number {
   const t = Date.parse(value);
@@ -29,7 +27,86 @@ function formatListDate(value: string, locale = "en-GB"): string {
 const allPosts = getAllBlogPosts();
 const sortedPosts = [...allPosts].sort((a, b) => parsePostDate(b.date) - parsePostDate(a.date));
 
+type BlogPostMeta = (typeof sortedPosts)[number];
+
+function BlogPostCard({
+  post,
+  enterHidden,
+  enterVisible,
+  enterTransition,
+}: {
+  post: BlogPostMeta;
+  enterHidden: { opacity: number; y?: number };
+  enterVisible: { opacity: number; y?: number };
+  enterTransition: typeof springEnter | { duration: number };
+}) {
+  const tags = post.tags?.filter(Boolean).slice(0, 4) ?? [];
+  const locale = getDefaultBlogLocale(post.id) ?? "en-GB";
+
+  return (
+    <motion.li
+      variants={{ hidden: enterHidden, visible: enterVisible }}
+      transition={enterTransition}
+    >
+      <Link
+        to={getBlogPostPath(post.id, getDefaultBlogLocale(post.id))}
+        className={cn(
+          "group relative flex min-h-11 items-start gap-3 rounded-2xl bg-card p-4 md:gap-4 md:p-5",
+          "shadow-[var(--shadow-border)]",
+          "transition-[transform,box-shadow] duration-200 ease-out",
+          "hover:-translate-y-0.5 hover:shadow-[var(--shadow-border-hover)]",
+          "active:scale-[0.96]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        )}
+      >
+        <div className="min-w-0 flex-1">
+          <time
+            dateTime={post.date}
+            className="mb-1 block font-mono text-xs tabular-nums tracking-wide text-muted-foreground"
+          >
+            {formatListDate(post.date, locale)}
+          </time>
+          <h2 className="text-balance font-mono text-sm font-semibold leading-snug tracking-tight text-foreground transition-colors duration-200 group-hover:text-chart-3 md:text-base">
+            {post.title}
+          </h2>
+          <p className="mt-1.5 line-clamp-2 text-pretty font-sans text-xs leading-relaxed text-muted-foreground md:text-sm">
+            {post.description}
+          </p>
+          {tags.length > 0 ? (
+            <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Tags">
+              {tags.map((tag) => (
+                <li key={tag}>
+                  <span className="inline-block rounded-md bg-muted/70 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                    {tag}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+
+        <span
+          className={cn(
+            "mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted-foreground",
+            "opacity-40 transition-[opacity,transform,color] duration-200 ease-out",
+            "group-hover:translate-x-0.5 group-hover:text-chart-3 group-hover:opacity-100",
+            "group-focus-visible:translate-x-0.5 group-focus-visible:text-chart-3 group-focus-visible:opacity-100",
+          )}
+          aria-hidden
+        >
+          <ArrowRight className="h-4 w-4" strokeWidth={2} />
+        </span>
+      </Link>
+    </motion.li>
+  );
+}
+
 export function BlogListPage() {
+  const reduceMotion = useReducedMotion();
+  const enterHidden = reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 };
+  const enterVisible = reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 };
+  const enterTransition = reduceMotion ? { duration: 0.2 } : springEnter;
+
   useDocumentHead({
     title: "Blog | bgramaje",
     description: "Blog posts by bgramaje",
@@ -38,80 +115,65 @@ export function BlogListPage() {
   });
 
   return (
-    <div className={`${pageShellClass} py-8 pb-16 min-h-full`}>
+    <div className={`${pageShellClass} min-h-full py-8 pb-16`}>
       <motion.header
         className="mb-8"
         initial="hidden"
         animate="visible"
-        variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: { staggerChildren: reduceMotion ? 0 : 0.1 },
+          },
+        }}
       >
         <motion.h1
-          variants={enterVariants}
-          transition={{ duration: 0.3 }}
-          className="text-foreground font-bold font-mono text-3xl md:text-4xl leading-tight uppercase tracking-tight text-balance"
+          variants={{ hidden: enterHidden, visible: enterVisible }}
+          transition={enterTransition}
+          className="text-balance font-mono text-3xl font-bold uppercase leading-[1.05] tracking-tighter text-foreground md:text-4xl"
         >
           Blog
         </motion.h1>
         <motion.p
-          variants={enterVariants}
-          transition={{ duration: 0.3 }}
-          className="text-muted-foreground text-sm font-sans mt-1.5 text-pretty"
+          variants={{ hidden: enterHidden, visible: enterVisible }}
+          transition={enterTransition}
+          className="mt-2 text-pretty font-sans text-sm leading-relaxed text-muted-foreground"
         >
           Thoughts, projects, and notes
         </motion.p>
       </motion.header>
 
-      <ul className="space-y-4" role="list">
-        {sortedPosts.map((post, i) => {
-          const tags = post.tags?.filter(Boolean).slice(0, 4) ?? [];
-          const locale = getDefaultBlogLocale(post.id) ?? "en-GB";
-          return (
-            <motion.li
-              key={post.id}
-              initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 0.3, delay: 0.2 + i * 0.1 }}
-            >
-              <Link
-                to={getBlogPostPath(post.id, getDefaultBlogLocale(post.id))}
-                className="group flex gap-4 rounded-xl bg-card p-4 md:p-5 shadow-[var(--shadow-border)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-border-hover)] active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <div className="flex-1 min-w-0">
-                  <time
-                    dateTime={post.date}
-                    className="block font-mono text-xs text-muted-foreground tabular-nums mb-1"
-                  >
-                    {formatListDate(post.date, locale)}
-                  </time>
-                  <h2 className="font-mono font-semibold text-foreground text-sm md:text-base leading-snug text-balance group-hover:text-chart-3 transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-sans line-clamp-2 text-pretty mt-1.5">
-                    {post.description}
-                  </p>
-                  {tags.length > 0 && (
-                    <ul className="flex flex-wrap gap-1.5 mt-3" aria-label="Tags">
-                      {tags.map((tag) => (
-                        <li key={tag}>
-                          <span className="inline-block rounded-md border border-border/40 bg-muted/50 px-2 py-0.5 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                            {tag}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </Link>
-            </motion.li>
-          );
-        })}
-      </ul>
+      <motion.ul
+        className="space-y-3 md:space-y-4"
+        role="list"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: reduceMotion ? 0 : 0.08,
+              delayChildren: reduceMotion ? 0 : 0.12,
+            },
+          },
+        }}
+      >
+        {sortedPosts.map((post) => (
+          <BlogPostCard
+            key={post.id}
+            post={post}
+            enterHidden={enterHidden}
+            enterVisible={enterVisible}
+            enterTransition={enterTransition}
+          />
+        ))}
+      </motion.ul>
 
-      {sortedPosts.length === 0 && (
-        <p className="text-muted-foreground text-sm font-sans rounded-lg border border-dashed border-border/50 px-4 py-6 text-center">
+      {sortedPosts.length === 0 ? (
+        <p className="rounded-xl border border-dashed border-border/50 px-4 py-6 text-center font-sans text-sm text-muted-foreground">
           No posts yet.
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

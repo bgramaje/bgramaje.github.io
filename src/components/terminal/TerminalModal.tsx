@@ -33,10 +33,9 @@ export function TerminalModal({
   }, []);
 
   useEffect(() => {
-    if (history.length > 0) {
-      const t = setTimeout(scrollToBottom, 80);
-      return () => clearTimeout(t);
-    }
+    if (history.length === 0) return;
+    const id = requestAnimationFrame(scrollToBottom);
+    return () => cancelAnimationFrame(id);
   }, [history, scrollToBottom]);
 
   useEffect(() => {

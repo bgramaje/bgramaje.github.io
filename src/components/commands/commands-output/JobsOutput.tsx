@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllJobIds, loadJobContent } from "@/lib/loaders/jobLoader";
+import { StaggerItem } from "@/components/commands/commands-output/StaggerItem";
 
 interface JobListItem {
   slug: string;
@@ -19,7 +20,7 @@ function startYearFromPeriod(period: string): number {
 }
 
 const rowClass =
-  "flex w-full min-h-10 items-start gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-left transition-[color,background-color,transform] active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "flex w-full min-h-10 items-start gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-left transition-[color,background-color,transform] duration-100 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export function JobsOutput({ onJobClick }: JobsOutputProps) {
   const [jobs, setJobs] = useState<JobListItem[]>([]);
@@ -73,26 +74,27 @@ export function JobsOutput({ onJobClick }: JobsOutputProps) {
 
   return (
     <div className="space-y-3 mx-2">
-      {jobs.map((job) => (
-        <button
-          key={job.slug}
-          type="button"
-          onClick={() => onJobClick?.(job.slug)}
-          aria-label={`View ${job.role} at ${job.company}`}
-          className={`${rowClass} group cursor-pointer hover:bg-border/25`}
-        >
-          <span className="text-success shrink-0 mt-0.5" aria-hidden>
-            ▸
-          </span>
-          <div className="flex-1 min-w-0">
-            <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate" title={job.role}>
-              {job.role}
-            </p>
-            <p className="text-muted-foreground text-xs mt-0.5 tabular-nums">
-              {job.company} · {job.period}
-            </p>
-          </div>
-        </button>
+      {jobs.map((job, i) => (
+        <StaggerItem key={job.slug} index={i}>
+          <button
+            type="button"
+            onClick={() => onJobClick?.(job.slug)}
+            aria-label={`View ${job.role} at ${job.company}`}
+            className={`${rowClass} group cursor-pointer hover:bg-border/25`}
+          >
+            <span className="text-success shrink-0 mt-0.5" aria-hidden>
+              ▸
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-foreground text-sm font-medium group-hover:text-success transition-colors min-w-0 truncate" title={job.role}>
+                {job.role}
+              </p>
+              <p className="text-muted-foreground text-xs mt-0.5 tabular-nums">
+                {job.company} · {job.period}
+              </p>
+            </div>
+          </button>
+        </StaggerItem>
       ))}
     </div>
   );

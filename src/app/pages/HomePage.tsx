@@ -57,10 +57,10 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (history.length > 0) {
-      const t = setTimeout(scrollToBottom, 80);
-      return () => clearTimeout(t);
-    }
+    if (history.length === 0) return;
+    // ponytail: one rAF for layout; upgrade to ResizeObserver if tall MDX jumps scroll
+    const id = requestAnimationFrame(scrollToBottom);
+    return () => cancelAnimationFrame(id);
   }, [history, scrollToBottom]);
 
   useEffect(() => {

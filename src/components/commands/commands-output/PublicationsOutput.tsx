@@ -1,7 +1,8 @@
 import { publications } from "@/content/data/portfolio";
+import { StaggerItem } from "@/components/commands/commands-output/StaggerItem";
 
 const rowClass =
-  "group flex min-h-10 items-start gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 transition-[color,background-color,transform] active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "group flex min-h-10 items-start gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 transition-[color,background-color,transform] duration-100 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 function PublicationRow({
   pub,
@@ -44,8 +45,10 @@ function PublicationRow({
 export function PublicationsOutput() {
   return (
     <div className="space-y-3 mx-2">
-      {publications.map((pub) => (
-        <PublicationRow key={pub.uid} pub={pub} />
+      {publications.map((pub, i) => (
+        <StaggerItem key={pub.uid} index={i}>
+          <PublicationRow pub={pub} />
+        </StaggerItem>
       ))}
     </div>
   );

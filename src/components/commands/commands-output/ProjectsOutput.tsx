@@ -1,8 +1,9 @@
 import { projects } from "@/content/data/portfolio";
 import { TechChip } from "@/components/shared/TechChip";
+import { StaggerItem } from "@/components/commands/commands-output/StaggerItem";
 
 const rowClass =
-  "group min-h-10 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 transition-[color,background-color,transform] active:scale-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "group min-h-10 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 transition-[color,background-color,transform] duration-100 ease-out active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 function ProjectRow({
   project,
@@ -60,17 +61,16 @@ function ProjectRow({
 export function ProjectsOutput() {
   return (
     <div className="space-y-3 mx-2">
-      <p className="text-primary font-semibold">Side projects:</p>
-      {projects.map((project) => {
+      <StaggerItem index={0}>
+        <p className="text-primary font-semibold">Side projects:</p>
+      </StaggerItem>
+      {projects.map((project, i) => {
         const href = project.url ?? project.github;
         const label = project.url ? "View live" : "View source";
         return (
-          <ProjectRow
-            key={project.name}
-            project={project}
-            href={href}
-            label={label}
-          />
+          <StaggerItem key={project.name} index={i + 1}>
+            <ProjectRow project={project} href={href} label={label} />
+          </StaggerItem>
         );
       })}
     </div>
