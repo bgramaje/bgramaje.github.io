@@ -32,7 +32,7 @@ export function WorkTechnologies(props: WorkTechnologiesProps) {
   return (
     <div
       className={cn(
-        "mt-4 grid grid-cols-1 gap-x-5 gap-y-3 sm:grid-cols-2",
+        "mt-4 grid grid-cols-2 gap-x-3 gap-y-3 sm:gap-x-5",
         className
       )}
     >
@@ -47,7 +47,7 @@ export function WorkTechnologies(props: WorkTechnologiesProps) {
         return (
           <div
             key={groupKey}
-            className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-x-2.5"
+            className="flex min-w-0 flex-col gap-1.5 sm:grid sm:grid-cols-[4.75rem_minmax(0,1fr)] sm:items-center sm:gap-x-2.5 sm:gap-y-0"
           >
             <span className="shrink-0 font-mono text-[10px] font-medium uppercase leading-none tracking-widest text-muted-foreground">
               {label}

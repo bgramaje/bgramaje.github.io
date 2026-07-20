@@ -4,6 +4,17 @@ All notable changes to this portfolio are documented here.
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-07-20
+
+### Changed
+
+- Job achievement sections (`scrollable`) use a max-height scroll area so the Stack stays visible without scrolling the whole dialog
+- Job Stack layout uses a 2-column grid on mobile (label stacked above chips)
+
+### Fixed
+
+- Desktop dialogs keep a column layout (`flex-direction` inherited) so title and body stack correctly
+
 ## [0.0.2] - 2026-07-20
 
 ### Added
