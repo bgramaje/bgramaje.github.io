@@ -32,8 +32,12 @@ export function Callout({ title, type = "info", className, children }: CalloutPr
   const variant = variantMap[validType] || "info";
 
   return (
-    <Alert variant={variant} className={cn("my-2 p-2 px-3 pb-1 flex items-center font-sans", className)}>
-        <Icon size={18} />
+    <Alert
+      variant={variant}
+      role={validType === "error" ? "alert" : "note"}
+      className={cn("my-2 p-2 px-3 pb-1 flex items-center font-sans", className)}
+    >
+        <Icon size={18} aria-hidden />
         <div className="flex flex-col gap-1 ml-2">
             {title && <AlertTitle className="mb-0 font-sans">{title}</AlertTitle>}
             <AlertDescription className="!mb-0 !pb-0 font-sans">{children}</AlertDescription>

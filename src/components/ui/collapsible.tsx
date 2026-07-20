@@ -1,9 +1,32 @@
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+"use client"
 
-const Collapsible = CollapsiblePrimitive.Root;
+import {
+  DisclosurePanel as CollapsibleContentPrimitive,
+  Disclosure as CollapsiblePrimitive,
+  Button as CollapsibleTriggerPrimitive,
+  type ButtonProps,
+  type DisclosurePanelProps,
+  type DisclosureProps,
+} from "react-aria-components"
 
-const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger;
+function Collapsible({ ...props }: DisclosureProps) {
+  return <CollapsiblePrimitive data-slot="collapsible" {...props} />
+}
 
-const CollapsibleContent = CollapsiblePrimitive.CollapsibleContent;
+function CollapsibleTrigger({ ...props }: ButtonProps) {
+  return (
+    <CollapsibleTriggerPrimitive
+      slot="trigger"
+      data-slot="collapsible-trigger"
+      {...props}
+    />
+  )
+}
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+function CollapsibleContent({ ...props }: DisclosurePanelProps) {
+  return (
+    <CollapsibleContentPrimitive data-slot="collapsible-content" {...props} />
+  )
+}
+
+export { Collapsible, CollapsibleTrigger, CollapsibleContent }

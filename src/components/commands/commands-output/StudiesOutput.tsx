@@ -6,11 +6,14 @@ export function StudiesOutput() {
     <div className="space-y-3">
       {studies.map((study, idx) => (
         <StaggerItem key={idx} index={idx} className="flex items-start gap-3">
-          <span className="text-success shrink-0 mt-0.5">
+          <span className="text-success shrink-0 mt-0.5" aria-hidden>
             {study.type === "master" ? "✔" : "▸"}
           </span>
           <div className="flex-1">
             <p className="text-foreground text-sm font-medium">
+              <span className="sr-only">
+                {study.type === "master" ? "Master's degree: " : "Degree: "}
+              </span>
               {study.degree}
             </p>
             <p className="text-muted-foreground text-xs mt-0.5">

@@ -18,7 +18,6 @@ import { highlightCode, type CodeBlockTheme } from "@/lib/shiki";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
   ResponsiveDialog,
@@ -80,6 +79,7 @@ function CodeBlockActionButton({
       onClick={onClick}
       className={cn(
         "group relative rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
       )}
       whileHover={{ scale: 1.05 }}
@@ -445,76 +445,86 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     const currentAnimation =
       containerAnimation[animation] || containerAnimation.fadeIn;
 
+    const headerLeft = (
+      <div className="flex items-center gap-2">
+        <div className="flex gap-1.5" aria-hidden>
+          <div className="h-3 w-3 rounded-full bg-red-500/80 transition-colors hover:bg-red-500" />
+          <div className="h-3 w-3 rounded-full bg-yellow-500/80 transition-colors hover:bg-yellow-500" />
+          <div className="h-3 w-3 rounded-full bg-green-500/80 transition-colors hover:bg-green-500" />
+        </div>
+
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          {variant === "terminal" ? (
+            <Terminal className="h-3.5 w-3.5" aria-hidden />
+          ) : (
+            <FileCode className="h-4 w-4" aria-hidden />
+          )}
+          <span className="font-medium">
+            {title || (showLanguage && getLanguageDisplayName(language))}
+          </span>
+        </div>
+        {collapsible ? (
+          <span className="text-muted-foreground" aria-hidden>
+            {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </span>
+        ) : null}
+      </div>
+    );
+
+    const headerActions = (
+      <div className="relative z-10 flex items-center gap-1 overflow-visible">
+        <CodeBlockActionButton
+          label={wordWrap ? "Disable word wrap" : "Enable word wrap"}
+          className={wordWrap ? "text-foreground" : undefined}
+          onClick={() => setWordWrap(!wordWrap)}
+        >
+          <WrapText className="h-4 w-4" aria-hidden />
+        </CodeBlockActionButton>
+
+        <CodeBlockActionButton
+          label={isExpanded ? "Minimize" : "Maximize"}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <Minimize2 className="h-4 w-4" aria-hidden />
+          ) : (
+            <Maximize2 className="h-4 w-4" aria-hidden />
+          )}
+        </CodeBlockActionButton>
+
+        {downloadable && (
+          <DownloadButton
+            code={trimmedCode}
+            fileName={downloadFileName}
+            language={language}
+          />
+        )}
+
+        {copyable && <CopyButton code={trimmedCode} />}
+      </div>
+    );
+
     const headerRow = (
       <div
         className={cn(
           "flex items-center justify-between px-2 py-0.5 overflow-visible",
           headerStyles[variant],
-          collapsible && "cursor-pointer select-none",
         )}
       >
-        <div className="flex items-center gap-2">
-          {/* Window controls */}
-          <div className="flex gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-500/80 transition-colors hover:bg-red-500" />
-            <div className="h-3 w-3 rounded-full bg-yellow-500/80 transition-colors hover:bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-500/80 transition-colors hover:bg-green-500" />
-          </div>
-
-          {/* Title or language */}
-          <div className={cn(
-            "flex items-center gap-1.5 text-sm",
-            variant === "terminal" ? "text-muted-foreground" : "text-muted-foreground",
-          )}>
-            {variant === "terminal" ? (
-              <Terminal className="h-3.5 w-3.5" />
-            ) : (
-              <FileCode className="h-4 w-4" />
-            )}
-            <span className="font-medium">
-              {title || (showLanguage && getLanguageDisplayName(language))}
-            </span>
-          </div>
-          {collapsible && (
-            <span className="text-muted-foreground">
-              {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            </span>
-          )}
-        </div>
-
-        {/* Action buttons */}
-        <div className="relative z-10 flex items-center gap-1 overflow-visible" onClick={(e) => e.stopPropagation()}>
-          <CodeBlockActionButton
-            label={wordWrap ? "Disable word wrap" : "Enable word wrap"}
-            className={wordWrap ? "text-foreground" : undefined}
-            onClick={() => setWordWrap(!wordWrap)}
+        {collapsible ? (
+          <button
+            type="button"
+            className="flex min-w-0 flex-1 items-center gap-2 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
           >
-            <WrapText className="h-4 w-4" />
-          </CodeBlockActionButton>
-
-          <CodeBlockActionButton
-            label={isExpanded ? "Minimize" : "Maximize"}
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <Minimize2 className="h-4 w-4" />
-            ) : (
-              <Maximize2 className="h-4 w-4" />
-            )}
-          </CodeBlockActionButton>
-
-          {/* Download button */}
-          {downloadable && (
-            <DownloadButton
-              code={trimmedCode}
-              fileName={downloadFileName}
-              language={language}
-            />
-          )}
-
-          {/* Copy button */}
-          {copyable && <CopyButton code={trimmedCode} />}
-        </div>
+            {headerLeft}
+            <span className="sr-only">{open ? "Collapse code" : "Expand code"}</span>
+          </button>
+        ) : (
+          headerLeft
+        )}
+        {headerActions}
       </div>
     );
 
@@ -554,10 +564,8 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
         transition={currentAnimation.transition}
       >
         {collapsible ? (
-          <Collapsible open={open} onOpenChange={setOpen}>
-            <CollapsibleTrigger asChild>
-              {headerRow}
-            </CollapsibleTrigger>
+          <Collapsible isExpanded={open} onExpandedChange={setOpen}>
+            {headerRow}
             <CollapsibleContent>{codeContent}</CollapsibleContent>
           </Collapsible>
         ) : (

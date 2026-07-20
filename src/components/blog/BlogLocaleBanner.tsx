@@ -6,7 +6,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { getBlogLocales, getBlogPostPath } from "@/lib/loaders/blogLoader";
 import { cn } from "@/lib/utils";
 
@@ -55,6 +55,7 @@ export function BlogLocaleBanner({ postId, currentLocale, className }: BlogLocal
 
   return (
     <Alert
+      role="status"
       className={cn(
         "w-full px-3 py-2.5 pr-[5.5rem] text-sm has-[>svg]:gap-x-2.5 [&>svg]:size-4",
         className,
@@ -66,9 +67,12 @@ export function BlogLocaleBanner({ postId, currentLocale, className }: BlogLocal
         {copy.description}
       </AlertDescription>
       <AlertAction className="top-2 right-2.5">
-        <Button size="sm" variant="default" className="h-8 px-3 text-sm" asChild>
-          <Link to={getBlogPostPath(postId, alternateLocale)}>{copy.actionLabel}</Link>
-        </Button>
+        <Link
+          to={getBlogPostPath(postId, alternateLocale)}
+          className={cn(buttonVariants({ size: "sm", variant: "default" }), "h-8 px-3 text-sm")}
+        >
+          {copy.actionLabel}
+        </Link>
       </AlertAction>
     </Alert>
   );

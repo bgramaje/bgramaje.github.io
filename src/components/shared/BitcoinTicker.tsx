@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Bitcoin } from "lucide-react";
-import { Ticker } from "@/components/ui/ticker";
 
 const STORAGE_KEY_LAST_FETCH = "btc_last_fetch";
 const STORAGE_KEY_PRICE = "btc_price";
@@ -92,17 +91,25 @@ export function BitcoinTicker({ inline = false }: BitcoinTickerProps) {
   }, []);
 
   const placeholder = (
-    <span className="inline-flex min-w-30 items-center gap-1.5 text-xs text-muted-foreground" aria-hidden>
-      BTC —
+    <span
+      className="inline-flex min-w-30 items-center gap-1.5 text-xs text-muted-foreground"
+      role="status"
+      aria-live="polite"
+    >
+      Loading Bitcoin price
     </span>
   );
 
   if (price == null) {
-    return inline ? placeholder : <Ticker className="pointer-events-none p-0">{placeholder}</Ticker>;
+    return placeholder;
   }
 
   const isUp = change24h >= 0;
   const priceColor = isUp ? "text-success" : "text-destructive";
+  const changeLabel =
+    change24h === 0
+      ? "unchanged in 24 hours"
+      : `${isUp ? "up" : "down"} ${Math.abs(change24h).toFixed(2)} percent in 24 hours`;
 
   const content = (
     <span className="inline-flex min-w-30 items-center gap-1.5 whitespace-nowrap">
@@ -111,7 +118,7 @@ export function BitcoinTicker({ inline = false }: BitcoinTickerProps) {
         {priceFormatter.format(price)}
       </span>
       {change24h !== 0 ? (
-        <span className={`text-xs font-medium tabular-nums ${priceColor}`}>
+        <span className={`text-xs font-medium tabular-nums ${priceColor}`} aria-hidden>
           {isUp ? "+" : ""}
           {change24h.toFixed(2)}%
         </span>
@@ -119,16 +126,13 @@ export function BitcoinTicker({ inline = false }: BitcoinTickerProps) {
     </span>
   );
 
-  if (inline) {
-    return <span className="text-muted-foreground">{content}</span>;
-  }
-
   return (
-    <Ticker
-      className="pointer-events-none min-w-30 text-muted-foreground p-0"
-      aria-label="Bitcoin price"
+    <span
+      className={inline ? "text-muted-foreground" : "inline-flex min-w-30 text-muted-foreground"}
+      role="status"
+      aria-label={`Bitcoin price ${priceFormatter.format(price)}, ${changeLabel}`}
     >
       {content}
-    </Ticker>
+    </span>
   );
 }

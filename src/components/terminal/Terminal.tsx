@@ -35,7 +35,7 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => onKeyDown(e, value, setValue)}
-          className="w-full bg-transparent text-foreground caret-transparent outline-none"
+          className="w-full bg-transparent text-foreground caret-transparent outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
           placeholder={placeholder ?? ""}
           spellCheck={false}
           autoComplete="off"
@@ -43,9 +43,9 @@ export function Terminal({ onSubmit, onKeyDown, inputRef, placeholder }: Termina
           autoCorrect="off"
           aria-label="Terminal command"
         />
-        <span className="absolute left-0 top-0 pointer-events-none text-foreground whitespace-pre">
+        <span className="absolute left-0 top-0 pointer-events-none text-foreground whitespace-pre" aria-hidden="true">
           {value || (placeholder ? <span className="text-muted-foreground">{placeholder}</span> : null)}
-          <span className="inline-block w-2 h-4 bg-primary animate-blink ml-px align-middle -mb-0.5" aria-hidden />
+          <span className="inline-block w-2 h-4 bg-primary animate-blink ml-px align-middle -mb-0.5" />
         </span>
       </div>
     </form>

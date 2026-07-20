@@ -41,7 +41,9 @@ export default defineConfig({
     react(),
     {
       enforce: "pre",
+      // .md stays as ?raw / plain text (e.g. CHANGELOG.md); content uses .mdx only
       ...mdx({
+        include: /\.mdx$/,
         jsxImportSource: "react",
         providerImportSource: "@mdx-js/react",
         remarkPlugins: [

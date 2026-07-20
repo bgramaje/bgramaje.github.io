@@ -29,7 +29,7 @@ export function TerminalTitleBar({ title = "whoami", onClose }: TerminalTitleBar
             className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-[color,background-color,transform] duration-100 ease-out hover:bg-border/20 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.97]"
             aria-label="Close dialog"
           >
-            <X size={14} />
+            <X size={14} aria-hidden />
           </button>
         ) : null}
       </div>

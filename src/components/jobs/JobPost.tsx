@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import { useMDXWorkComponents } from "@/lib/mdx/work-components";
 import { loadJobContent } from "@/lib/loaders/jobLoader";
@@ -19,6 +19,10 @@ export function JobPost({ id }: JobPostProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const components = useMDXWorkComponents({});
+  const reduceMotion = useReducedMotion();
+  const motionProps = reduceMotion
+    ? { initial: false as const, animate: { opacity: 1 } }
+    : contentMotion;
 
   useEffect(() => {
     let cancelled = false;
@@ -50,14 +54,15 @@ export function JobPost({ id }: JobPostProps) {
       <motion.div
         key={`loading-${id}`}
         className={wrapperClass}
-        initial={{ opacity: 0 }}
+        initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="space-y-3 py-2">
-          <div className="h-5 w-2/5 animate-pulse rounded bg-border/30" />
-          <div className="h-3 w-1/4 animate-pulse rounded bg-border/20" />
-          <div className="mt-4 space-y-2">
+        <div className="space-y-3 py-2" role="status" aria-live="polite">
+          <span className="sr-only">Loading job details</span>
+          <div className="h-5 w-2/5 animate-pulse rounded bg-border/30" aria-hidden />
+          <div className="h-3 w-1/4 animate-pulse rounded bg-border/20" aria-hidden />
+          <div className="mt-4 space-y-2" aria-hidden>
             <div className="h-3 w-full animate-pulse rounded bg-border/20" />
             <div className="h-3 w-11/12 animate-pulse rounded bg-border/20" />
             <div className="h-3 w-4/5 animate-pulse rounded bg-border/20" />
@@ -69,8 +74,8 @@ export function JobPost({ id }: JobPostProps) {
 
   if (error || !MDXContent) {
     return (
-      <motion.div key={`error-${id}`} className={wrapperClass} {...contentMotion}>
-        <p className="text-destructive">
+      <motion.div key={`error-${id}`} className={wrapperClass} {...motionProps}>
+        <p className="text-destructive" role="alert">
           {error ?? "Failed to load job"}: <span className="text-foreground">{id}</span>
         </p>
       </motion.div>
@@ -79,7 +84,7 @@ export function JobPost({ id }: JobPostProps) {
 
   const Content = MDXContent;
   return (
-    <motion.div key={`content-${id}`} className={wrapperClass} {...contentMotion}>
+    <motion.div key={`content-${id}`} className={wrapperClass} {...motionProps}>
       <div className={typesetClass}>
         <MDXProvider components={components}>
           <Content />

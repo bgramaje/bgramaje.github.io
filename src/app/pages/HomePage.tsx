@@ -172,15 +172,10 @@ export function HomePage() {
 
           <div
             ref={terminalRef}
-            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-4 px-1.5 scroll-smooth text-sm relative"
+            className="flex-1 min-w-0 w-full overflow-y-auto pt-1.5 pb-16 px-1.5 scroll-smooth text-sm relative"
             onClick={handleTerminalContentClick}
           >
-            <div className="sticky top-0.5 z-10 h-0 overflow-visible flex justify-end pointer-events-none">
-              <div className="absolute right-1.5 top-0 w-11 flex flex-col items-center pointer-events-auto">
-                <CommandToolbar onCommandClick={handleToolbarCommand} />
-              </div>
-            </div>
-            <div className="pr-11 md:pr-12 min-w-0">
+            <div className="pr-1 min-w-0">
               <h1 className="sr-only">bgramaje — interactive portfolio terminal</h1>
 
               <div aria-live="polite" aria-relevant="additions" className="min-w-0">
@@ -204,6 +199,10 @@ export function HomePage() {
                 inputRef={inputRef}
               />
             </div>
+          </div>
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center px-2">
+            <CommandToolbar onCommandClick={handleToolbarCommand} />
           </div>
         </div>
 

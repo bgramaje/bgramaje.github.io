@@ -3,7 +3,6 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
-  DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
@@ -20,10 +19,21 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 
-const ResponsiveDialogContext = React.createContext<boolean>(true);
+type ResponsiveDialogContextValue = {
+  isDesktop: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+const ResponsiveDialogContext =
+  React.createContext<ResponsiveDialogContextValue | null>(null);
 
 function useResponsiveDialogContext() {
-  return React.useContext(ResponsiveDialogContext);
+  const ctx = React.useContext(ResponsiveDialogContext);
+  if (!ctx) {
+    throw new Error("ResponsiveDialog components must be used within ResponsiveDialog");
+  }
+  return ctx;
 }
 
 export function ResponsiveDialog({
@@ -37,11 +47,9 @@ export function ResponsiveDialog({
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
-    <ResponsiveDialogContext.Provider value={isDesktop}>
+    <ResponsiveDialogContext.Provider value={{ isDesktop, open, onOpenChange }}>
       {isDesktop ? (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-          {children}
-        </Dialog>
+        children
       ) : (
         <Drawer open={open} onOpenChange={onOpenChange}>
           {children}
@@ -60,9 +68,16 @@ export function ResponsiveDialogContent({
   className?: string;
   showHandle?: boolean;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop, open, onOpenChange } = useResponsiveDialogContext();
   return isDesktop ? (
-    <DialogContent className={className}>{children}</DialogContent>
+    <Dialog
+      isOpen={open}
+      onOpenChange={onOpenChange}
+      className={className}
+      showCloseButton={false}
+    >
+      {children}
+    </Dialog>
   ) : (
     // Full-bleed wins over shared desktop max-w (twMerge: last conflict wins).
     <DrawerContent className={cn(className, "w-full max-w-none")} showHandle={showHandle}>
@@ -78,7 +93,7 @@ export function ResponsiveDialogHeader({
   children: React.ReactNode;
   className?: string;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop } = useResponsiveDialogContext();
   return isDesktop ? (
     <DialogHeader className={className}>{children}</DialogHeader>
   ) : (
@@ -93,7 +108,7 @@ export function ResponsiveDialogTitle({
   children: React.ReactNode;
   className?: string;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop } = useResponsiveDialogContext();
   return isDesktop ? (
     <DialogTitle className={className}>{children}</DialogTitle>
   ) : (
@@ -108,7 +123,7 @@ export function ResponsiveDialogDescription({
   children: React.ReactNode;
   className?: string;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop } = useResponsiveDialogContext();
   return isDesktop ? (
     <DialogDescription className={className}>{children}</DialogDescription>
   ) : (
@@ -123,7 +138,7 @@ export function ResponsiveDialogFooter({
   children: React.ReactNode;
   className?: string;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop } = useResponsiveDialogContext();
   return isDesktop ? (
     <DialogFooter className={className}>{children}</DialogFooter>
   ) : (
@@ -134,20 +149,14 @@ export function ResponsiveDialogFooter({
 export function ResponsiveDialogClose({
   children,
   className,
-  asChild,
 }: {
   children?: React.ReactNode;
   className?: string;
-  asChild?: boolean;
 }) {
-  const isDesktop = useResponsiveDialogContext();
+  const { isDesktop } = useResponsiveDialogContext();
   return isDesktop ? (
-    <DialogClose className={className} asChild={asChild}>
-      {children}
-    </DialogClose>
+    <DialogClose className={className}>{children}</DialogClose>
   ) : (
-    <DrawerClose className={className} asChild={asChild}>
-      {children}
-    </DrawerClose>
+    <DrawerClose className={className}>{children}</DrawerClose>
   );
 }

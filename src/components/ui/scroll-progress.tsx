@@ -39,6 +39,7 @@ export function ScrollProgress({
       style={{
         scaleX: scrollYProgress,
       }}
+      aria-hidden="true"
       {...props}
     />
   )

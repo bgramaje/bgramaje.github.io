@@ -37,7 +37,13 @@ function applyTheme(resolved: ResolvedTheme) {
 }
 
 function runThemeTransition(update: () => void, x: number, y: number) {
-  if (!document.startViewTransition) { update(); return; }
+  const reduceMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !document.startViewTransition) {
+    update();
+    return;
+  }
   const transition = document.startViewTransition(update);
   transition.ready.then(() => {
     const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
