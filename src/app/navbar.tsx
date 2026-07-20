@@ -58,7 +58,9 @@ export function Navbar() {
           variant="ghost"
           size="icon"
           className="md:hidden"
-          aria-label="Open menu"
+          aria-label={sheetOpen ? "Close menu" : "Open menu"}
+          aria-expanded={sheetOpen}
+          aria-controls="mobile-nav"
           onPress={() => setSheetOpen(true)}
         >
           <Menu aria-hidden />
@@ -123,7 +125,7 @@ export function Navbar() {
           <SheetTitle className="font-mono">Menu</SheetTitle>
           <SheetDescription className="sr-only">Site navigation</SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col gap-1 px-4 pb-6">
+        <div id="mobile-nav" className="flex flex-col gap-1 px-4 pb-6">
           <nav className="flex flex-col gap-1" aria-label="Main">
             {navItems.map(({ path, name }) => (
               <NavLink

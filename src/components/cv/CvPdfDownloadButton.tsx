@@ -29,11 +29,6 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
 
   return (
     <span className={cn("relative inline-flex shrink-0", className)}>
-      {error ? (
-        <span role="alert" className="sr-only">
-          {error}
-        </span>
-      ) : null}
       <Button
         type="button"
         variant="ghost"
@@ -44,6 +39,7 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
         }}
         aria-busy={loading}
         aria-label="Download CV PDF"
+        aria-describedby={error ? "cv-download-error" : undefined}
         className="size-10"
       >
         {loading ? (
@@ -52,6 +48,15 @@ export function CvPdfDownloadButton({ className }: { className?: string }) {
           <FileDown className="size-[17px]" aria-hidden />
         )}
       </Button>
+      {error ? (
+        <span
+          id="cv-download-error"
+          role="alert"
+          className="absolute top-full right-0 z-50 mt-1 max-w-48 rounded-md border border-destructive/40 bg-popover px-2 py-1 text-xs text-destructive shadow-sm"
+        >
+          {error}
+        </span>
+      ) : null}
     </span>
   );
 }

@@ -111,14 +111,15 @@ export function BitcoinTicker({ inline = false }: BitcoinTickerProps) {
       ? "unchanged in 24 hours"
       : `${isUp ? "up" : "down"} ${Math.abs(change24h).toFixed(2)} percent in 24 hours`;
 
+  // Visual content is aria-hidden so SR only hears the concise aria-label (no double announce).
   const content = (
-    <span className="inline-flex min-w-30 items-center gap-1.5 whitespace-nowrap">
-      <Bitcoin size={14} className="shrink-0 text-foreground" aria-hidden />
+    <span className="inline-flex min-w-30 items-center gap-1.5 whitespace-nowrap" aria-hidden>
+      <Bitcoin size={14} className="shrink-0 text-foreground" />
       <span className={`text-xs ml-[-4px] font-medium tabular-nums ${priceColor}`}>
         {priceFormatter.format(price)}
       </span>
       {change24h !== 0 ? (
-        <span className={`text-xs font-medium tabular-nums ${priceColor}`} aria-hidden>
+        <span className={`text-xs font-medium tabular-nums ${priceColor}`}>
           {isUp ? "+" : ""}
           {change24h.toFixed(2)}%
         </span>

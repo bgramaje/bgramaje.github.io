@@ -4,11 +4,22 @@ All notable changes to this portfolio are documented here.
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-07-20
+
 ### Added
 
 - `/changelog` page rendering this file, linked from the navbar
-- macOS-style command dock (beUI) at the bottom of the terminal
+- macOS-style command dock at the bottom of the terminal and on blog posts
 - React Aria as the shadcn/ui component base (replacing Radix for core primitives)
+
+### Fixed
+
+- Terminal Tab no longer traps keyboard focus; autocomplete only steals Tab when a single command matches
+- Skip link now moves focus into main content
+- Mobile menu exposes `aria-expanded` / `aria-controls`
+- Bitcoin ticker avoids double screen-reader announcements
+- CV download errors are visible (not screen-reader-only)
+- Command dock buttons use clearer accessible names
 
 ## [0.0.1] - 2026-07-20
 

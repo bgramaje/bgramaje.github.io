@@ -15,6 +15,13 @@ export function Layout() {
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:text-foreground focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-ring"
+          onClick={(e) => {
+            // Move focus into main; hash jump alone often leaves focus on the skip link.
+            e.preventDefault();
+            mainRef.current?.focus({ preventScroll: true });
+            mainRef.current?.scrollTo?.(0, 0);
+            window.history.replaceState(null, "", "#main-content");
+          }}
         >
           Skip to main content
         </a>

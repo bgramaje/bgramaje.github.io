@@ -118,11 +118,12 @@ export function TerminalModal({
             setValue(commandHistory[newIndex]);
           }
         }
-      } else if (e.key === "Tab") {
-        e.preventDefault();
-        const allowedCommands = ["close"];
-        const matches = allowedCommands.filter((cmd) => cmd.startsWith(currentValue.toLowerCase()));
-        if (matches.length === 1) {
+      } else if (e.key === "Tab" && !e.shiftKey) {
+        // Only steal Tab when autocomplete can complete; otherwise allow focus to leave (WCAG 2.1.2).
+        const needle = currentValue.toLowerCase();
+        const matches = ["close"].filter((cmd) => cmd.startsWith(needle));
+        if (matches.length === 1 && matches[0] !== needle) {
+          e.preventDefault();
           setValue(matches[0]);
         }
       } else if (e.key === "Escape") {

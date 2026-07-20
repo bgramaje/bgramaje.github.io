@@ -34,7 +34,7 @@ export function CommandToolbar({ onCommandClick, className }: CommandToolbarProp
         {COMMAND_ITEMS.map(({ id, icon: Icon, tooltip }) => (
           <DockItem
             key={id}
-            aria-label={tooltip}
+            aria-label={`Run ${id} command`}
             tooltip={tooltip}
             active={active === id}
             onClick={() => {
